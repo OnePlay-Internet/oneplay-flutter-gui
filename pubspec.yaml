@@ -46,4 +46,3 @@ flutter:
   module:
     androidX: true
     androidPackage: com.example.multiple_flutters_module
-    iosBundleIdentifier: com.example.multipleFluttersModule
