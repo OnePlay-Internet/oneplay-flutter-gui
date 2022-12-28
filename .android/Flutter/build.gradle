@@ -30,7 +30,7 @@ group 'com.example.multiple_flutters_module'
 version '1.0'
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
