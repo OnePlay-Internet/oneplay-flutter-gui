@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart' as launcher;
 import 'package:clipboard/clipboard.dart';
 
 void main() => runApp(const MyApp(color: Colors.blue));
-
-@pragma('vm:entry-point')
-void topMain() => runApp(const MyApp(color: Colors.green));
-
-@pragma('vm:entry-point')
-void bottomMain() => runApp(const MyApp(color: Colors.purple));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.color});
