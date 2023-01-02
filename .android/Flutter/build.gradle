@@ -26,11 +26,11 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.library'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
-group 'com.example.multiple_flutters_module'
+group 'com.example.oneplay_flutter_gui'
 version '1.0'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
