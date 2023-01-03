@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _channel = const MethodChannel('multiple-flutters');
+    _channel = const MethodChannel('flutter-gui');
   }
 
   void startGame(String token) {
