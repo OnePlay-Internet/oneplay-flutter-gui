@@ -17,7 +17,7 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    print(err.error);
+    print(err.response?.statusCode);
     super.onError(err, handler);
   }
 }

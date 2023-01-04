@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
@@ -11,6 +12,7 @@ class Feeds extends StatefulWidget {
 
 class _FeedsState extends State<Feeds> {
   bool logginOut = false;
+  AuthService authService = Modular.get<AuthService>();
 
   logout() async {
     AuthService authService = Modular.get<AuthService>();
@@ -27,7 +29,11 @@ class _FeedsState extends State<Feeds> {
       alignment: Alignment.center,
       child: Column(
         children: [
-          const Text('Home'),
+          Observer(
+            builder: (_) {
+              return Text('Hi ${authService.user?.firstName}');
+            }
+          ),
           const SizedBox(height: 24),
           OutlinedButton(
             onPressed: logginOut ? null : logout,
