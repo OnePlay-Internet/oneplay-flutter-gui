@@ -8,6 +8,8 @@ class AuthGuard extends RouteGuard {
 
   @override
   FutureOr<bool> canActivate(String path, ParallelRoute route) {
-    return Modular.get<AuthService>().sessionToken != null;
+    var token = Modular.get<AuthService>().sessionToken;
+    print('Auth guard : $token');
+    return token != null;
   }
 }

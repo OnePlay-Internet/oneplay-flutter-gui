@@ -9,8 +9,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind((i) => RestService()),
-        Bind((i) => AuthService(i.get())),
+        Bind((i) => AuthService()),
       ];
 
   @override
