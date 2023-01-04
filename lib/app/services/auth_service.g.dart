@@ -9,26 +9,18 @@ part of 'auth_service.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AuthService on AuthServiceBase, Store {
-  Computed<UserModel?>? _$userComputed;
+  late final _$userAtom = Atom(name: 'AuthServiceBase.user', context: context);
 
   @override
-  UserModel? get user => (_$userComputed ??=
-          Computed<UserModel?>(() => super.user, name: 'AuthServiceBase.user'))
-      .value;
-
-  late final _$_userAtom =
-      Atom(name: 'AuthServiceBase._user', context: context);
-
-  @override
-  ObservableFuture<UserModel?> get _user {
-    _$_userAtom.reportRead();
-    return super._user;
+  UserModel? get user {
+    _$userAtom.reportRead();
+    return super.user;
   }
 
   @override
-  set _user(ObservableFuture<UserModel?> value) {
-    _$_userAtom.reportWrite(value, super._user, () {
-      super._user = value;
+  set user(UserModel? value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
     });
   }
 
@@ -52,7 +44,7 @@ mixin _$AuthService on AuthServiceBase, Store {
       AsyncAction('AuthServiceBase.logout', context: context);
 
   @override
-  Future logout() {
+  Future<dynamic> logout() {
     return _$logoutAsyncAction.run(() => super.logout());
   }
 
@@ -60,7 +52,7 @@ mixin _$AuthService on AuthServiceBase, Store {
       AsyncAction('AuthServiceBase.login', context: context);
 
   @override
-  Future login(String token) {
+  Future<dynamic> login(String token) {
     return _$loginAsyncAction.run(() => super.login(token));
   }
 
@@ -68,11 +60,11 @@ mixin _$AuthService on AuthServiceBase, Store {
       ActionController(name: 'AuthServiceBase', context: context);
 
   @override
-  dynamic loadUser() {
+  dynamic loadUser(UserModel user) {
     final _$actionInfo = _$AuthServiceBaseActionController.startAction(
         name: 'AuthServiceBase.loadUser');
     try {
-      return super.loadUser();
+      return super.loadUser(user);
     } finally {
       _$AuthServiceBaseActionController.endAction(_$actionInfo);
     }
@@ -81,8 +73,8 @@ mixin _$AuthService on AuthServiceBase, Store {
   @override
   String toString() {
     return '''
-sessionToken: ${sessionToken},
-user: ${user}
+user: ${user},
+sessionToken: ${sessionToken}
     ''';
   }
 }
