@@ -17,7 +17,7 @@ class UserModel {
   @JsonKey(name: 'last_name')
   String lastName;
 
-  String bio;
+  String? bio;
 
   String email;
 
@@ -44,7 +44,7 @@ class UserModel {
     this.username,
     required this.firstName,
     required this.lastName,
-    required this.bio,
+    this.bio,
     required this.email,
     required this.phone,
     required this.type,
