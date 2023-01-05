@@ -9,8 +9,8 @@ StatefulBuilder customTextField({
   TextInputType textInputType = TextInputType.text,
 }) {
   bool isHideText = textInputType == TextInputType.visiblePassword;
-  return StatefulBuilder(
-      builder: (BuildContext context, StateSetter stateSetter) {
+  bool onChangeText = false;
+  return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 40),
       height: 84,
@@ -27,43 +27,66 @@ StatefulBuilder customTextField({
                   color: greyColor2)),
           SizedBox(
             height: 50,
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: hintText,
-                hintStyle: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: greyColor1),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: blackColor1, width: 2),
+            child: Stack(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    hintStyle: const TextStyle(
+                        fontFamily: mainFontFamily,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.02,
+                        color: greyColor1),
+                    enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: blackColor1, width: 2),
+                    ),
+                    suffixIcon: textInputType == TextInputType.visiblePassword
+                        ? InkWell(
+                            onTap: () {
+                              setState(() => isHideText = !isHideText);
+                            },
+                            child: Container(
+                              height: 20,
+                              width: 20,
+                              alignment: Alignment.centerRight,
+                              child: SvgPicture.asset(
+                                isHideText ? hidePwdIcon : showPwdIcon,
+                                color: greyColor2,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
+                  ),
+                  controller: textCtrler,
+                  obscureText: isHideText,
+                  onTap: () => setState(() => onChangeText = true),
+                  onTapOutside: (event) => setState(() => onChangeText = false),
+                  onEditingComplete: () {
+                    setState(() => onChangeText = false);
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: greyColor1),
                 ),
-                suffixIcon: textInputType == TextInputType.visiblePassword
-                    ? InkWell(
-                        onTap: () {
-                          stateSetter(() => isHideText = !isHideText);
-                        },
-                        child: Container(
-                          height: 20,
-                          width: 20,
-                          alignment: Alignment.centerRight,
-                          child: SvgPicture.asset(
-                            showPwdIcon,
-                            color: greyColor2,
-                          ),
+                Positioned(
+                    bottom: 1,
+                    child: Container(
+                      height: 3,
+                      width: MediaQuery.of(context).size.width - 20,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: onChangeText
+                              ? [greyColor1, greyColor1]
+                              : [blackColor2, blackColor1],
                         ),
-                      )
-                    : const SizedBox(),
-              ),
-              controller: textCtrler,
-              obscureText: isHideText,
-              style: const TextStyle(
-                  fontFamily: mainFontFamily,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.02,
-                  color: Colors.white),
+                      ),
+                    )),
+              ],
             ),
           )
         ],

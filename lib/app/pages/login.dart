@@ -43,9 +43,27 @@ class _LoginState extends State<Login> {
           children: [
             headTitle(),
             const SizedBox(height: 40),
-            customTextField(labelText: 'Email / Phone', hintText: 'Email', textCtrler: idCtrler),
+            customTextField(
+                labelText: 'Email / Phone',
+                hintText: 'Email Address',
+                textCtrler: idCtrler),
             const SizedBox(height: 40),
-            customTextField(labelText: 'Password', hintText: '', textCtrler: pwdCtrler, textInputType: TextInputType.visiblePassword)
+            customTextField(
+                labelText: 'Password',
+                hintText: '',
+                textCtrler: pwdCtrler,
+                textInputType: TextInputType.visiblePassword),
+            Padding(
+              padding: const EdgeInsets.all(40),
+              child: Row(
+                children: [
+                  Row(
+                    children: [Container(), Text('')],
+                  ),
+                  Text('')  
+                ], 
+              ),
+            )
           ],
         ),
       ),
