@@ -25,7 +25,12 @@ class AuthInterceptor2 extends Interceptor {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    print(err.response);
+    String? message = err.response?.data?['msg'];
+    if (message != null || message != '') {
+      err.error = {'message': message};
+    } else {
+      err.error = {'message': 'Something went wrong'};
+    }
     super.onError(err, handler);
   }
 }

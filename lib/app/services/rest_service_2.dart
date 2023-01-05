@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor_2.dart';
+import 'package:oneplay_flutter_gui/app/models/client_token_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_status_model.dart';
+import 'package:oneplay_flutter_gui/app/models/start_game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
 class RestService2 {
@@ -23,5 +25,30 @@ class RestService2 {
         GameStatusResponse.fromJson(res.data);
 
     return gameStatusResponse.data;
+  }
+
+  Future<StartGameResponse> startGame(String gameId) async {
+    FormData data = FormData.fromMap({
+      'game_id': gameId,
+      'launch_payload': '{}',
+    });
+
+    Response res = await _dio.post('/start_game', data: data);
+
+    return StartGameResponse.fromJson(res.data);
+  }
+
+  Future<ClientTokenModel> getClientToken(String sessionId) async {
+    FormData data = FormData.fromMap({'session_id': sessionId});
+
+    Response res = await _dio.post('/get_session', data: data);
+
+    return ClientTokenResponse.fromJson(res.data).data;
+  }
+
+  Future<void> terminateSession(String sessionId) async {
+    FormData data = FormData.fromMap({'session_id': sessionId});
+
+    await _dio.post('/terminate_stream', data: data);
   }
 }

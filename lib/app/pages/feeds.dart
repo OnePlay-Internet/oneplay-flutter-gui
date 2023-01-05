@@ -29,15 +29,19 @@ class _FeedsState extends State<Feeds> {
       alignment: Alignment.center,
       child: Column(
         children: [
-          Observer(
-            builder: (_) {
-              return Text('Hi ${authService.user?.firstName}');
-            }
-          ),
+          Observer(builder: (_) {
+            return Text('Hi ${authService.user?.firstName}');
+          }),
           const SizedBox(height: 24),
           OutlinedButton(
             onPressed: logginOut ? null : logout,
             child: const Text('Logout'),
+          ),
+          const SizedBox(height: 24),
+          OutlinedButton(
+            onPressed: () => Modular.to.pushNamed(
+                '/game/28428948074d7e424071f3a7209523bbd22d8d8e1d59d952ba590553b61fc358'),
+            child: const Text('Play'),
           ),
         ],
       ),
