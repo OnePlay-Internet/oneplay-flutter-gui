@@ -1,1 +1,5 @@
 export 'extensions/mobx.dart';
+export 'theme/color.dart';
+export 'theme/pngPath.dart';
+export 'theme/style.dart';
+export 'theme/svgPath.dart';
