@@ -43,88 +43,40 @@ class _LoginState extends State<Login> {
         child: SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: SingleChildScrollView(
-        child: Column(children: [
-          headTitle(),
-          const SizedBox(height: 40),
-          customTextField(
-              labelText: 'Email / Phone',
-              hintText: 'Email Address',
-              textCtrler: idCtrler),
-          const SizedBox(height: 40),
-          customTextField(
-              labelText: 'Password',
-              hintText: '',
-              textCtrler: pwdCtrler,
-              textInputType: TextInputType.visiblePassword),
-          Padding(
-            padding: const EdgeInsets.all(40),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [savePwd(), forgotPwd()],
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(children: [
+            headTitle(),
+            const SizedBox(height: 40),
+            customTextField(
+                labelText: 'Email / Phone',
+                hintText: 'Email Address',
+                textCtrler: idCtrler),
+            const SizedBox(height: 40),
+            customTextField(
+                labelText: 'Password',
+                hintText: '',
+                textCtrler: pwdCtrler,
+                textInputType: TextInputType.visiblePassword),
+            Padding(
+              padding: const EdgeInsets.all(40),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [savePwd(), forgotPwd()],
+              ),
             ),
-          ),
-          loginBtn(context),
-          createNewAccount(),
-          commonDividerWidget(),
-          needHelpWidget(),
-          authFooterWidget()
-        ]),
+            loginBtn(context,
+                () => login(idCtrler.text.trim(), pwdCtrler.text.trim())),
+            createNewAccount(),
+            commonDividerWidget(),
+            needHelpWidget(),
+            authFooterWidget()
+          ]),
+        ),
       ),
     ));
-
-    // return Container(
-    //   margin: EdgeInsets.only(
-    //     left: 40,
-    //     right: 40,
-    //     top: MediaQuery.of(context).size.height * 0.2,
-    //   ),
-    //   height: MediaQuery.of(context).size.height * 0.6,
-    //   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
-    //   decoration: BoxDecoration(
-    //     border: Border.all(color: const Color.fromRGBO(168, 157, 237, 1)),
-    //   ),
-    //   child: Form(
-    //     key: _formKey,
-    //     child: SingleChildScrollView(
-    //       child: Column(
-    //         children: [
-    //           TextFormField(
-    //             controller: idTextController,
-    //             decoration: const InputDecoration(
-    //               icon: Icon(Icons.person),
-    //               hintText: 'Enter your phone or email',
-    //               labelText: 'Id',
-    //             ),
-    //             onSaved: (value) => idTextController.text = value ?? '',
-    //           ),
-    //           const SizedBox(height: 24),
-    //           TextFormField(
-    //             controller: passwordTextController,
-    //             decoration: const InputDecoration(
-    //               icon: Icon(Icons.key),
-    //               hintText: 'Enter your password',
-    //               labelText: 'Password',
-    //             ),
-    //             onSaved: (value) => passwordTextController.text = value ?? '',
-    //           ),
-    //           const SizedBox(height: 24),
-    //           OutlinedButton(
-    //             onPressed: loading
-    //                 ? null
-    //                 : () => login(
-    //                       idTextController.text.trim(),
-    //                       passwordTextController.text.trim(),
-    //                     ),
-    //             child: const Text('Login'),
-    //           )
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
-
 
   Padding createNewAccount() {
     return Padding(
@@ -153,28 +105,53 @@ class _LoginState extends State<Login> {
         ]));
   }
 
-  Padding loginBtn(BuildContext context) {
+  Padding loginBtn(BuildContext context, Function() onTap) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            gradient: const LinearGradient(
-                end: Alignment.bottomRight,
-                begin: Alignment.topLeft,
-                colors: [pinkColor1, blueColor1])),
-        child: const Center(
-            child: Text(
-          'Log in',
-          style: TextStyle(
-              fontFamily: mainFontFamily,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
-              letterSpacing: 0.02),
-        )),
+      child: InkWell(
+        onTap: loading ? null : onTap,
+        child: Container(
+          height: 50,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              gradient: const LinearGradient(
+                  end: Alignment.bottomRight,
+                  begin: Alignment.topLeft,
+                  colors: [pinkColor1, blueColor1])),
+          child: Center(
+              child: loading
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            )),
+                        SizedBox(width: 15),
+                        Text(
+                          'Validating....',
+                          style: TextStyle(
+                              fontFamily: mainFontFamily,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              letterSpacing: 0.02),
+                        )
+                      ],
+                    )
+                  : const Text(
+                      'Log in',
+                      style: TextStyle(
+                          fontFamily: mainFontFamily,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          letterSpacing: 0.02),
+                    )),
+        ),
       ),
     );
   }
