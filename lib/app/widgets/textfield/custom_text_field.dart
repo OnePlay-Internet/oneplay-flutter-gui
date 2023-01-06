@@ -84,7 +84,7 @@ StatefulBuilder customTextField({
                   controller: textCtrler,
                   obscureText: isHideText,
                   onTap: () => setState(() => onChangeText = true),
-                  onTapOutside: (event) => setState(() => onChangeText = false),
+                  // onTapOutside: (event) => setState(() => onChangeText = false),
                   onEditingComplete: () {
                     setState(() => onChangeText = false);
                     FocusManager.instance.primaryFocus?.unfocus();

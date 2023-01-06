@@ -48,4 +48,4 @@ app.*.map.json
 /windows/flutter/
 /.android/
 
-.env
+config.dart
