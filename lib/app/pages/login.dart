@@ -68,6 +68,7 @@ class _LoginState extends State<Login> {
           createNewAccount(),
           commonDividerWidget(),
           needHelpWidget(),
+          authFooterWidget()
         ]),
       ),
     ));
