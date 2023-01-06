@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../common/common.dart';
 
 StatefulBuilder customTextField({
@@ -7,6 +8,7 @@ StatefulBuilder customTextField({
   required String hintText,
   required TextEditingController textCtrler,
   TextInputType textInputType = TextInputType.text,
+  String errorText = '',
 }) {
   bool isHideText = textInputType == TextInputType.visiblePassword;
   bool onChangeText = false;
@@ -19,12 +21,33 @@ StatefulBuilder customTextField({
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(labelText,
-              style: const TextStyle(
-                  fontFamily: mainFontFamily,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.02,
-                  color: greyColor2)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(labelText,
+                  style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: greyColor2,
+                      fontSize: 14)),
+              errorText != ""
+                  ? GradientText(
+                      errorText,
+                      style: const TextStyle(
+                        fontFamily: mainFontFamily,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.02,
+                        decorationThickness: 1,
+                      ),
+                      gradientType: GradientType.linear,
+                      gradientDirection: GradientDirection.ltr,
+                      colors: const [pinkColor2, purpleColor3],
+                    )
+                  : const SizedBox.shrink(),
+            ],
+          ),
           SizedBox(
             height: 50,
             child: Stack(
@@ -80,9 +103,11 @@ StatefulBuilder customTextField({
                       width: MediaQuery.of(context).size.width - 20,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: onChangeText
-                              ? [greyColor1, greyColor1]
-                              : [blackColor2, blackColor1],
+                          colors: errorText != ''
+                              ? [pinkColor2, purpleColor3]
+                              : onChangeText
+                                  ? [greyColor1, greyColor1]
+                                  : [blackColor2, blackColor1],
                         ),
                       ),
                     )),
