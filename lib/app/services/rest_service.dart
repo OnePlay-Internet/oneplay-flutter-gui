@@ -1,21 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor.dart';
+import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/user_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
 class RestService {
   final Dio _dio;
-  final AuthService _authService;
 
-  RestService(this._authService)
+  RestService(final AuthService authService)
       : _dio = Dio(
           BaseOptions(
             baseUrl: dotenv.env['API_BASE_URL'] ?? '',
             connectTimeout: 30000,
             receiveTimeout: 30000,
           ),
-        )..interceptors.add(AuthInterceptor(_authService));
+        )..interceptors.add(AuthInterceptor(authService));
 
   Future<UserModel> getProfile() async {
     Response userData = await _dio.get('/accounts/profile');
@@ -39,5 +39,17 @@ class RestService {
     );
 
     return loginData.data['session_token'];
+  }
+
+  Future<List<String>> getWishlist() async {
+    Response res = await _dio.get('/accounts/wishlist');
+
+    return (res.data as List<dynamic>).map((e) => e as String).toList();
+  }
+
+  Future<GameModel> getGameDetails(String id) async {
+    Response res = await _dio.get('/games/$id/info');
+
+    return GameModel.fromJson(res.data);
   }
 }
