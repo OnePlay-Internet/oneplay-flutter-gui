@@ -42,6 +42,7 @@ dependencies:
   json_annotation: ^4.7.0
   shared_preferences: ^0.5.5
   flutter_svg: ^1.1.6
+  simple_gradient_text: ^1.2.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

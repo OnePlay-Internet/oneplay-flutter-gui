@@ -11,7 +11,7 @@ class AuthWidget extends StatelessWidget {
     return Scaffold(
       backgroundColor: mainColor,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(140.0),
+        preferredSize: const Size.fromHeight(100.0),
         child: AppBarWidget().logoWidget(context),
       ),
       body: const RouterOutlet(),

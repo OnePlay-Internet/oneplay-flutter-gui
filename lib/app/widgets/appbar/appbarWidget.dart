@@ -4,7 +4,6 @@ import 'package:oneplay_flutter_gui/app/common/theme/pngPath.dart';
 class AppBarWidget {
   Widget logoWidget(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 51),
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.center,
       child: Row(
