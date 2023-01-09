@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor_2.dart';
 import 'package:oneplay_flutter_gui/app/models/client_token_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_status_model.dart';
@@ -12,7 +12,7 @@ class RestService2 {
   RestService2(final AuthService authService)
       : _dio = Dio(
           BaseOptions(
-            baseUrl: dotenv.env['CLIENT_API_BASE_URL'] ?? '',
+            baseUrl: CLIENT_API_BASE_URL,
             connectTimeout: 30000,
             receiveTimeout: 30000,
           ),
