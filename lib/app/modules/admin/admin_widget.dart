@@ -28,7 +28,7 @@ class _AdminWidgetState extends State<AdminWidget> {
     return Scaffold(
       backgroundColor: mainColor,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100.0),
+        preferredSize: const Size.fromHeight(60.0),
         child: AppBarWidget().menu(context),
       ),
       body: const RouterOutlet(),
