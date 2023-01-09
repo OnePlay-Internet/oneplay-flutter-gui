@@ -42,6 +42,7 @@ dependencies:
   flutter_svg: ^1.1.6
   simple_gradient_text: ^1.2.4
   shared_preferences: ^2.0.15
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:
