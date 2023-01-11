@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor.dart';
+import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/user_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
@@ -51,5 +52,17 @@ class RestService {
     Response res = await _dio.get('/games/$id/info');
 
     return GameModel.fromJson(res.data);
+  }
+
+  Future<List<GameFeedModel>> getHomeFeed() async {
+    Response res = await _dio.get('/games/feed/personalized', queryParameters: {
+      'textBackground': "280x170",
+      'textLogo': "400x320",
+      'poster': "528x704",
+    });
+
+    var data = (res.data as List<dynamic>).map((d) => GameFeedModel.fromJson(d)).toList();
+
+    return data;
   }
 }
