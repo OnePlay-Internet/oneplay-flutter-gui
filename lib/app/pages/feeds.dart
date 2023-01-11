@@ -3,9 +3,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:oneplay_flutter_gui/app/common/theme/color.dart';
-import 'package:oneplay_flutter_gui/app/mocking/mock.dart';
+import 'package:oneplay_flutter_gui/app/common/common.dart';
+import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
+import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
+import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 
 class Feeds extends StatefulWidget {
   const Feeds({super.key});
@@ -17,6 +19,28 @@ class Feeds extends StatefulWidget {
 class _FeedsState extends State<Feeds> {
   bool logginOut = false;
   AuthService authService = Modular.get<AuthService>();
+  RestService restService = Modular.get<RestService>();
+
+  late GameFeedModel firstRow;
+  late List<GameFeedModel> restRow;
+  bool starting = false;
+  List<GameModel> library = [];
+  List<String> wishlist = [];
+
+  _getHomeFeed() async {
+    setState(() => starting = true);
+    await restService.getHomeFeed().then((value) async {
+      firstRow = value[0];
+      restRow = value.getRange(2, value.length).toList();
+      setState(() => starting = false);
+    });
+  }
+
+  @override
+  void initState() {
+    _getHomeFeed();
+    super.initState();
+  }
 
   logout() async {
     AuthService authService = Modular.get<AuthService>();
@@ -30,29 +54,31 @@ class _FeedsState extends State<Feeds> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainColor,
-      body: SafeArea(
-          child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: ListView(
-          children: [
-            CarouselSlider(
-              options: CarouselOptions(
-                viewportFraction: 0.75,
+      body: starting
+          ? const Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: ListView(
+                children: [
+                  bannerWidget(firstRow),
+                  ...restRow
+                      .map((value) => Container(
+                          height: 167.59,
+                          margin: const EdgeInsets.only(left: 20, bottom: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              titleLabelGames(value),
+                              listGames(value)
+                            ],
+                          )))
+                      .toList()
+                ],
               ),
-              items: imgListBanner
-                  .map((item) => Container(
-                        height: 200,
-                        margin: const EdgeInsets.symmetric(vertical: 20),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(imageUrl: item)),
-                      ))
-                  .toList(),
-            )
-          ],
-        ),
-      )),
+            )),
     );
     // return Container(
     //   padding: const EdgeInsets.all(4),
@@ -67,14 +93,100 @@ class _FeedsState extends State<Feeds> {
     //         onPressed: logginOut ? null : logout,
     //         child: const Text('Logout'),
     //       ),
-    //       const SizedBox(height: 24),
-    //       OutlinedButton(
-    //         onPressed: () => Modular.to.pushNamed(
-    //             '/game/28428948074d7e424071f3a7209523bbd22d8d8e1d59d952ba590553b61fc358'),
-    //         child: const Text('Play'),
-    //       ),
     //     ],
     //   ),
     // );
+  }
+
+  SizedBox listGames(GameFeedModel value) {
+    return SizedBox(
+      height: 127.59,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: value.games
+            .map((e) => InkWell(
+                  onTap: (() => Modular.to.pushNamed('/game/${e.oneplayId}')),
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(right: 20),
+                    height: 127.59,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        imageUrl: e.textBgImage.toString(),
+                        fit: BoxFit.fitHeight,
+                        height: 127.59,
+                        placeholder: (context, url) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                        errorWidget: (context, url, error) {
+                          return Stack(
+                            children: [
+                              Image.asset(
+                                defaultBg,
+                                fit: BoxFit.fitHeight,
+                              ),
+                              Positioned(
+                                top: 40,
+                                left: 5,
+                                child: Text(
+                                  e.title.toString(),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: mainFontFamily),
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Text titleLabelGames(GameFeedModel value) {
+    return Text(
+      value.title,
+      style: const TextStyle(
+          fontFamily: mainFontFamily,
+          fontSize: 18,
+          letterSpacing: 0.02,
+          fontWeight: FontWeight.w500,
+          color: Colors.white),
+    );
+  }
+
+  CarouselSlider bannerWidget(GameFeedModel data) {
+    return CarouselSlider(
+      options: CarouselOptions(
+        viewportFraction: 0.75,
+      ),
+      items: data.games.map((item) {
+        return item.textBgImage!.isNotEmpty
+            ? InkWell(
+                onTap: (() => Modular.to.pushNamed('/game/${item.oneplayId}')),
+                child: Container(
+                  height: 200,
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        imageUrl: item.textBgImage.toString(),
+                        height: 200,
+                        fit: BoxFit.fitHeight,
+                      )),
+                ),
+              )
+            : const SizedBox.shrink();
+      }).toList(),
+    );
   }
 }
