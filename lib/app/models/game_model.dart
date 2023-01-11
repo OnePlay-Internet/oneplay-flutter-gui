@@ -53,7 +53,7 @@ class GameModel {
   String textLogo;
 
   @JsonKey(name: 'trailer_video')
-  String trailerVideo;
+  String? trailerVideo;
 
   @JsonKey(
     name: 'videos',
@@ -75,10 +75,10 @@ class GameModel {
   double popularityScore;
 
   @JsonKey(name: 'metacritic_score')
-  int metacriticScore;
+  int? metacriticScore;
 
   @JsonKey(name: 'official_website')
-  String officialWebsite;
+  String? officialWebsite;
 
   @JsonKey(name: 'age_rating')
   String ageRating;
@@ -87,7 +87,7 @@ class GameModel {
   String rawgId;
 
   @JsonKey(name: 'cheapshark_id')
-  String cheapsharkId;
+  String? cheapsharkId;
 
   @JsonKey(
     name: 'is_released',
@@ -143,16 +143,16 @@ class GameModel {
     required this.bgImage,
     required this.textBgImage,
     required this.textLogo,
-    required this.trailerVideo,
+    this.trailerVideo,
     this.video,
     required this.rating,
     required this.isFree,
     required this.popularityScore,
-    required this.metacriticScore,
-    required this.officialWebsite,
+    this.metacriticScore,
+    this.officialWebsite,
     required this.ageRating,
     required this.rawgId,
-    required this.cheapsharkId,
+    this.cheapsharkId,
     required this.isReleased,
     required this.status,
     required this.isCategorized,
@@ -185,7 +185,8 @@ class GameModel {
 
   static String _boolToString(bool value) => value ? 'true' : 'false';
 
-  static String? _stringFromList(List<dynamic> value) => value.first as String?;
+  static String? _stringFromList(List<dynamic> value) =>
+      value.firstWhere((e) => true, orElse: () => null) as String?;
 
   static List<dynamic> _stringToList(String? value) =>
       value != null ? [value] : [];
