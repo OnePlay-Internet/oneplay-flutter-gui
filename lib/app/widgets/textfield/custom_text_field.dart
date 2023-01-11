@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:validators/validators.dart';
 import '../../common/common.dart';
 
 StatefulBuilder customTextField({
@@ -84,7 +85,6 @@ StatefulBuilder customTextField({
                   controller: textCtrler,
                   obscureText: isHideText,
                   onTap: () => setState(() => onChangeText = true),
-                  // onTapOutside: (event) => setState(() => onChangeText = false),
                   onEditingComplete: () {
                     setState(() => onChangeText = false);
                     FocusManager.instance.primaryFocus?.unfocus();

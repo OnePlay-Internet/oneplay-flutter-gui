@@ -8,6 +8,9 @@ import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
 import 'package:oneplay_flutter_gui/app/widgets/footer/authFooter.dart';
 import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:validators/validators.dart';
+
+import '../widgets/popup/popup_success.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -21,30 +24,44 @@ class _LoginState extends State<Login> {
   bool loading = false;
   bool isSavePwd = false;
 
+  String errorEmail = "";
+  String errorPwd = "";
   login(String id, String password) async {
     final RestService restService = Modular.get<RestService>();
     final AuthService authService = Modular.get<AuthService>();
 
     setState(() => loading = true);
 
-    String token = await restService.login(id: id, password: password);
-    await authService.login(token);
-
-    setState(() => loading = false);
-    Modular.to.navigate('/feeds');
+    try {
+      String token = await restService.login(id: id, password: password);
+      await authService.login(token);
+      showDialog(
+          context: context,
+          builder: (_) => alertSuccess(
+              context: context,
+              title: 'Login Success',
+              description: 'You will be redirect to Feed Page'),
+          barrierDismissible: false);
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        setState(() => loading = false);
+        Modular.to.navigate('/feeds');
+      });
+    } catch (e) {
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final idCtrler = TextEditingController();
     final pwdCtrler = TextEditingController();
-
     return SafeArea(
         child: SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Form(
-        key: _formKey,
         child: SingleChildScrollView(
           child: Column(children: [
             headTitle(),
@@ -53,7 +70,7 @@ class _LoginState extends State<Login> {
               labelText: 'Email / Phone',
               hintText: 'Email Address',
               textCtrler: idCtrler,
-              errorText: '',
+              errorText: errorEmail,
             ),
             const SizedBox(height: 40),
             customTextField(
@@ -61,7 +78,7 @@ class _LoginState extends State<Login> {
               hintText: '',
               textCtrler: pwdCtrler,
               textInputType: TextInputType.visiblePassword,
-              errorText: '',
+              errorText: errorPwd,
             ),
             Padding(
               padding: const EdgeInsets.all(40),
@@ -70,8 +87,21 @@ class _LoginState extends State<Login> {
                 children: [savePwd(), forgotPwd()],
               ),
             ),
-            loginBtn(context,
-                () => login(idCtrler.text.trim(), pwdCtrler.text.trim())),
+            loginBtn(context, () {
+              if (!isEmail(idCtrler.text)) {
+                setState(() => errorEmail = "Invalid email address");
+                return;
+              }
+              if (idCtrler.text.isEmpty) {
+                setState(() => errorEmail = "Enter your email");
+                return;
+              }
+              if (pwdCtrler.text.isEmpty) {
+                setState(() => errorPwd = "Enter your password");
+                return;
+              }
+              login(idCtrler.text.trim(), pwdCtrler.text.trim());
+            }),
             createNewAccount(),
             commonDividerWidget(),
             needHelpWidget(),
@@ -131,12 +161,13 @@ class _LoginState extends State<Login> {
                         SizedBox(
                             height: 20,
                             width: 20,
-                            child: CircularProgressIndicator(
+                            child: Icon(
+                              Icons.check_circle,
                               color: Colors.white,
                             )),
                         SizedBox(width: 15),
                         Text(
-                          'Validating....',
+                          'Logging you in...',
                           style: TextStyle(
                               fontFamily: mainFontFamily,
                               color: Colors.white,
