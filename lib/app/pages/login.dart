@@ -24,6 +24,8 @@ class _LoginState extends State<Login> {
   bool loading = false;
   bool isSavePwd = false;
 
+  final idCtrler = TextEditingController();
+  final pwdCtrler = TextEditingController();
   String errorEmail = "";
   String errorPwd = "";
   login(String id, String password) async {
@@ -55,8 +57,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final idCtrler = TextEditingController();
-    final pwdCtrler = TextEditingController();
     return SafeArea(
         child: SizedBox(
       height: MediaQuery.of(context).size.height,
