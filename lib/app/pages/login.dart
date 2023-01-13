@@ -24,6 +24,8 @@ class _LoginState extends State<Login> {
   bool loading = false;
   bool isSavePwd = false;
 
+  final idCtrler = TextEditingController();
+  final pwdCtrler = TextEditingController();
   String errorEmail = "";
   String errorPwd = "";
   login(String id, String password) async {
@@ -47,16 +49,24 @@ class _LoginState extends State<Login> {
         Modular.to.navigate('/feeds');
       });
     } catch (e) {
-      setState(() {
-        loading = false;
-      });
+      showDialog(
+          context: context,
+          builder: (_) {
+            Future.delayed(const Duration(milliseconds: 3000), () {
+              setState(() => loading = false);
+              Navigator.pop(_);
+            });
+            return alertError(
+                context: context,
+                title: 'Login Error',
+                description: 'Please check your email, password and try again');
+          },
+          barrierDismissible: false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final idCtrler = TextEditingController();
-    final pwdCtrler = TextEditingController();
     return SafeArea(
         child: SizedBox(
       height: MediaQuery.of(context).size.height,
