@@ -9,6 +9,8 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/appbar/appbarWidget.dart';
 
+import '../../widgets/bottom_nav/bottom_nav.dart';
+
 class AdminWidget extends StatefulWidget {
   const AdminWidget({super.key});
 
@@ -32,6 +34,7 @@ class _AdminWidgetState extends State<AdminWidget> {
         child: AppBarWidget().menu(context),
       ),
       body: const RouterOutlet(),
+      bottomNavigationBar: const BottomNav(),
     );
   }
 

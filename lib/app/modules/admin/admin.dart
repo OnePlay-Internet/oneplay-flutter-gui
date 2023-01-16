@@ -2,6 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/modules/admin/admin_widget.dart';
 import 'package:oneplay_flutter_gui/app/pages/feeds.dart';
 import 'package:oneplay_flutter_gui/app/pages/game.dart';
+import 'package:oneplay_flutter_gui/app/pages/search.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
@@ -26,6 +27,10 @@ class AdminModule extends Module {
             ChildRoute(
               '/game/:id',
               child: (context, args) => Game(args.params['id']),
+            ),
+            ChildRoute(
+              '/search',
+              child: (context, args) => const Search(),
             ),
           ],
         )
