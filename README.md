@@ -24,7 +24,7 @@ From your command line:
   * `cd oneplay-flutter-gui`
 
 * Create config env
-  * Create config.dart into config/
+  * Create config.dart into lib/app/common/config/
   * Define API_BASE_URL and CLIENT_API_BASE_URL
 
 * Install dependencies
