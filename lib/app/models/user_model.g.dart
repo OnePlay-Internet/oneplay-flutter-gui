@@ -37,3 +37,25 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'is_verified_profile': instance.isVerified,
       'profile_image': instance.photo,
     };
+
+ShortUserModel _$ShortUserModelFromJson(Map<String, dynamic> json) =>
+    ShortUserModel(
+      id: json['user_id'] as String,
+      username: json['username'] as String?,
+      firstName: json['first_name'] as String,
+      lastName: json['last_name'] as String,
+      email: json['email'] as String,
+      phone: json['phone'] as String,
+      photo: json['profile_image'] as String?,
+    );
+
+Map<String, dynamic> _$ShortUserModelToJson(ShortUserModel instance) =>
+    <String, dynamic>{
+      'user_id': instance.id,
+      'username': instance.username,
+      'email': instance.email,
+      'phone': instance.phone,
+      'first_name': instance.firstName,
+      'last_name': instance.lastName,
+      'profile_image': instance.photo,
+    };

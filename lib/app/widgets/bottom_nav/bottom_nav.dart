@@ -50,10 +50,10 @@ class _BottomNavState extends State<BottomNav> {
 
     switch (value) {
       case 0:
-        Modular.to.pushNamed('/feeds');
+        Modular.to.pushNamedAndRemoveUntil('/feeds', (r) => false);
         break;
       case 1:
-        Modular.to.pushNamed('/search');
+        Modular.to.pushNamedAndRemoveUntil('/search', (r) => false);
         break;
     }
   }
