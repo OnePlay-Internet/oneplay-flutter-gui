@@ -83,7 +83,8 @@ class _SearchState extends State<Search> {
                     if (games.isNotEmpty)
                       _seeAllBtn(
                         context,
-                        onTap: () => Modular.to.pushNamed('/search/games'),
+                        onTap: () => Modular.to
+                            .pushNamed('/search/games?q=${_controller.text}'),
                         text: "See more games",
                       ),
                     if (users.isNotEmpty) _titleText('People'),
@@ -91,7 +92,8 @@ class _SearchState extends State<Search> {
                     if (users.isNotEmpty)
                       _seeAllBtn(
                         context,
-                        onTap: () => Modular.to.pushNamed('/search/users'),
+                        onTap: () => Modular.to
+                            .pushNamed('/search/users?q=${_controller.text}'),
                         text: "See more people",
                       ),
                   ],
@@ -177,9 +179,9 @@ class _SearchState extends State<Search> {
           limit: 3,
         )
             .then((res) {
+          setState(() => games = res.results);
           keyword = res.keyword;
           keywordHash = res.keywordHash;
-          games = res.results;
         }),
         _restService
             .searchUsers(
@@ -187,8 +189,8 @@ class _SearchState extends State<Search> {
           page: 0,
           limit: 3,
         )
-            .then((_users) {
-          users = _users;
+            .then((value) {
+          setState(() => users = value);
         }),
       ]);
     } on DioError catch (e) {
