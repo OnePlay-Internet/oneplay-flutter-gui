@@ -121,6 +121,7 @@ class _GameState extends State<Game> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
@@ -133,16 +134,18 @@ class _GameState extends State<Game> {
                     const SizedBox(
                       height: 20,
                     ),
-                    // Row(
-                    //   children: [
-                        // CachedNetworkImage(
-                        //     imageUrl: game?.storesMapping[0].link ?? "",
-                        //     height: 30),
-                        // const SizedBox(height: 20),
-                        Text(game?.storesMapping[0].name ?? "",
-                            style: tinyStyle)
-                    //   ],
-                    // )
+                    if (game != null)
+                      if (game!.storesMapping.isNotEmpty)
+                        Row(
+                          children: [
+                            // CachedNetworkImage(
+                            //     imageUrl: game?.storesMapping[0].link ?? "",
+                            //     height: 30),
+                            // const SizedBox(height: 20),
+                            Text(game?.storesMapping[0].name ?? "",
+                                style: tinyStyle)
+                          ],
+                        )
                   ],
                 ),
               ),
