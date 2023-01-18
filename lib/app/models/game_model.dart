@@ -81,7 +81,7 @@ class GameModel {
   String? officialWebsite;
 
   @JsonKey(name: 'age_rating')
-  String ageRating;
+  String? ageRating;
 
   @JsonKey(name: 'rawg_id')
   String rawgId;
@@ -150,7 +150,7 @@ class GameModel {
     required this.popularityScore,
     this.metacriticScore,
     this.officialWebsite,
-    required this.ageRating,
+    this.ageRating,
     required this.rawgId,
     this.cheapsharkId,
     required this.isReleased,

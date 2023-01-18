@@ -36,7 +36,7 @@ GameModel _$GameModelFromJson(Map<String, dynamic> json) => GameModel(
       popularityScore: (json['popularity_score'] as num).toDouble(),
       metacriticScore: json['metacritic_score'] as int?,
       officialWebsite: json['official_website'] as String?,
-      ageRating: json['age_rating'] as String,
+      ageRating: json['age_rating'] as String?,
       rawgId: json['rawg_id'] as String,
       cheapsharkId: json['cheapshark_id'] as String?,
       isReleased: GameModel._boolFromString(json['is_released'] as String),

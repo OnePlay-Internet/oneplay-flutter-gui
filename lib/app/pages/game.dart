@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,10 @@ import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/initialize_state.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
+import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
+import 'package:readmore/readmore.dart';
+
+import '../common/common.dart';
 
 class Game extends StatefulWidget {
   final String id;
@@ -32,46 +37,297 @@ class _GameState extends State<Game> {
   bool terminating = false;
   InitializeState initializeState = InitializeState();
 
+  bool isShowSetting = true;
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _reloadGameStatus,
       child: ListView(
-        padding: const EdgeInsets.only(top: 40),
         children: [
-          Center(child: Text('${game?.title}')),
-          const SizedBox(height: 32),
-          if (game?.bgImage != null)
-            Column(
-              children: [
-                Image(image: NetworkImage(game?.bgImage ?? '')),
-                const SizedBox(height: 32),
-              ],
+          if (game?.bgImage != null) bannerImageWidget(context),
+          checkShowSettingWidget(context),
+          commonDividerWidget(),
+          detailGameWidget(),
+          // Center(child: Text('${game?.title}')),
+          // const SizedBox(height: 32),
+          // if (game?.bgImage != null)
+          //   Column(
+          //     children: [
+          //       Image(image: NetworkImage(game?.bgImage ?? '')),
+          //       const SizedBox(height: 32),
+          //     ],
+          //   ),
+          // Observer(
+          //   builder: (_) {
+          //     String action = _getAction(gameService.gameStatus);
+          //     return Column(
+          //       children: [
+          //         OutlinedButton(
+          //           onPressed: starting || game == null ? null : _startgame,
+          //           child: Text(action),
+          //         ),
+          //         if (action == 'Resume') const SizedBox(height: 32),
+          //         if (action == 'Resume')
+          //           OutlinedButton(
+          //             onPressed: terminating
+          //                 ? null
+          //                 : () => _terminateSession(
+          //                     gameService.gameStatus.sessionId!),
+          //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
+          //           ),
+          //       ],
+          //     );
+          //   },
+          // )
+        ],
+      ),
+    );
+  }
+
+  Widget detailGameWidget() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'About Game',
+            style: TextStyle(
+                fontFamily: mainFontFamily,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.02,
+                color: Colors.white),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ReadMoreText(
+              game?.description ?? "",
+              style: tinyStyle.copyWith(color: greyColor1),
+              trimMode: TrimMode.Line,
+              trimLines: 3,
+              colorClickableText: greyColor2,
+              trimCollapsedText: 'Read more',
+              trimExpandedText: 'Collapse',
+              textAlign: TextAlign.left,
             ),
-          Observer(
-            builder: (_) {
-              String action = _getAction(gameService.gameStatus);
-              return Column(
-                children: [
-                  OutlinedButton(
-                    onPressed: starting || game == null ? null : _startgame,
-                    child: Text(action),
-                  ),
-                  if (action == 'Resume') const SizedBox(height: 32),
-                  if (action == 'Resume')
-                    OutlinedButton(
-                      onPressed: terminating
-                          ? null
-                          : () => _terminateSession(
-                              gameService.gameStatus.sessionId!),
-                      child: Text(terminating ? 'Terminating...' : 'Terminate'),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Store',
+                      style: tinyStyle.copyWith(color: greyColor1),
                     ),
-                ],
-              );
-            },
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    // Row(
+                    //   children: [
+                        // CachedNetworkImage(
+                        //     imageUrl: game?.storesMapping[0].link ?? "",
+                        //     height: 30),
+                        // const SizedBox(height: 20),
+                        Text(game?.storesMapping[0].name ?? "",
+                            style: tinyStyle)
+                    //   ],
+                    // )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Developer',
+                        style: tinyStyle.copyWith(color: greyColor1)),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      game?.developer
+                              .toString()
+                              .replaceAll('[', '')
+                              .replaceAll(']', '')
+                              .replaceAll(',', '') ??
+                          "",
+                      style: tinyStyle,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
+              ),
+            ],
           )
         ],
       ),
+    );
+  }
+
+  Container checkShowSettingWidget(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Theme(
+            data: Theme.of(context).copyWith(
+              unselectedWidgetColor: greyColor2,
+            ),
+            child: Checkbox(
+              value: isShowSetting,
+              activeColor: greyColor2,
+              checkColor: Colors.black,
+              onChanged: (value) => setState(() {
+                isShowSetting = value!;
+              }),
+            ),
+          ),
+          Text(
+            'Show settings before launch',
+            style: tinyStyle.copyWith(color: greyColor1),
+          )
+        ],
+      ),
+    );
+  }
+
+  Stack bannerImageWidget(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          height: 244,
+          margin: const EdgeInsets.all(20),
+          width: MediaQuery.of(context).size.width,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+              imageUrl: game!.bgImage,
+              fit: BoxFit.fitHeight,
+              placeholder: (context, url) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+              errorWidget: (context, url, error) {
+                return Stack(
+                  children: [
+                    Image.asset(
+                      defaultBg,
+                      fit: BoxFit.fitHeight,
+                    ),
+                    Positioned(
+                      top: 40,
+                      left: 5,
+                      child: Text(
+                        game!.title,
+                        style: const TextStyle(
+                            color: Colors.white, fontFamily: mainFontFamily),
+                        maxLines: 2,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+        Container(
+          height: 244,
+          margin: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                  begin: FractionalOffset.center,
+                  end: FractionalOffset.bottomCenter,
+                  colors: [
+                    Colors.black.withAlpha(65),
+                    Colors.black,
+                  ],
+                  stops: const [
+                    0.0,
+                    1.0
+                  ])),
+        ),
+        Positioned(
+            top: 40,
+            right: 40,
+            child: Container(
+              height: 48,
+              width: 48,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(90), color: Colors.black),
+              child: Center(
+                child: Container(
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: const LinearGradient(
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topRight,
+                          colors: [
+                            Color(0xff59FEF4),
+                            Color(0xff3AA0FE),
+                          ])),
+                  child: const Center(
+                    child: Icon(
+                      Icons.add_rounded,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            )),
+        Container(
+          height: 244,
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.all(20),
+          child: Align(
+              alignment: const Alignment(0, 1.2),
+              child: Observer(builder: (_) {
+                String action = _getAction(gameService.gameStatus);
+                return InkWell(
+                  onTap: starting || game == null ? null : _startgame,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 100,
+                    height: 48,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(90),
+                        gradient: const LinearGradient(
+                          colors: [pinkColor1, blueColor1],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )),
+                    child: Center(
+                        child: Text(
+                      action,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: mainFontFamily,
+                          fontSize: 16,
+                          letterSpacing: 0.02,
+                          fontWeight: FontWeight.w500),
+                    )),
+                  ),
+                );
+              })),
+        )
+      ],
     );
   }
 
@@ -93,11 +349,11 @@ class _GameState extends State<Game> {
         if (gameStatus.isRunning == true) {
           return 'Resume';
         }
-        return 'Play';
+        return 'Play Now';
       }
-      return 'Play';
+      return 'Play Now';
     }
-    return 'Play';
+    return 'Play Now';
   }
 
   Future<void> _reloadGameStatus() async {
