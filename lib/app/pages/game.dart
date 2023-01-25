@@ -49,6 +49,8 @@ class _GameState extends State<Game> {
           checkShowSettingWidget(context),
           commonDividerWidget(),
           detailGameWidget(),
+          listTagWidget(),
+
           // Center(child: Text('${game?.title}')),
           // const SizedBox(height: 32),
           // if (game?.bgImage != null)
@@ -81,6 +83,56 @@ class _GameState extends State<Game> {
           //   },
           // )
         ],
+      ),
+    );
+  }
+
+  Widget listTagWidget() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            child: Text(
+              'Tags',
+              style: tinyStyle.copyWith(color: greyColor1),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Wrap(
+            spacing: 15,
+            runSpacing: 15,
+            children:
+                game?.genreMappings.map((e) => tagWidget(e)).toList() ?? [],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget tagWidget(String? tagName) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      height: 24,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [purpleColor2, purpleColor1],
+          )),
+      child: Text(
+        tagName ?? '',
+        style: const TextStyle(
+            fontFamily: mainFontFamily,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            letterSpacing: 0.02,
+            color: Colors.white),
       ),
     );
   }
