@@ -59,3 +59,39 @@ class UserModel {
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }
+
+@JsonSerializable()
+class ShortUserModel {
+  @JsonKey(name: 'user_id')
+  String id;
+
+  String? username;
+
+  String email;
+
+  String phone;
+
+  @JsonKey(name: 'first_name')
+  String firstName;
+
+  @JsonKey(name: 'last_name')
+  String lastName;
+
+  @JsonKey(name: 'profile_image')
+  String? photo;
+
+  ShortUserModel({
+    required this.id,
+    this.username,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.phone,
+    this.photo,
+  });
+
+  factory ShortUserModel.fromJson(Map<String, dynamic> json) =>
+      _$ShortUserModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ShortUserModelToJson(this);
+}
