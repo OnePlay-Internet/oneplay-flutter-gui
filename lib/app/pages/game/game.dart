@@ -9,6 +9,7 @@ import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_status_model.dart';
 import 'package:oneplay_flutter_gui/app/models/start_game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/video_model.dart';
+import 'package:oneplay_flutter_gui/app/pages/game/popup_game_setting.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/initialize_state.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
@@ -347,6 +348,13 @@ class _GameState extends State<Game> {
   }
 
   void _startgame() async {
+    if (isShowSetting) {
+      await showDialog(
+          context: context,
+          builder: (_) => gameSettingPopup(context),
+          barrierDismissible: false);
+    }
+
     try {
       _startLoading();
 
