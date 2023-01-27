@@ -148,35 +148,91 @@ class _GameState extends State<Game> {
       height: 244,
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.all(20),
-      child: Align(
-          alignment: const Alignment(0, 1.2),
-          child: Observer(builder: (_) {
-            String action = _getAction(gameService.gameStatus);
-            return InkWell(
-              onTap: starting || game == null ? null : _startgame,
-              child: Container(
-                width: MediaQuery.of(context).size.width - 100,
-                height: 48,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(90),
-                    gradient: const LinearGradient(
-                      colors: [pinkColor1, blueColor1],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                child: Center(
-                    child: Text(
-                  action,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontFamily: mainFontFamily,
-                      fontSize: 16,
-                      letterSpacing: 0.02,
-                      fontWeight: FontWeight.w500),
-                )),
+      child: Observer(builder: (_) {
+        String action = _getAction(gameService.gameStatus);
+        if (action == "Resume") {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: starting || game == null ? null : _startgame,
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 100,
+                  height: 48,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(90),
+                      color: Colors.white),
+                  child: Center(
+                      child: Text(
+                    action,
+                    style: const TextStyle(
+                        color: basicLineColor,
+                        fontFamily: mainFontFamily,
+                        fontSize: 16,
+                        letterSpacing: 0.02,
+                        fontWeight: FontWeight.w500),
+                  )),
+                ),
               ),
-            );
-          })),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: terminating
+                    ? null
+                    : () =>
+                        _terminateSession(gameService.gameStatus.sessionId!),
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 100,
+                  height: 48,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(90),
+                      gradient: const LinearGradient(
+                        colors: [pinkColor2, purpleColor3],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )),
+                  child: Center(
+                      child: Text(
+                    terminating ? 'Terminating...' : 'Terminate',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: mainFontFamily,
+                        fontSize: 16,
+                        letterSpacing: 0.02,
+                        fontWeight: FontWeight.w500),
+                  )),
+                ),
+              )
+            ],
+          );
+        }
+        return Align(
+          alignment: const Alignment(0, 1.2),
+          child: InkWell(
+            onTap: starting || game == null ? null : _startgame,
+            child: Container(
+              width: MediaQuery.of(context).size.width - 100,
+              height: 48,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(90),
+                  gradient: const LinearGradient(
+                    colors: [pinkColor1, blueColor1],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )),
+              child: Center(
+                  child: Text(
+                action,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: mainFontFamily,
+                    fontSize: 16,
+                    letterSpacing: 0.02,
+                    fontWeight: FontWeight.w500),
+              )),
+            ),
+          ),
+        );
+      }),
     );
   }
 
