@@ -56,7 +56,7 @@ class _SearchState extends State<Search> {
                       style: BorderStyle.none,
                     ),
                   ),
-                  fillColor: blackColor3,
+                  fillColor: basicLineColor,
                   filled: true,
                   hintText: "Search for game or friends",
                   hintStyle: const TextStyle(
