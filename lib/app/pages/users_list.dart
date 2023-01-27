@@ -35,7 +35,7 @@ class _UsersListState extends State<UsersList> {
                 ? 'All users'
                 : 'You searched for "${widget.query}"',
             style: const TextStyle(
-              color: greyColor1,
+              color: textSecondaryColor,
               fontSize: 20,
             ),
           ),

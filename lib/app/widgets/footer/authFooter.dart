@@ -53,7 +53,7 @@ Padding needHelpWidget() {
               fontSize: 16,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.02,
-              color: greyColor1),
+              color: textSecondaryColor),
         ),
         GradientText(
           'Browse FAQ',

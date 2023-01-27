@@ -9,6 +9,7 @@ import 'package:oneplay_flutter_gui/app/models/client_token_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_status_model.dart';
 import 'package:oneplay_flutter_gui/app/models/start_game_model.dart';
+import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/initialize_state.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
@@ -17,6 +18,8 @@ import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
 import 'package:readmore/readmore.dart';
 
 import '../common/common.dart';
+import '../models/game_feed_model.dart';
+import '../widgets/list_game_w_label/list_game_w_label.dart';
 
 class Game extends StatefulWidget {
   final String id;
@@ -32,10 +35,15 @@ class _GameState extends State<Game> {
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
   GameModel? game;
+  List<ShortGameModel> devGames = [];
+  List<ShortGameModel> genreGames = [];
+  List<VideoModel> videos = [];
   BuildContext? initializeContext;
   bool starting = false;
   bool terminating = false;
   InitializeState initializeState = InitializeState();
+
+  int maxLoadTopVideo = 2;
 
   bool isShowSetting = true;
 
@@ -50,6 +58,19 @@ class _GameState extends State<Game> {
           commonDividerWidget(),
           detailGameWidget(),
           listTagWidget(),
+          const SizedBox(
+            height: 10,
+          ),
+          commonDividerWidget(),
+          topVideoLiveStreamsWidget(),
+          commonDividerWidget(),
+          const SizedBox(height: 30),
+          if (genreGames.isNotEmpty)
+            listGameWithLabel(
+                GameFeedModel(title: 'From Genre', games: genreGames)),
+          if (genreGames.isNotEmpty)
+            listGameWithLabel(
+                GameFeedModel(title: 'From Developer', games: devGames)),
 
           // Center(child: Text('${game?.title}')),
           // const SizedBox(height: 32),
@@ -87,6 +108,128 @@ class _GameState extends State<Game> {
     );
   }
 
+  Widget topVideoLiveStreamsWidget() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            child: const Text(
+              'Top Live Streams',
+              style: TextStyle(
+                  fontFamily: mainFontFamily,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.02,
+                  color: textPrimaryColor),
+            ),
+          ),
+          const SizedBox(height: 15),
+          ...videos.map((e) {
+            if (videos.indexOf(e) < maxLoadTopVideo) return videoWidget(e);
+            return const SizedBox.shrink();
+          }).toList(),
+          if (maxLoadTopVideo < videos.length)
+            InkWell(
+              onTap: (() {
+                setState(() => maxLoadTopVideo += 3);
+              }),
+              child: Container(
+                height: 44,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    end: Alignment.centerLeft,
+                    begin: Alignment.centerRight,
+                    colors: [blackColor1, blackColor2],
+                  ),
+                  borderRadius: BorderRadius.circular(60),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Browse more streams',
+                    style: TextStyle(
+                        fontFamily: mainFontFamily,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        letterSpacing: 0.02,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            )
+        ],
+      ),
+    );
+  }
+
+  Widget videoWidget(VideoModel video) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15),
+      height: 370,
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: 248,
+              width: MediaQuery.of(context).size.width,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: video.thumbnail,
+                  width: 125,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return Image.asset(
+                      defaultBg,
+                      fit: BoxFit.fitHeight,
+                    );
+                  },
+                ),
+              ),
+            ),
+            Text(video.title,
+                style: tinyStyle.copyWith(color: textSecondaryColor),
+                maxLines: 2),
+            SizedBox(
+              height: 52,
+              child: Row(children: [
+                SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(90),
+                    child: CachedNetworkImage(
+                      imageUrl: video.creatorThumbnail,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(video.creatorName,
+                        style: tinyStyle.copyWith(color: textSecondaryColor)),
+                    Text(video.updatedAt.toString(),
+                        style: tinyStyle.copyWith(color: textSecondaryColor)),
+                  ],
+                )
+              ]),
+            ),
+          ]),
+    );
+  }
+
   Widget listTagWidget() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -97,7 +240,7 @@ class _GameState extends State<Game> {
             alignment: Alignment.topLeft,
             child: Text(
               'Tags',
-              style: tinyStyle.copyWith(color: greyColor1),
+              style: tinyStyle.copyWith(color: textSecondaryColor),
             ),
           ),
           const SizedBox(
@@ -159,10 +302,10 @@ class _GameState extends State<Game> {
             width: MediaQuery.of(context).size.width,
             child: ReadMoreText(
               game?.description ?? "",
-              style: tinyStyle.copyWith(color: greyColor1),
+              style: tinyStyle.copyWith(color: textSecondaryColor),
               trimMode: TrimMode.Line,
               trimLines: 3,
-              colorClickableText: greyColor2,
+              colorClickableText: textPrimaryColor,
               trimCollapsedText: 'Read more',
               trimExpandedText: 'Collapse',
               textAlign: TextAlign.left,
@@ -181,7 +324,7 @@ class _GameState extends State<Game> {
                   children: [
                     Text(
                       'Store',
-                      style: tinyStyle.copyWith(color: greyColor1),
+                      style: tinyStyle.copyWith(color: textSecondaryColor),
                     ),
                     const SizedBox(
                       height: 20,
@@ -206,7 +349,7 @@ class _GameState extends State<Game> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Developer',
-                        style: tinyStyle.copyWith(color: greyColor1)),
+                        style: tinyStyle.copyWith(color: textSecondaryColor)),
                     const SizedBox(
                       height: 20,
                     ),
@@ -239,11 +382,11 @@ class _GameState extends State<Game> {
         children: [
           Theme(
             data: Theme.of(context).copyWith(
-              unselectedWidgetColor: greyColor2,
+              unselectedWidgetColor: textPrimaryColor,
             ),
             child: Checkbox(
               value: isShowSetting,
-              activeColor: greyColor2,
+              activeColor: textPrimaryColor,
               checkColor: Colors.black,
               onChanged: (value) => setState(() {
                 isShowSetting = value!;
@@ -252,7 +395,7 @@ class _GameState extends State<Game> {
           ),
           Text(
             'Show settings before launch',
-            style: tinyStyle.copyWith(color: greyColor1),
+            style: tinyStyle.copyWith(color: textSecondaryColor),
           )
         ],
       ),
@@ -388,14 +531,46 @@ class _GameState extends State<Game> {
 
   @override
   void initState() {
-    _getGameById();
+    init();
     super.initState();
   }
 
-  void _getGameById() async {
+  init() async {
     var game = await restService.getGameDetails(widget.id);
-
     setState(() => this.game = game);
+
+    _getTopVideoById();
+    _getFromGenreBydId();
+    _getFromDeveloperBydId();
+  }
+
+  void _getFromGenreBydId() async {
+    game?.genreMappings.forEach((element) async {
+      var genreGames = await restService.getGamesByGenre(element);
+      setState(() => this.genreGames =
+          getShuffledGames([...this.genreGames, ...genreGames]));
+    });
+  }
+
+  void _getFromDeveloperBydId() async {
+    game?.developer.forEach((element) async {
+      var devGames = await restService.getGamesByDeveloper(element);
+      setState(() =>
+          this.devGames = getShuffledGames([...this.devGames, ...devGames]));
+    });
+  }
+
+  void _getTopVideoById() async {
+    var videos = await restService.getVideos(widget.id);
+    setState(() => this.videos = videos);
+  }
+
+  // private getShuffledGames(games: GameModel[]): GameModel[] {
+  //   return [...games].sort(() => Math.random() - 0.5);
+  // }
+
+  getShuffledGames(List<ShortGameModel> games) {
+    return [...games];
   }
 
   String _getAction(GameStatusModel? gameStatus) {

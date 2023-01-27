@@ -42,7 +42,7 @@ InkWell gameRow(ShortGameModel e) {
                   Text(
                     e.title,
                     style: const TextStyle(
-                      color: greyColor2,
+                      color: textPrimaryColor,
                       fontSize: 16,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -50,7 +50,7 @@ InkWell gameRow(ShortGameModel e) {
                   Text(
                     e.releaseDate.year.toString(),
                     style: const TextStyle(
-                      color: greyColor1,
+                      color: textSecondaryColor,
                       fontSize: 14,
                     ),
                   ),

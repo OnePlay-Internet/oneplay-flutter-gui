@@ -37,7 +37,7 @@ class _GamesListState extends State<GamesList> {
                 ? 'All games'
                 : 'You searched for "${widget.query}"',
             style: const TextStyle(
-              color: greyColor1,
+              color: textSecondaryColor,
               fontSize: 20,
             ),
           ),
