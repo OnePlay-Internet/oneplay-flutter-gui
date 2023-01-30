@@ -351,7 +351,7 @@ class _GameState extends State<Game> {
     if (isShowSetting) {
       await showDialog(
           context: context,
-          builder: (_) => gameSettingPopup(context),
+          builder: (_) => gameSettingPopup(_),
           barrierDismissible: false);
     }
 
