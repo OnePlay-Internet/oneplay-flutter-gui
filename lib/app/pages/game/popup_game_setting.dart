@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:oneplay_flutter_gui/main.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../common/common.dart';
 import '../../widgets/common_divider.dart';
+import '../../widgets/custom_switch/custom_switch.dart';
 
 Widget gameSettingPopup(BuildContext context) {
   List<String> resolutionList = [
@@ -25,6 +27,7 @@ Widget gameSettingPopup(BuildContext context) {
       backgroundColor: mainColor,
       contentPadding: EdgeInsets.zero,
       content: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.8,
         width: MediaQuery.of(context).size.width,
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -95,7 +98,7 @@ Widget gameSettingPopup(BuildContext context) {
                             style: tinyStyle.copyWith(color: textPrimaryColor),
                           ),
                           StatefulBuilder(
-                            builder: (context, setState) => SizedBox(
+                            builder: (_, setState) => SizedBox(
                               height: 20,
                               width: 34,
                               child: Transform.scale(
@@ -130,46 +133,256 @@ Widget gameSettingPopup(BuildContext context) {
               ),
             ),
             const SizedBox(height: 30),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                SvgPicture.asset(advancedSettingIcon,
-                    height: 20, color: textPrimaryColor),
-                const SizedBox(width: 14),
-                Text(
-                  'Advanced game options',
-                  style: tinyStyle.copyWith(color: textSecondaryColor),
-                )
-              ]),
-            ),
             InkWell(
-              child: Container(
-                margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
+              onTap: () => advancedSettingPopup(context),
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 48,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    gradient: const LinearGradient(
-                      colors: [pinkColor1, blueColor1],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                child: Center(
-                  child: Text(
-                    'Launch Game',
-                    style: tinyStyle.copyWith(color: Colors.white),
-                  ),
-                ),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  SvgPicture.asset(advancedSettingIcon,
+                      height: 20, color: textPrimaryColor),
+                  const SizedBox(width: 14),
+                  Text(
+                    'Advanced game options',
+                    style: tinyStyle.copyWith(color: textSecondaryColor),
+                  )
+                ]),
               ),
-            )
+            ),
+            btnLaunchGame(context)
           ],
         ),
       ));
 }
 
-Widget advancedSettingPopup() {
-  return AlertDialog();
+advancedSettingPopup(BuildContext context) {
+  bool abMouseMode = true;
+  bool abTouchMode = true;
+  bool bgGamepad = false;
+
+  List<String> audioType = ['Stereo', '5.1 Channel'];
+  List<String> streamCodec = ['Auto', 'HEVC', 'H.265'];
+  List<String> videoDecode = ['Auto', 'Software', 'Hardware'];
+
+  int audioTypeValue = 0;
+  int streamCodecValue = 1;
+  int videoDecodeValue = 0;
+
+  showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0))),
+            backgroundColor: blackColor4,
+            contentPadding: EdgeInsets.zero,
+            insetPadding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            content: StatefulBuilder(builder: (__, setState) {
+              return SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: blackColor4,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 40, bottom: 30, left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Advanced Game Options',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontFamily: mainFontFamily,
+                                  letterSpacing: 0.02,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            InkWell(
+                              onTap: () => Navigator.pop(context),
+                              child: SvgPicture.asset(
+                                crossIcon,
+                                height: 20,
+                                width: 20,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      commonDividerWidget(),
+                      switchGameSetting(
+                          context: context,
+                          content: 'Absolute Mouse Mode',
+                          setState: setState,
+                          value: abMouseMode,
+                          onChanged: (value) =>
+                              {setState(() => abMouseMode = value)}),
+                      switchGameSetting(
+                          context: context,
+                          content: 'Absolute Touch Mode',
+                          setState: setState,
+                          value: abTouchMode,
+                          onChanged: (value) =>
+                              {setState(() => abTouchMode = value)}),
+                      switchGameSetting(
+                          context: context,
+                          content: 'Background Gamepad',
+                          setState: setState,
+                          value: bgGamepad,
+                          onChanged: (value) =>
+                              {setState(() => bgGamepad = value)}),
+                      selectionGameSetting(
+                          context,
+                          'Audio Type',
+                          audioType,
+                          (e) => setState(
+                              () => audioTypeValue = audioType.indexOf(e)),
+                          audioTypeValue),
+                      selectionGameSetting(
+                          context,
+                          'Stream Codec',
+                          streamCodec,
+                          (e) => setState(
+                              () => streamCodecValue = streamCodec.indexOf(e)),
+                          streamCodecValue),
+                      selectionGameSetting(
+                          context,
+                          'Video Decoder Selection',
+                          videoDecode,
+                          (e) => setState(
+                              () => videoDecodeValue = videoDecode.indexOf(e)),
+                          videoDecodeValue),
+                      btnLaunchGame(context),
+                      const SizedBox(height: 20)
+                    ],
+                  ),
+                ),
+              );
+            }));
+      },
+      barrierDismissible: false);
+}
+
+Container selectionGameSetting(BuildContext context, String title,
+    List<String> audioType, Function(String e) onTap, int audioTypeValue) {
+  return Container(
+    height: 88,
+    width: MediaQuery.of(context).size.width,
+    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+    child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: tinyStyle.copyWith(color: textSecondaryColor),
+          ),
+          Wrap(
+            spacing: 15,
+            runSpacing: 15,
+            children: audioType
+                .map((e) => InkWell(
+                      onTap: () => onTap(e),
+                      child: Container(
+                        height: 52,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 13),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                width: 2,
+                                color: audioType.indexOf(e) == audioTypeValue
+                                    ? purpleColor1
+                                    : basicLineColor)),
+                        child: GradientText(
+                          e,
+                          style: tinyStyle,
+                          gradientType: GradientType.linear,
+                          gradientDirection: GradientDirection.ltr,
+                          colors: audioType.indexOf(e) == audioTypeValue
+                              ? const [purpleColor2, purpleColor1]
+                              : [textPrimaryColor, textPrimaryColor],
+                        ),
+                      ),
+                    ))
+                .toList(),
+          )
+        ]),
+  );
+}
+
+Container switchGameSetting({
+  required BuildContext context,
+  required bool value,
+  required StateSetter setState,
+  required String content,
+  required Function(bool value) onChanged,
+}) {
+  return Container(
+    width: MediaQuery.of(context).size.width,
+    height: 52,
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10), color: mainColor),
+    child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            content,
+            style: tinyStyle.copyWith(color: textSecondaryColor),
+          ),
+          SizedBox(
+            height: 20,
+            width: 34,
+            child: Transform.scale(
+              scale: 0.8,
+              child: CupertinoSwitch(
+                value: value,
+                thumbColor: textPrimaryColor,
+                activeColor: Colors.purple,
+                onChanged: onChanged,
+              ),
+            ),
+          ),
+        ]),
+  );
+}
+
+InkWell btnLaunchGame(BuildContext context) {
+  return InkWell(
+    onTap: () => Navigator.pop(context),
+    child: Container(
+      margin: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 30,
+      ),
+      width: MediaQuery.of(context).size.width,
+      height: 48,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          gradient: const LinearGradient(
+            colors: [pinkColor1, blueColor1],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          )),
+      child: Center(
+        child: Text(
+          'Launch Game',
+          style: tinyStyle.copyWith(color: Colors.white),
+        ),
+      ),
+    ),
+  );
 }
 
 Widget dropdownMenu(List<String> options, String selectValue) {
