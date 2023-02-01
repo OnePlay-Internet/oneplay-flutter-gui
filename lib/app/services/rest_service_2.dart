@@ -30,11 +30,24 @@ class RestService2 {
   }
 
   Future<StartGameResponse> startGame(
-      String gameId, GameSetting setting) async {
+    String gameId,
+    GameSetting setting,
+  ) async {
+    const jsonEncoder = JsonEncoder();
     FormData data = FormData.fromMap({
       'game_id': gameId,
-      'launch_payload': jsonDecode(
-          '{"resolution": "${setting.resolution}", "is_vsync_enabled": ${setting.is_vsync_enabled}, "fps": "${setting.fps.toString()}", "bitrate": ${setting.bitrate!.toInt()}, "show_stats": ${setting.show_stats}, "fullscreen": ${setting.fullscreen}, "onscreen_controls": ${setting.onscreen_controls}, "audio_type": "${setting.audio_type}", "stream_codec": "${setting.stream_codec}", "video_decoder_selection": "${setting.video_decoder_selection}"}')
+      'launch_payload': jsonEncoder.convert({
+        "resolution": setting.resolution,
+        "is_vsync_enabled": setting.is_vsync_enabled,
+        "fps": setting.fps.toString(),
+        "bitrate": setting.bitrate!.toInt(),
+        "show_stats": setting.show_stats,
+        "fullscreen": setting.fullscreen,
+        "onscreen_controls": setting.onscreen_controls,
+        "audio_type": setting.audio_type,
+        "stream_codec": setting.stream_codec,
+        "video_decoder_selection": setting.video_decoder_selection,
+      })
     }, ListFormat.multiCompatible);
 
     Response res = await _dio.post('/start_game', data: data);
