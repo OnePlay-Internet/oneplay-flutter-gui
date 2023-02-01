@@ -1,26 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:oneplay_flutter_gui/main.dart';
+import 'package:oneplay_flutter_gui/app/common/utils/play_constant.dart';
+import 'package:oneplay_flutter_gui/app/models/game_setting.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../common/common.dart';
 import '../../widgets/common_divider.dart';
-import '../../widgets/custom_switch/custom_switch.dart';
 
-Widget gameSettingPopup(BuildContext context) {
-  List<String> resolutionList = [
-    '1280x720',
-    '1920x1080',
-    '2560x1440',
-    '3840x2160'
-  ];
-  String resolutionValue = resolutionList[0];
-
-  List<String> fpsList = ['30 FPS', '60 FPS'];
-  String fpsValue = fpsList[1];
-  bool isVsync = true;
-
+Widget gameSettingPopup(BuildContext context, GameSetting gameSetting) {
   return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6.0))),
@@ -74,7 +62,8 @@ Widget gameSettingPopup(BuildContext context) {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: basicLineColor, width: 2)),
               width: MediaQuery.of(context).size.width,
-              child: dropdownMenu(resolutionList, resolutionValue),
+              child: dropdownMenu(
+                  PlayConstants.MOBILE_RESOLUTIONS, gameSetting.resolution),
             ),
             const SizedBox(height: 30),
             Container(
@@ -104,12 +93,12 @@ Widget gameSettingPopup(BuildContext context) {
                               child: Transform.scale(
                                 scale: 0.6,
                                 child: CupertinoSwitch(
-                                  value: isVsync,
+                                  value: gameSetting.is_vsync_enabled!,
                                   thumbColor: textPrimaryColor,
                                   activeColor: Colors.purple,
                                   onChanged: (value) {
                                     setState(() {
-                                      isVsync = value;
+                                      gameSetting.is_vsync_enabled = value;
                                     });
                                   },
                                 ),
@@ -126,7 +115,7 @@ Widget gameSettingPopup(BuildContext context) {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: basicLineColor, width: 2)),
-                      child: dropdownMenu(fpsList, fpsValue),
+                      child: dropdownMenu(PlayConstants.FPS, gameSetting.fps),
                     ),
                   ),
                 ],
@@ -134,7 +123,7 @@ Widget gameSettingPopup(BuildContext context) {
             ),
             const SizedBox(height: 30),
             InkWell(
-              onTap: () => advancedSettingPopup(context),
+              onTap: () => advancedSettingPopup(context, gameSetting),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child:
@@ -155,12 +144,12 @@ Widget gameSettingPopup(BuildContext context) {
       ));
 }
 
-advancedSettingPopup(BuildContext context) {
-  bool abMouseMode = true;
-  bool abTouchMode = true;
-  bool bgGamepad = false;
+advancedSettingPopup(BuildContext context, GameSetting gameSetting) {
+  bool showStats = true;
+  bool fullScreenMode = true;
+  bool onScreenControls = false;
 
-  List<String> audioType = ['Stereo', '5.1 Channel'];
+  List<String> audioType = ['Stereo', '5.1'];
   List<String> streamCodec = ['Auto', 'HEVC', 'H.265'];
   List<String> videoDecode = ['Auto', 'Software', 'Hardware'];
 
@@ -219,46 +208,43 @@ advancedSettingPopup(BuildContext context) {
                       commonDividerWidget(),
                       switchGameSetting(
                           context: context,
-                          content: 'Absolute Mouse Mode',
+                          content: 'Show Stats',
                           setState: setState,
-                          value: abMouseMode,
+                          value: showStats,
                           onChanged: (value) =>
-                              {setState(() => abMouseMode = value)}),
+                              {setState(() => gameSetting.show_stats = value)}),
                       switchGameSetting(
                           context: context,
-                          content: 'Absolute Touch Mode',
+                          content: 'Fullscreen Mode',
                           setState: setState,
-                          value: abTouchMode,
+                          value: fullScreenMode,
                           onChanged: (value) =>
-                              {setState(() => abTouchMode = value)}),
+                              {setState(() => gameSetting.fullscreen = value)}),
                       switchGameSetting(
                           context: context,
-                          content: 'Background Gamepad',
+                          content: 'Onscreen Controls',
                           setState: setState,
-                          value: bgGamepad,
-                          onChanged: (value) =>
-                              {setState(() => bgGamepad = value)}),
+                          value: onScreenControls,
+                          onChanged: (value) => {
+                                setState(
+                                    () => gameSetting.onscreen_controls = value)
+                              }),
+                      selectionGameSetting(context, 'Audio Type', audioType,
+                          (e) {
+                        setState(() => audioTypeValue = audioType.indexOf(e));
+                        gameSetting.audio_type = e;
+                      }, audioTypeValue),
+                      selectionGameSetting(context, 'Stream Codec', streamCodec,
+                          (e) {
+                        setState(
+                            () => streamCodecValue = streamCodec.indexOf(e));
+                      }, streamCodecValue),
                       selectionGameSetting(
-                          context,
-                          'Audio Type',
-                          audioType,
-                          (e) => setState(
-                              () => audioTypeValue = audioType.indexOf(e)),
-                          audioTypeValue),
-                      selectionGameSetting(
-                          context,
-                          'Stream Codec',
-                          streamCodec,
-                          (e) => setState(
-                              () => streamCodecValue = streamCodec.indexOf(e)),
-                          streamCodecValue),
-                      selectionGameSetting(
-                          context,
-                          'Video Decoder Selection',
-                          videoDecode,
-                          (e) => setState(
-                              () => videoDecodeValue = videoDecode.indexOf(e)),
-                          videoDecodeValue),
+                          context, 'Video Decoder Selection', videoDecode, (e) {
+                        setState(
+                            () => videoDecodeValue = videoDecode.indexOf(e));
+                        gameSetting.video_decoder_selection = e;
+                      }, videoDecodeValue),
                       btnLaunchGame(context),
                       const SizedBox(height: 20)
                     ],
@@ -385,7 +371,7 @@ InkWell btnLaunchGame(BuildContext context) {
   );
 }
 
-Widget dropdownMenu(List<String> options, String selectValue) {
+Widget dropdownMenu(List<dynamic> options, dynamic selectValue) {
   return StatefulBuilder(
     builder: (context, setState) {
       return DropdownButton(
@@ -398,7 +384,7 @@ Widget dropdownMenu(List<String> options, String selectValue) {
             .map((e) => DropdownMenuItem(
                 value: e,
                 child: Text(
-                  e,
+                  "$e",
                   style: tinyStyle.copyWith(color: textPrimaryColor),
                 )))
             .toList(),

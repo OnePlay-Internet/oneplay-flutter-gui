@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor_2.dart';
@@ -5,6 +6,7 @@ import 'package:oneplay_flutter_gui/app/models/client_token_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_status_model.dart';
 import 'package:oneplay_flutter_gui/app/models/start_game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
+import '../models/game_setting.dart';
 
 class RestService2 {
   final Dio _dio;
@@ -27,11 +29,13 @@ class RestService2 {
     return gameStatusResponse.data;
   }
 
-  Future<StartGameResponse> startGame(String gameId) async {
+  Future<StartGameResponse> startGame(
+      String gameId, GameSetting setting) async {
     FormData data = FormData.fromMap({
       'game_id': gameId,
-      'launch_payload': '{}',
-    });
+      'launch_payload': jsonDecode(
+          '{"resolution": "${setting.resolution}", "is_vsync_enabled": ${setting.is_vsync_enabled}, "fps": "${setting.fps.toString()}", "bitrate": ${setting.bitrate!.toInt()}, "show_stats": ${setting.show_stats}, "fullscreen": ${setting.fullscreen}, "onscreen_controls": ${setting.onscreen_controls}, "audio_type": "${setting.audio_type}", "stream_codec": "${setting.stream_codec}", "video_decoder_selection": "${setting.video_decoder_selection}"}')
+    }, ListFormat.multiCompatible);
 
     Response res = await _dio.post('/start_game', data: data);
 

@@ -4,17 +4,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:oneplay_flutter_gui/app/common/utils/play_constant.dart';
 import 'package:oneplay_flutter_gui/app/models/client_token_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
+import 'package:oneplay_flutter_gui/app/models/game_setting.dart';
 import 'package:oneplay_flutter_gui/app/models/game_status_model.dart';
 import 'package:oneplay_flutter_gui/app/models/start_game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/pages/game/popup_game_setting.dart';
+import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/initialize_state.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/common.dart';
 import '../../models/game_feed_model.dart';
@@ -34,6 +38,7 @@ class _GameState extends State<Game> {
   RestService restService = Modular.get<RestService>();
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
+  AuthService authService = Modular.get<AuthService>();
   GameModel? game;
   List<ShortGameModel> devGames = [];
   List<ShortGameModel> genreGames = [];
@@ -42,10 +47,12 @@ class _GameState extends State<Game> {
   bool starting = false;
   bool terminating = false;
   InitializeState initializeState = InitializeState();
+  late SharedPreferences pref;
 
   int maxLoadTopVideo = 2;
 
   bool isShowSetting = true;
+  GameSetting gameSetting = GameSetting();
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +162,7 @@ class _GameState extends State<Game> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              InkWell(
+              GestureDetector(
                 onTap: starting || game == null ? null : _startgame,
                 child: Container(
                   width: MediaQuery.of(context).size.width - 100,
@@ -176,7 +183,7 @@ class _GameState extends State<Game> {
                 ),
               ),
               const SizedBox(height: 20),
-              InkWell(
+              GestureDetector(
                 onTap: terminating
                     ? null
                     : () =>
@@ -244,7 +251,10 @@ class _GameState extends State<Game> {
   }
 
   init() async {
+    pref = await SharedPreferences.getInstance();
+    _getCurrGameSetting();
     var game = await restService.getGameDetails(widget.id);
+
     setState(() => this.game = game);
 
     _getTopVideoById();
@@ -275,6 +285,71 @@ class _GameState extends State<Game> {
 
   getShuffledGames(List<ShortGameModel> games) {
     return [...games];
+  }
+
+  void _getCurrGameSetting() {
+    String subscribedPlan = authService.user?.subscribedPlan ?? "Founder";
+
+    if (pref.getString("resolution") == null) {
+      gameSetting.resolution =
+          PlayConstants.DEFAULT_RESOLUTIONS[subscribedPlan]!;
+    } else {
+      gameSetting.resolution = pref.getString("resolution")!;
+    }
+
+    if (pref.getBool("is_vsync_enabled") == null) {
+      gameSetting.is_vsync_enabled = true;
+    } else {
+      gameSetting.is_vsync_enabled = pref.getBool("is_vsync_enabled")!;
+    }
+
+    if (pref.getInt("fps") == null) {
+      gameSetting.fps = PlayConstants.DEFAULT_FPS;
+    } else {
+      gameSetting.fps = pref.getInt("fps")!;
+    }
+
+    if (pref.getDouble("bitrate") == null) {
+      gameSetting.bitrate = PlayConstants.getIdleBitrate(
+          resolution: gameSetting.resolution!, fps: gameSetting.fps!);
+    } else {
+      gameSetting.bitrate = pref.getDouble("bitrate");
+    }
+
+    if (pref.getBool("fullscreen") == null) {
+      gameSetting.fullscreen = true;
+    } else {
+      gameSetting.fullscreen = pref.getBool("fullscreen")!;
+    }
+
+    if (pref.getBool("onscreen_controls") == null) {
+      gameSetting.onscreen_controls = false;
+    } else {
+      gameSetting.onscreen_controls = pref.getBool("onscreen_controls")!;
+    }
+
+    if (pref.getString("audio_type") == null) {
+      gameSetting.audio_type = "stereo";
+    } else {
+      gameSetting.audio_type = pref.getString("audio_type")!;
+    }
+    if (pref.getString("stream_codec") == null) {
+      gameSetting.stream_codec = "auto";
+    } else {
+      gameSetting.stream_codec = pref.getString("stream_codec")!;
+    }
+    if (pref.getBool("show_stats") == null) {
+      gameSetting.show_stats = false;
+    } else {
+      gameSetting.show_stats = pref.getBool("show_stats")!;
+    }
+
+    if (pref.getString("video_decoder_selection") == null) {
+      gameSetting.video_decoder_selection = "auto";
+    } else {
+      gameSetting.video_decoder_selection =
+          pref.getString("video_decoder_selection")!;
+    }
   }
 
   String _getAction(GameStatusModel? gameStatus) {
@@ -350,16 +425,17 @@ class _GameState extends State<Game> {
   void _startgame() async {
     if (isShowSetting) {
       await showDialog(
-          context: context,
-          builder: (_) => gameSettingPopup(_),
-          barrierDismissible: false);
+        context: context,
+        builder: (_) => gameSettingPopup(_, gameSetting),
+        barrierDismissible: false,
+      );
     }
 
     try {
       _startLoading();
 
       StartGameResponse res =
-          await restService2.startGame(game?.oneplayId ?? '');
+          await restService2.startGame(game?.oneplayId ?? '', gameSetting);
 
       if (res.data.apiAction == ApiAction.callSession) {
         _startGameWithClientToken(res.data.session?.id ?? '');
