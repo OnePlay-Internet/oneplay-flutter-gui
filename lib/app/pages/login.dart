@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -48,7 +49,7 @@ class _LoginState extends State<Login> {
         setState(() => loading = false);
         Modular.to.navigate('/feeds');
       });
-    } catch (e) {
+    } on DioError catch (e) {
       showDialog(
           context: context,
           builder: (_) {
@@ -57,9 +58,10 @@ class _LoginState extends State<Login> {
               Navigator.pop(_);
             });
             return alertError(
-                context: context,
-                title: 'Login Error',
-                description: 'Please check your email, password and try again');
+              context: context,
+              title: 'Login Error',
+              description: e.error['message'],
+            );
           },
           barrierDismissible: false);
     }

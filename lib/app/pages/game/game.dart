@@ -52,6 +52,7 @@ class _GameState extends State<Game> {
   int maxLoadTopVideo = 2;
 
   bool isShowSetting = true;
+  bool wishlistLoading = false;
   GameSetting gameSetting = GameSetting();
 
   @override
@@ -64,7 +65,16 @@ class _GameState extends State<Game> {
             Stack(
               children: [
                 ...bannerWidget(context, game),
-                addToWishlist(),
+                Observer(builder: (_) {
+                  bool isInWishlist =
+                      authService.wishlist.contains(game?.oneplayId);
+                  return wishlistButton(
+                    isInWishlist ? Icons.remove : Icons.add_rounded,
+                    onTap: wishlistLoading
+                        ? null
+                        : () => _wishlistAction(isInWishlist),
+                  );
+                }),
                 statusActionBtn()
               ],
             ),
@@ -241,6 +251,51 @@ class _GameState extends State<Game> {
           ),
         );
       }),
+    );
+  }
+
+  void _addToWishlist() async {
+    setState(() => wishlistLoading = true);
+    try {
+      await restService.addToWishlist(game?.oneplayId ?? "");
+      setState(() => wishlistLoading = false);
+      authService.addToWishlist(game?.oneplayId ?? "");
+      _showSnackBar('Added to Library');
+    } on DioError catch (e) {
+      _showError(title: 'Error', message: e.error['message']);
+    }
+  }
+
+  void _removeFromWishlist() async {
+    setState(() => wishlistLoading = true);
+    try {
+      await restService.removeFromWishlist(game?.oneplayId ?? "");
+      setState(() => wishlistLoading = false);
+      authService.removeFromWishlist(game?.oneplayId ?? "");
+      _showSnackBar('Removed from Library');
+    } on DioError catch (e) {
+      _showError(title: 'Error', message: e.error['message']);
+    }
+  }
+
+  void _wishlistAction(bool isInWishlist) {
+    if (isInWishlist) {
+      _removeFromWishlist();
+    } else {
+      _addToWishlist();
+    }
+  }
+
+  void _showSnackBar(String text) {
+    final snackBar = ScaffoldMessenger.of(context);
+    snackBar.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(
+          label: 'Done',
+          onPressed: snackBar.hideCurrentSnackBar,
+        ),
+      ),
     );
   }
 
