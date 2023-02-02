@@ -133,7 +133,7 @@ class _LoginState extends State<Login> {
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 0.02,
-                color: greyColor1),
+                color: textSecondaryColor),
           ),
           GradientText(
             'Create a New',
@@ -209,7 +209,7 @@ class _LoginState extends State<Login> {
           fontWeight: FontWeight.w500,
           fontSize: 16,
           letterSpacing: 0.02,
-          color: greyColor2),
+          color: textPrimaryColor),
     );
   }
 
@@ -225,7 +225,7 @@ class _LoginState extends State<Login> {
             scale: 0.8,
             child: CupertinoSwitch(
               value: isSavePwd,
-              thumbColor: greyColor2,
+              thumbColor: textPrimaryColor,
               activeColor: Colors.purple,
               onChanged: (value) {
                 setState(() {
@@ -245,7 +245,7 @@ class _LoginState extends State<Login> {
               fontWeight: FontWeight.w500,
               fontSize: 16,
               letterSpacing: 0.02,
-              color: greyColor1),
+              color: textSecondaryColor),
         )
       ],
     );

@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/modules/admin/admin_widget.dart';
 import 'package:oneplay_flutter_gui/app/pages/feeds.dart';
-import 'package:oneplay_flutter_gui/app/pages/game.dart';
+import 'package:oneplay_flutter_gui/app/pages/game/game.dart';
 import 'package:oneplay_flutter_gui/app/pages/games_list.dart';
 import 'package:oneplay_flutter_gui/app/pages/search.dart';
 import 'package:oneplay_flutter_gui/app/pages/users_list.dart';

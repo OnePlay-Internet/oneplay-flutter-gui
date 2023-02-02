@@ -39,7 +39,7 @@ class _UserRowState extends State<UserRow> {
             child: Text(
               '${widget.user.firstName} ${widget.user.lastName}',
               style: const TextStyle(
-                color: greyColor2,
+                color: textPrimaryColor,
                 fontSize: 16,
               ),
               overflow: TextOverflow.ellipsis,

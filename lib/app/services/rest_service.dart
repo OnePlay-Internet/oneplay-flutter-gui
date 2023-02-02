@@ -6,6 +6,7 @@ import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/search_model.dart';
 import 'package:oneplay_flutter_gui/app/models/user_model.dart';
+import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
 class RestService {
@@ -151,5 +152,40 @@ class RestService {
 
   Future<void> deleteFriend(String id) async {
     await _dio.delete("/social/friends/$id");
+  }
+
+  Future<void> getStreamsFeed() async {
+    await _dio.get('/streams');
+  }
+
+  Future<List<VideoModel>> getVideos(String id) async {
+    Response res = await _dio.get('/streams/$id');
+
+    var data =
+        (res.data as List<dynamic>).map((e) => VideoModel.fromJson(e)).toList();
+
+    return data;
+  }
+
+  Future<List<ShortGameModel>> getGamesByGenre(String genre) async {
+    final body = {'genres': genre, 'order_by': "trend_score:desc"};
+
+    Response res = await _dio.post('/games/feed/custom', data: body);
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => ShortGameModel.fromJson(e))
+        .toList();
+    return data;
+  }
+
+  Future<List<ShortGameModel>> getGamesByDeveloper(String developer) async {
+    final body = {'developer': developer, 'order_by': "trend_score:desc"};
+
+    Response res = await _dio.post('/games/feed/custom', data: body);
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => ShortGameModel.fromJson(e))
+        .toList();
+    return data;
   }
 }

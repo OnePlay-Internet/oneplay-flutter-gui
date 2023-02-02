@@ -45,7 +45,7 @@ class _SearchState extends State<Search> {
                 textInputAction: TextInputAction.search,
                 onSubmitted: (value) => _search(),
                 style: const TextStyle(
-                  color: greyColor2,
+                  color: textPrimaryColor,
                   fontSize: 16,
                 ),
                 decoration: InputDecoration(
@@ -56,11 +56,11 @@ class _SearchState extends State<Search> {
                       style: BorderStyle.none,
                     ),
                   ),
-                  fillColor: blackColor3,
+                  fillColor: basicLineColor,
                   filled: true,
                   hintText: "Search for game or friends",
                   hintStyle: const TextStyle(
-                    color: greyColor2,
+                    color: textPrimaryColor,
                     fontSize: 16,
                   ),
                   suffixIcon: IconButton(
@@ -68,7 +68,7 @@ class _SearchState extends State<Search> {
                       FocusManager.instance.primaryFocus?.unfocus();
                       _search();
                     },
-                    icon: const Icon(Icons.search, color: greyColor2),
+                    icon: const Icon(Icons.search, color: textPrimaryColor),
                   ),
                 ),
               ),
@@ -112,7 +112,7 @@ class _SearchState extends State<Search> {
       child: Text(
         text,
         style: const TextStyle(
-          color: greyColor1,
+          color: textSecondaryColor,
           fontSize: 16,
         ),
       ),

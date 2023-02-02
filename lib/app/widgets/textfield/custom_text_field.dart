@@ -30,7 +30,7 @@ StatefulBuilder customTextField({
                       fontFamily: mainFontFamily,
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0.02,
-                      color: greyColor2,
+                      color: textPrimaryColor,
                       fontSize: 14)),
               errorText != ""
                   ? GradientText(
@@ -61,7 +61,7 @@ StatefulBuilder customTextField({
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.02,
-                        color: greyColor1),
+                        color: textSecondaryColor),
                     enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: blackColor1, width: 2),
                     ),
@@ -76,7 +76,7 @@ StatefulBuilder customTextField({
                               alignment: Alignment.centerRight,
                               child: SvgPicture.asset(
                                 isHideText ? hidePwdIcon : showPwdIcon,
-                                color: greyColor2,
+                                color: textPrimaryColor,
                               ),
                             ),
                           )
@@ -94,7 +94,7 @@ StatefulBuilder customTextField({
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0.02,
-                      color: greyColor1),
+                      color: textSecondaryColor),
                 ),
                 Positioned(
                     bottom: 1,
@@ -106,7 +106,7 @@ StatefulBuilder customTextField({
                           colors: errorText != ''
                               ? [pinkColor2, purpleColor3]
                               : onChangeText
-                                  ? [greyColor1, greyColor1]
+                                  ? [textSecondaryColor, textSecondaryColor]
                                   : [blackColor2, blackColor1],
                         ),
                       ),
