@@ -36,7 +36,7 @@ GameModel _$GameModelFromJson(Map<String, dynamic> json) => GameModel(
       popularityScore: (json['popularity_score'] as num).toDouble(),
       metacriticScore: json['metacritic_score'] as int?,
       officialWebsite: json['official_website'] as String?,
-      ageRating: json['age_rating'] as String,
+      ageRating: json['age_rating'] as String?,
       rawgId: json['rawg_id'] as String,
       cheapsharkId: json['cheapshark_id'] as String?,
       isReleased: GameModel._boolFromString(json['is_released'] as String),
@@ -91,4 +91,35 @@ Map<String, dynamic> _$GameModelToJson(GameModel instance) => <String, dynamic>{
       'developer': instance.developer,
       'publisher': instance.publisher,
       'stores_mappings': instance.storesMapping,
+    };
+
+ShortGameModel _$ShortGameModelFromJson(Map<String, dynamic> json) =>
+    ShortGameModel(
+      oneplayId: json['oplay_id'] as String,
+      title: json['title'] as String,
+      releaseDate:
+          ShortGameModel._dateFromString(json['release_date'] as String),
+      posterImg: json['poster_image'] as String?,
+      bgImage: json['background_image'] as String?,
+      textBgImage: json['text_background_image'] as String?,
+      textLogo: json['text_logo'] as String?,
+      isFree: ShortGameModel._boolFromString(json['is_free'] as String),
+      status: json['status'] as String,
+      genreMappings: (json['genre_mappings'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+    );
+
+Map<String, dynamic> _$ShortGameModelToJson(ShortGameModel instance) =>
+    <String, dynamic>{
+      'oplay_id': instance.oneplayId,
+      'title': instance.title,
+      'release_date': ShortGameModel._dateToString(instance.releaseDate),
+      'poster_image': instance.posterImg,
+      'background_image': instance.bgImage,
+      'text_background_image': instance.textBgImage,
+      'text_logo': instance.textLogo,
+      'is_free': ShortGameModel._boolToString(instance.isFree),
+      'status': instance.status,
+      'genre_mappings': instance.genreMappings,
     };

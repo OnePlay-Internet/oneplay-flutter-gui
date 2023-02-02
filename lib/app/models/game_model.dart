@@ -81,7 +81,7 @@ class GameModel {
   String? officialWebsite;
 
   @JsonKey(name: 'age_rating')
-  String ageRating;
+  String? ageRating;
 
   @JsonKey(name: 'rawg_id')
   String rawgId;
@@ -150,7 +150,7 @@ class GameModel {
     required this.popularityScore,
     this.metacriticScore,
     this.officialWebsite,
-    required this.ageRating,
+    this.ageRating,
     required this.rawgId,
     this.cheapsharkId,
     required this.isReleased,
@@ -190,4 +190,70 @@ class GameModel {
 
   static List<dynamic> _stringToList(String? value) =>
       value != null ? [value] : [];
+}
+
+@JsonSerializable()
+class ShortGameModel {
+  @JsonKey(name: 'oplay_id')
+  String oneplayId;
+
+  String title;
+
+  @JsonKey(
+    name: 'release_date',
+    fromJson: _dateFromString,
+    toJson: _dateToString,
+  )
+  DateTime releaseDate;
+
+  @JsonKey(name: 'poster_image')
+  String? posterImg;
+
+  @JsonKey(name: 'background_image')
+  String? bgImage;
+
+  @JsonKey(name: 'text_background_image')
+  String? textBgImage;
+
+  @JsonKey(name: 'text_logo')
+  String? textLogo;
+
+  @JsonKey(
+    name: 'is_free',
+    fromJson: _boolFromString,
+    toJson: _boolToString,
+  )
+  bool isFree;
+
+  String status;
+
+  @JsonKey(name: 'genre_mappings')
+  List<String> genreMappings;
+
+  ShortGameModel({
+    required this.oneplayId,
+    required this.title,
+    required this.releaseDate,
+    required this.posterImg,
+    required this.bgImage,
+    required this.textBgImage,
+    required this.textLogo,
+    required this.isFree,
+    required this.status,
+    required this.genreMappings,
+  });
+
+  factory ShortGameModel.fromJson(Map<String, dynamic> json) =>
+      _$ShortGameModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ShortGameModelToJson(this);
+
+  static bool _boolFromString(String value) => value == 'true';
+
+  static String _boolToString(bool value) => value ? 'true' : 'false';
+
+  static DateTime _dateFromString(String value) => DateTime.parse(value);
+
+  static String _dateToString(DateTime value) =>
+      value.toString().split(' ').first;
 }

@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
+import 'package:oneplay_flutter_gui/app/services/friend_service.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/appbar/appbarWidget.dart';
+
+import '../../widgets/bottom_nav/bottom_nav.dart';
 
 class AdminWidget extends StatefulWidget {
   const AdminWidget({super.key});
@@ -19,6 +22,7 @@ class AdminWidget extends StatefulWidget {
 class _AdminWidgetState extends State<AdminWidget> {
   GameService gameService = Modular.get<GameService>();
   AuthService authService = Modular.get<AuthService>();
+  FriendService friendService = Modular.get<FriendService>();
   RestService restService = Modular.get<RestService>();
   RestService2 restService2 = Modular.get<RestService2>();
   Timer? timer;
@@ -32,6 +36,7 @@ class _AdminWidgetState extends State<AdminWidget> {
         child: AppBarWidget().menu(context),
       ),
       body: const RouterOutlet(),
+      bottomNavigationBar: const BottomNav(),
     );
   }
 
@@ -39,6 +44,7 @@ class _AdminWidgetState extends State<AdminWidget> {
   void initState() {
     _initAuth();
     _initGames();
+    _initFriends();
     timer = Timer.periodic(const Duration(minutes: 5), (timer) => _initGames());
     super.initState();
   }
@@ -57,5 +63,17 @@ class _AdminWidgetState extends State<AdminWidget> {
 
   void _initGames() async {
     gameService.loadStatus(await restService2.getGameStatus());
+  }
+
+  void _initFriends() {
+    restService
+        .getAllFriends()
+        .then((value) => friendService.loadFriends(value));
+    restService
+        .getPendingReceivedRequests()
+        .then((value) => friendService.loadRequests(value));
+    restService
+        .getPendingSentRequests()
+        .then((value) => friendService.loadPendings(value));
   }
 }

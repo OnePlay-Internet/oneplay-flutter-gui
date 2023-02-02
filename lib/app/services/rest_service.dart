@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor.dart';
+import 'package:oneplay_flutter_gui/app/models/friend_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
+import 'package:oneplay_flutter_gui/app/models/search_model.dart';
 import 'package:oneplay_flutter_gui/app/models/user_model.dart';
+import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
 class RestService {
@@ -61,8 +64,128 @@ class RestService {
       'poster': "528x704",
     });
 
-    var data = (res.data as List<dynamic>).map((d) => GameFeedModel.fromJson(d)).toList();
+    var data = (res.data as List<dynamic>)
+        .map((d) => GameFeedModel.fromJson(d))
+        .toList();
 
+    return data;
+  }
+
+  Future<SearchGamesModel> searchGames({
+    required String query,
+    required int page,
+    required int limit,
+    String? status,
+  }) async {
+    final params = {
+      "query": query,
+      "page": page,
+      "limit": limit,
+    };
+
+    if (status != null) {
+      params["status"] = status;
+    }
+
+    Response res = await _dio.get("/games/search", queryParameters: params);
+
+    return SearchGamesModel.fromJson(res.data);
+  }
+
+  Future<List<ShortUserModel>> searchUsers({
+    required String query,
+    required int page,
+    required int limit,
+  }) async {
+    Response res = await _dio.get('/accounts/search/', queryParameters: {
+      "query": query,
+      "page": page,
+      "limit": limit,
+    });
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => ShortUserModel.fromJson(e))
+        .toList();
+
+    return data;
+  }
+
+  Future<List<FriendModel>> getAllFriends() async {
+    Response res = await _dio.get('/social/friends/all');
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => FriendModel.fromJson(e))
+        .toList();
+
+    return data;
+  }
+
+  Future<List<FriendModel>> getPendingSentRequests() async {
+    Response res = await _dio.get('/social/friends/pending_sent_requests');
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => FriendModel.fromJson(e))
+        .toList();
+
+    return data;
+  }
+
+  Future<List<FriendModel>> getPendingReceivedRequests() async {
+    Response res = await _dio.get('/social/friends/pending_received_requests');
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => FriendModel.fromJson(e))
+        .toList();
+
+    return data;
+  }
+
+  Future<String> addFriend(String id) async {
+    Response res = await _dio.post("/social/friends/$id/send_request");
+
+    return res.data["id"];
+  }
+
+  Future<void> acceptFriend(String id) async {
+    await _dio.put("/social/friends/$id/accept_request");
+  }
+
+  Future<void> deleteFriend(String id) async {
+    await _dio.delete("/social/friends/$id");
+  }
+
+  Future<void> getStreamsFeed() async {
+    await _dio.get('/streams');
+  }
+
+  Future<List<VideoModel>> getVideos(String id) async {
+    Response res = await _dio.get('/streams/$id');
+
+    var data =
+        (res.data as List<dynamic>).map((e) => VideoModel.fromJson(e)).toList();
+
+    return data;
+  }
+
+  Future<List<ShortGameModel>> getGamesByGenre(String genre) async {
+    final body = {'genres': genre, 'order_by': "trend_score:desc"};
+
+    Response res = await _dio.post('/games/feed/custom', data: body);
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => ShortGameModel.fromJson(e))
+        .toList();
+    return data;
+  }
+
+  Future<List<ShortGameModel>> getGamesByDeveloper(String developer) async {
+    final body = {'developer': developer, 'order_by': "trend_score:desc"};
+
+    Response res = await _dio.post('/games/feed/custom', data: body);
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => ShortGameModel.fromJson(e))
+        .toList();
     return data;
   }
 }

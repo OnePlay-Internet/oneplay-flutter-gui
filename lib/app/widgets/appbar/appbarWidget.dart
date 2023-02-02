@@ -28,7 +28,8 @@ class AppBarWidget {
         margin: const EdgeInsets.only(top: 18),
         alignment: Alignment.center,
         decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: blackColor3, width: 1))),
+            border:
+                Border(bottom: BorderSide(color: basicLineColor, width: 1))),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
