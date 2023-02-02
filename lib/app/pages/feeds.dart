@@ -26,8 +26,7 @@ class _FeedsState extends State<Feeds> {
   late GameFeedModel firstRow;
   late List<GameFeedModel> restRow;
   bool starting = false;
-  List<GameModel> library = [];
-  List<String> wishlist = [];
+  List<ShortGameModel> library = [];
 
   _getHomeFeed() async {
     setState(() => starting = true);
@@ -38,9 +37,16 @@ class _FeedsState extends State<Feeds> {
     });
   }
 
+  _getLibrary() {
+    restService
+        .getWishlistGames(authService.wishlist)
+        .then((value) => setState(() => library = value));
+  }
+
   @override
   void initState() {
     _getHomeFeed();
+    _getLibrary();
     super.initState();
   }
 
@@ -65,9 +71,15 @@ class _FeedsState extends State<Feeds> {
               child: ListView(
                 children: [
                   bannerWidget(firstRow),
-                  ...restRow
-                      .map((value) => listGameWithLabel(value))
-                      .toList()
+                  Observer(builder: (context) {
+                    _getLibrary();
+                    return library.isNotEmpty
+                        ? listGameWithLabel(
+                            GameFeedModel(title: 'My Library', games: library),
+                          )
+                        : Container();
+                  }),
+                  ...restRow.map((value) => listGameWithLabel(value)).toList()
                 ],
               ),
             )),
