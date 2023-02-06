@@ -18,6 +18,7 @@ import 'package:oneplay_flutter_gui/app/services/initialize_state.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/common.dart';
@@ -172,45 +173,87 @@ class _GameState extends State<Game> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              GestureDetector(
+              FocusZoom(
+                builder: (focus) {
+                  return InkWell(
+                    focusNode: focus,
+                    onTap: starting || game == null ? null : _startgame,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 100,
+                      height: 48,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(90),
+                          color: Colors.white),
+                      child: Center(
+                          child: Text(
+                        action,
+                        style: const TextStyle(
+                            color: basicLineColor,
+                            fontFamily: mainFontFamily,
+                            fontSize: 16,
+                            letterSpacing: 0.02,
+                            fontWeight: FontWeight.w500),
+                      )),
+                    ),
+                  );
+                }
+              ),
+              const SizedBox(height: 20),
+              FocusZoom(
+                builder: (focus) {
+                  return InkWell(
+                    focusNode: focus,
+                    onTap: terminating
+                        ? null
+                        : () =>
+                            _terminateSession(gameService.gameStatus.sessionId!),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 100,
+                      height: 48,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(90),
+                          gradient: const LinearGradient(
+                            colors: [pinkColor2, purpleColor3],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )),
+                      child: Center(
+                          child: Text(
+                        terminating ? 'Terminating...' : 'Terminate',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: mainFontFamily,
+                            fontSize: 16,
+                            letterSpacing: 0.02,
+                            fontWeight: FontWeight.w500),
+                      )),
+                    ),
+                  );
+                }
+              )
+            ],
+          );
+        }
+        return Align(
+          alignment: const Alignment(0, 1.2),
+          child: FocusZoom(
+            builder: (focus) {
+              return InkWell(
+                focusNode: focus,
                 onTap: starting || game == null ? null : _startgame,
                 child: Container(
                   width: MediaQuery.of(context).size.width - 100,
                   height: 48,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(90),
-                      color: Colors.white),
-                  child: Center(
-                      child: Text(
-                    action,
-                    style: const TextStyle(
-                        color: basicLineColor,
-                        fontFamily: mainFontFamily,
-                        fontSize: 16,
-                        letterSpacing: 0.02,
-                        fontWeight: FontWeight.w500),
-                  )),
-                ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: terminating
-                    ? null
-                    : () =>
-                        _terminateSession(gameService.gameStatus.sessionId!),
-                child: Container(
-                  width: MediaQuery.of(context).size.width - 100,
-                  height: 48,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(90),
                       gradient: const LinearGradient(
-                        colors: [pinkColor2, purpleColor3],
+                        colors: [pinkColor1, blueColor1],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )),
                   child: Center(
                       child: Text(
-                    terminating ? 'Terminating...' : 'Terminate',
+                    action,
                     style: const TextStyle(
                         color: Colors.white,
                         fontFamily: mainFontFamily,
@@ -219,35 +262,8 @@ class _GameState extends State<Game> {
                         fontWeight: FontWeight.w500),
                   )),
                 ),
-              )
-            ],
-          );
-        }
-        return Align(
-          alignment: const Alignment(0, 1.2),
-          child: InkWell(
-            onTap: starting || game == null ? null : _startgame,
-            child: Container(
-              width: MediaQuery.of(context).size.width - 100,
-              height: 48,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(90),
-                  gradient: const LinearGradient(
-                    colors: [pinkColor1, blueColor1],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )),
-              child: Center(
-                  child: Text(
-                action,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontFamily: mainFontFamily,
-                    fontSize: 16,
-                    letterSpacing: 0.02,
-                    fontWeight: FontWeight.w500),
-              )),
-            ),
+              );
+            }
           ),
         );
       }),
@@ -468,9 +484,14 @@ class _GameState extends State<Game> {
         title: Text(title),
         content: Text(message),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Ok'),
+          FocusZoom(
+            builder: (focus) {
+              return TextButton(
+                focusNode: focus,
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Ok'),
+              );
+            }
           ),
         ],
       ),
@@ -554,27 +575,37 @@ class _GameState extends State<Game> {
           'You are already playing a game. Do you want to terminate it?',
         ),
         actions: [
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
-              try {
-                await restService2.terminateSession(sessionId);
-                _reloadGameStatus();
-                _stopLoading();
-                _startgame();
-              } on DioError catch (e) {
-                _stopLoading();
-                _showError(title: 'Opps...', message: e.error['message']);
-              }
-            },
-            child: const Text('Yes'),
+          FocusZoom(
+            builder: (focus) {
+              return TextButton(
+                focusNode: focus,
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  try {
+                    await restService2.terminateSession(sessionId);
+                    _reloadGameStatus();
+                    _stopLoading();
+                    _startgame();
+                  } on DioError catch (e) {
+                    _stopLoading();
+                    _showError(title: 'Opps...', message: e.error['message']);
+                  }
+                },
+                child: const Text('Yes'),
+              );
+            }
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _stopLoading();
-            },
-            child: const Text('No'),
+          FocusZoom(
+            builder: (focus) {
+              return TextButton(
+                focusNode: focus,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _stopLoading();
+                },
+                child: const Text('No'),
+              );
+            }
           ),
         ],
       ),
