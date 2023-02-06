@@ -8,6 +8,7 @@ import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 
 import '../widgets/list_game_w_label/list_game_w_label.dart';
 
@@ -109,23 +110,27 @@ class _FeedsState extends State<Feeds> {
       ),
       items: data.games.map((item) {
         return item.textBgImage!.isNotEmpty
-            ? InkWell(
-                onTap: (() => Modular.to.pushNamed('/game/${item.oneplayId}')),
-                child: Container(
-                  height: 200,
-                  width: 300,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl: item.textBgImage.toString(),
-                        height: 200,
-                        width: 300,
-                        fit: BoxFit.fitHeight,
-                      )),
-                ),
-              )
+            ? FocusZoom(builder: (focusNode) {
+                return InkWell(
+                  focusNode: focusNode,
+                  onTap: (() =>
+                      Modular.to.pushNamed('/game/${item.oneplayId}')),
+                  child: Container(
+                    height: 200,
+                    width: 300,
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 10),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl: item.textBgImage.toString(),
+                          height: 200,
+                          width: 300,
+                          fit: BoxFit.fitHeight,
+                        )),
+                  ),
+                );
+              })
             : const SizedBox.shrink();
       }).toList(),
     );
