@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:validators/validators.dart';
 import '../../common/common.dart';
@@ -53,48 +54,59 @@ StatefulBuilder customTextField({
             height: 50,
             child: Stack(
               children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    hintStyle: const TextStyle(
-                        fontFamily: mainFontFamily,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.02,
-                        color: textSecondaryColor),
-                    enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: blackColor1, width: 2),
-                    ),
-                    suffixIcon: textInputType == TextInputType.visiblePassword
-                        ? InkWell(
-                            onTap: () {
-                              setState(() => isHideText = !isHideText);
-                            },
-                            child: Container(
-                              height: 20,
-                              width: 20,
-                              alignment: Alignment.centerRight,
-                              child: SvgPicture.asset(
-                                isHideText ? hidePwdIcon : showPwdIcon,
-                                color: textPrimaryColor,
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
-                  ),
-                  controller: textCtrler,
-                  obscureText: isHideText,
-                  onTap: () => setState(() => onChangeText = true),
-                  onEditingComplete: () {
-                    setState(() => onChangeText = false);
-                    FocusManager.instance.primaryFocus?.unfocus();
+                FocusZoom(
+                  builder: (focus) {
+                    return TextFormField(
+                      focusNode: focus,
+                      decoration: InputDecoration(
+                        hintText: hintText,
+                        hintStyle: const TextStyle(
+                            fontFamily: mainFontFamily,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.02,
+                            color: textSecondaryColor),
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: blackColor1, width: 2),
+                        ),
+                        suffixIcon: textInputType ==
+                                TextInputType.visiblePassword
+                            ? FocusZoom(
+                                builder: (f) {
+                                  return InkWell(
+                                    focusNode: f,
+                                    onTap: () {
+                                      setState(() => isHideText = !isHideText);
+                                    },
+                                    child: Container(
+                                      height: 20,
+                                      width: 20,
+                                      alignment: Alignment.centerRight,
+                                      child: SvgPicture.asset(
+                                        isHideText ? hidePwdIcon : showPwdIcon,
+                                        color: textPrimaryColor,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : const SizedBox(),
+                      ),
+                      controller: textCtrler,
+                      obscureText: isHideText,
+                      onTap: () => setState(() => onChangeText = true),
+                      onEditingComplete: () {
+                        setState(() => onChangeText = false);
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                      style: const TextStyle(
+                          fontFamily: mainFontFamily,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.02,
+                          color: textSecondaryColor),
+                    );
                   },
-                  style: const TextStyle(
-                      fontFamily: mainFontFamily,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0.02,
-                      color: textSecondaryColor),
                 ),
                 Positioned(
                     bottom: 1,

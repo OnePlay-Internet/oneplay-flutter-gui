@@ -6,6 +6,7 @@ import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:oneplay_flutter_gui/app/widgets/footer/authFooter.dart';
 import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -154,51 +155,56 @@ class _LoginState extends State<Login> {
   Padding loginBtn(BuildContext context, Function() onTap) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: InkWell(
-        onTap: loading ? null : onTap,
-        child: Container(
-          height: 50,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              gradient: const LinearGradient(
-                  end: Alignment.bottomRight,
-                  begin: Alignment.topLeft,
-                  colors: [pinkColor1, blueColor1])),
-          child: Center(
-              child: loading
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: Icon(
-                              Icons.check_circle,
-                              color: Colors.white,
-                            )),
-                        SizedBox(width: 15),
-                        Text(
-                          'Logging you in...',
+      child: FocusZoom(
+        builder: (focus) {
+          return InkWell(
+            focusNode: focus,
+            onTap: loading ? null : onTap,
+            child: Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: const LinearGradient(
+                      end: Alignment.bottomRight,
+                      begin: Alignment.topLeft,
+                      colors: [pinkColor1, blueColor1])),
+              child: Center(
+                  child: loading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: Icon(
+                                  Icons.check_circle,
+                                  color: Colors.white,
+                                )),
+                            SizedBox(width: 15),
+                            Text(
+                              'Logging you in...',
+                              style: TextStyle(
+                                  fontFamily: mainFontFamily,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  letterSpacing: 0.02),
+                            )
+                          ],
+                        )
+                      : const Text(
+                          'Log in',
                           style: TextStyle(
                               fontFamily: mainFontFamily,
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
                               letterSpacing: 0.02),
-                        )
-                      ],
-                    )
-                  : const Text(
-                      'Log in',
-                      style: TextStyle(
-                          fontFamily: mainFontFamily,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          letterSpacing: 0.02),
-                    )),
-        ),
+                        )),
+            ),
+          );
+        }
       ),
     );
   }
