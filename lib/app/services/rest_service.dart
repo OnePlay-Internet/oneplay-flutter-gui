@@ -188,4 +188,22 @@ class RestService {
         .toList();
     return data;
   }
+
+  Future<void> addToWishlist(String gameId) async {
+    await _dio.post("/accounts/add_to_wishlist/$gameId");
+  }
+
+  Future<void> removeFromWishlist(String gameId) async {
+    await _dio.post("/accounts/remove_from_wishlist/$gameId");
+  }
+
+  Future<List<ShortGameModel>> getWishlistGames(List<String> gameIds) async {
+    Response res = await _dio.post('/games/feed/custom', data: {
+      "content_ids": gameIds.join(','),
+    });
+
+    return (res.data as List<dynamic>)
+        .map((e) => ShortGameModel.fromJson(e))
+        .toList();
+  }
 }

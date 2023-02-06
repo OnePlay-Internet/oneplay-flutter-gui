@@ -337,36 +337,44 @@ List<Widget> bannerWidget(BuildContext context, GameModel? game) {
   ];
 }
 
-Widget addToWishlist() {
+Widget wishlistButton(IconData iconData, {void Function()? onTap}) {
   return Positioned(
-      top: 40,
-      right: 40,
+    top: 40,
+    right: 40,
+    child: InkWell(
+      onTap: onTap,
       child: Container(
         height: 48,
         width: 48,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(90), color: Colors.black),
+          borderRadius: BorderRadius.circular(90),
+          color: Colors.black,
+        ),
         child: Center(
           child: Container(
             height: 20,
             width: 20,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                gradient: const LinearGradient(
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    colors: [
-                      Color(0xff59FEF4),
-                      Color(0xff3AA0FE),
-                    ])),
-            child: const Center(
+              borderRadius: BorderRadius.circular(5),
+              gradient: const LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [
+                  Color(0xff59FEF4),
+                  Color(0xff3AA0FE),
+                ],
+              ),
+            ),
+            child: Center(
               child: Icon(
-                Icons.add_rounded,
+                iconData,
                 size: 15,
                 color: Colors.black,
               ),
             ),
           ),
         ),
-      ));
+      ),
+    ),
+  );
 }
