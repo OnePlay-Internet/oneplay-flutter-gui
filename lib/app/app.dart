@@ -4,7 +4,6 @@ import 'package:oneplay_flutter_gui/app/guards/login_guard.dart';
 import 'package:oneplay_flutter_gui/app/modules/admin/admin.dart';
 import 'package:oneplay_flutter_gui/app/modules/auth/auth.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
-import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 
 class AppModule extends Module {
   @override

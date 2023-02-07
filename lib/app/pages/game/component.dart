@@ -234,15 +234,17 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
                     height: 20,
                   ),
                   if (game != null)
-                    if (game!.storesMapping.isNotEmpty)
+                    if (game.storesMapping.isNotEmpty)
                       Row(
                         children: [
                           // CachedNetworkImage(
                           //     imageUrl: game?.storesMapping[0].link ?? "",
                           //     height: 30),
                           // const SizedBox(height: 20),
-                          Text(game?.storesMapping[0].name ?? "",
-                              style: tinyStyle)
+                          Text(
+                            game.storesMapping[0].name,
+                            style: tinyStyle,
+                          )
                         ],
                       )
                 ],
@@ -252,8 +254,10 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Developer',
-                      style: tinyStyle.copyWith(color: textSecondaryColor)),
+                  Text(
+                    'Developer',
+                    style: tinyStyle.copyWith(color: textSecondaryColor),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -266,7 +270,7 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
                         "",
                     style: tinyStyle,
                     overflow: TextOverflow.ellipsis,
-                  )
+                  ),
                 ],
               ),
             ),
@@ -304,7 +308,7 @@ List<Widget> bannerWidget(BuildContext context, GameModel? game) {
                   top: 40,
                   left: 5,
                   child: Text(
-                    game!.title,
+                    game.title,
                     style: const TextStyle(
                         color: Colors.white, fontFamily: mainFontFamily),
                     maxLines: 2,

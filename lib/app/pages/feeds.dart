@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
@@ -60,17 +59,16 @@ class _FeedsState extends State<Feeds> {
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: ListView(
-                children: [
-                  bannerWidget(firstRow),
-                  ...restRow
-                      .map((value) => listGameWithLabel(value))
-                      .toList()
-                ],
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: ListView(
+                  children: [
+                    bannerWidget(firstRow),
+                    ...restRow.map((value) => listGameWithLabel(value)).toList()
+                  ],
+                ),
               ),
-            )),
+            ),
     );
     // return Container(
     //   padding: const EdgeInsets.all(4),
