@@ -7,24 +7,26 @@ import '../../common/common.dart';
 
 Widget listGameWithLabel(GameFeedModel value) {
   return Container(
-      height: 167.59,
-      margin: const EdgeInsets.only(left: 20, bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [titleLabelGames(value), listGames(value)],
-      ));
+    height: 167.59,
+    margin: const EdgeInsets.only(left: 20, bottom: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [titleLabelGames(value), listGames(value)],
+    ),
+  );
 }
 
 Text titleLabelGames(GameFeedModel value) {
   return Text(
     value.title,
     style: const TextStyle(
-        fontFamily: mainFontFamily,
-        fontSize: 18,
-        letterSpacing: 0.02,
-        fontWeight: FontWeight.w500,
-        color: Colors.white),
+      fontFamily: mainFontFamily,
+      fontSize: 18,
+      letterSpacing: 0.02,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+    ),
   );
 }
 

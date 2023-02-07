@@ -11,7 +11,10 @@ class UserIdToken {
   String userId;
   String token;
 
-  UserIdToken(this.userId, this.token);
+  UserIdToken(
+    this.userId,
+    this.token,
+  );
 }
 
 abstract class AuthServiceBase with Store {
