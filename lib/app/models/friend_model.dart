@@ -40,13 +40,13 @@ class FriendModel {
 
   bool isOnline;
 
-  String email;
+  String? email;
 
   @JsonKey(name: 'first_name')
-  String firstName;
+  String? firstName;
 
   @JsonKey(name: 'last_name')
-  String lastName;
+  String? lastName;
 
   @JsonKey(
     name: 'last_login_timestamp',
@@ -70,9 +70,9 @@ class FriendModel {
     required this.createdAt,
     required this.updatedAt,
     required this.isOnline,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
+    this.email,
+    this.firstName,
+    this.lastName,
     this.lastLogin,
     this.profileImage,
     required this.userId,

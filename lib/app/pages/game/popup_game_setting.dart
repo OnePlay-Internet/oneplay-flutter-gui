@@ -9,7 +9,11 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../common/common.dart';
 import '../../widgets/common_divider.dart';
 
-Widget gameSettingPopup(BuildContext context, GameSetting gameSetting) {
+Widget gameSettingPopup(
+  BuildContext context,
+  GameSetting gameSetting,
+  Function() launchGame,
+) {
   return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6.0))),
@@ -22,17 +26,36 @@ Widget gameSettingPopup(BuildContext context, GameSetting gameSetting) {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 30),
-              child: Text(
-                'Select your game settings',
-                style: TextStyle(
-                  fontFamily: mainFontFamily,
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.02,
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Select your game settings',
+                    style: TextStyle(
+                      fontFamily: mainFontFamily,
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.02,
+                    ),
+                  ),
+                  FocusZoom(
+                    builder: (focus) {
+                      return InkWell(
+                        focusNode: focus,
+                        onTap: () => Navigator.pop(context),
+                        child: SvgPicture.asset(
+                          crossIcon,
+                          height: 20,
+                          width: 20,
+                        ),
+                      );
+                    },
+                  )
+                ],
               ),
             ),
             commonDividerWidget(),
@@ -123,34 +146,38 @@ Widget gameSettingPopup(BuildContext context, GameSetting gameSetting) {
               ),
             ),
             const SizedBox(height: 30),
-            FocusZoom(
-              builder: (focus) {
-                return InkWell(
-                  focusNode: focus,
-                  onTap: () => advancedSettingPopup(context, gameSetting),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child:
-                        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      SvgPicture.asset(advancedSettingIcon,
-                          height: 20, color: textPrimaryColor),
-                      const SizedBox(width: 14),
-                      Text(
-                        'Advanced game options',
-                        style: tinyStyle.copyWith(color: textSecondaryColor),
-                      )
-                    ]),
-                  ),
-                );
-              }
-            ),
-            btnLaunchGame(context)
+            FocusZoom(builder: (focus) {
+              return InkWell(
+                focusNode: focus,
+                onTap: () => advancedSettingPopup(
+                  context,
+                  gameSetting,
+                  launchGame,
+                ),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(advancedSettingIcon,
+                            height: 20, color: textPrimaryColor),
+                        const SizedBox(width: 14),
+                        Text(
+                          'Advanced game options',
+                          style: tinyStyle.copyWith(color: textSecondaryColor),
+                        )
+                      ]),
+                ),
+              );
+            }),
+            btnLaunchGame(context, launchGame)
           ],
         ),
       ));
 }
 
-advancedSettingPopup(BuildContext context, GameSetting gameSetting) {
+advancedSettingPopup(
+    BuildContext context, GameSetting gameSetting, Function() launchGame) {
   bool showStats = true;
   bool fullScreenMode = true;
   bool onScreenControls = false;
@@ -200,19 +227,17 @@ advancedSettingPopup(BuildContext context, GameSetting gameSetting) {
                                   letterSpacing: 0.02,
                                   fontWeight: FontWeight.w600),
                             ),
-                            FocusZoom(
-                              builder: (focus) {
-                                return InkWell(
-                                  focusNode: focus,
-                                  onTap: () => Navigator.pop(context),
-                                  child: SvgPicture.asset(
-                                    crossIcon,
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                );
-                              }
-                            )
+                            FocusZoom(builder: (focus) {
+                              return InkWell(
+                                focusNode: focus,
+                                onTap: () => Navigator.pop(context),
+                                child: SvgPicture.asset(
+                                  crossIcon,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                              );
+                            })
                           ],
                         ),
                       ),
@@ -256,7 +281,7 @@ advancedSettingPopup(BuildContext context, GameSetting gameSetting) {
                             () => videoDecodeValue = videoDecode.indexOf(e));
                         gameSetting.video_decoder_selection = e;
                       }, videoDecodeValue),
-                      btnLaunchGame(context),
+                      btnLaunchGame(context, launchGame),
                       const SizedBox(height: 20)
                     ],
                   ),
@@ -357,11 +382,14 @@ Container switchGameSetting({
   );
 }
 
-FocusZoom btnLaunchGame(BuildContext context) {
+FocusZoom btnLaunchGame(BuildContext context, Function() launchGame) {
   return FocusZoom(builder: (focus) {
     return InkWell(
       focusNode: focus,
-      onTap: () => Navigator.pop(context),
+      onTap: () {
+        Navigator.pop(context);
+        launchGame();
+      },
       child: Container(
         margin: const EdgeInsets.only(
           left: 20,
@@ -391,27 +419,25 @@ FocusZoom btnLaunchGame(BuildContext context) {
 Widget dropdownMenu(List<dynamic> options, dynamic selectValue) {
   return StatefulBuilder(
     builder: (context, setState) {
-      return FocusZoom(builder: (focus) {
-        return DropdownButton(
-          focusNode: focus,
-          isExpanded: true,
-          dropdownColor: blackColor4,
-          style: tinyStyle.copyWith(color: textPrimaryColor),
-          underline: const SizedBox.shrink(),
-          value: selectValue,
-          items: options
-              .map((e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(
-                    "$e",
-                    style: tinyStyle.copyWith(color: textPrimaryColor),
-                  )))
-              .toList(),
-          onChanged: (value) {
-            setState(() => selectValue = value!);
-          },
-        );
-      });
+      return DropdownButton(
+        focusColor: Colors.blue,
+        isExpanded: true,
+        dropdownColor: blackColor4,
+        style: tinyStyle.copyWith(color: textPrimaryColor),
+        underline: const SizedBox.shrink(),
+        value: selectValue,
+        items: options
+            .map((e) => DropdownMenuItem(
+                value: e,
+                child: Text(
+                  "$e",
+                  style: tinyStyle.copyWith(color: textPrimaryColor),
+                )))
+            .toList(),
+        onChanged: (value) {
+          setState(() => selectValue = value!);
+        },
+      );
     },
   );
 }
