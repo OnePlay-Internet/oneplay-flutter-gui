@@ -27,11 +27,18 @@ class _BottomNavState extends State<BottomNav> {
           isImage: true,
         ),
         _item(icon: const Icon(Icons.people), label: "Social"),
-        _item(icon: const Icon(Icons.store), label: "Store"),
+        // _item(icon: const Icon(Icons.store), label: "Store"),
+        _item(
+          icon: SvgPicture.asset(settingIcon),
+          label: "Settings",
+          isImage: true,
+        ),
       ],
       currentIndex: _selectedIndex,
       backgroundColor: blackColor4,
-      unselectedIconTheme: const IconThemeData(color: textPrimaryColor),
+      unselectedIconTheme: const IconThemeData(
+        color: textPrimaryColor,
+      ),
       unselectedItemColor: textSecondaryColor,
       showUnselectedLabels: true,
       onTap: _onTap,
@@ -54,6 +61,9 @@ class _BottomNavState extends State<BottomNav> {
         break;
       case 1:
         Modular.to.pushNamedAndRemoveUntil('/search', (r) => false);
+        break;
+      case 4:
+        Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);
         break;
     }
   }

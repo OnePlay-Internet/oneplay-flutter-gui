@@ -14,85 +14,91 @@ StatefulBuilder customTextField({
 }) {
   bool isHideText = textInputType == TextInputType.visiblePassword;
   bool onChangeText = false;
-  return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 40),
-      height: 84,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(labelText,
-                  style: const TextStyle(
-                      fontFamily: mainFontFamily,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0.02,
-                      color: textPrimaryColor,
-                      fontSize: 14)),
-              errorText != ""
-                  ? GradientText(
-                      errorText,
-                      style: const TextStyle(
-                        fontFamily: mainFontFamily,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.02,
-                        decorationThickness: 1,
-                      ),
-                      gradientType: GradientType.linear,
-                      gradientDirection: GradientDirection.ltr,
-                      colors: const [pinkColor2, purpleColor3],
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          ),
-          SizedBox(
-            height: 50,
-            child: Stack(
+  return StatefulBuilder(
+    builder: (BuildContext context, StateSetter setState) {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 40),
+        height: 84,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FocusZoom(
-                  builder: (focus) {
+                Text(
+                  labelText,
+                  style: const TextStyle(
+                    fontFamily: mainFontFamily,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.02,
+                    color: textPrimaryColor,
+                    fontSize: 14,
+                  ),
+                ),
+                errorText != ""
+                    ? GradientText(
+                        errorText,
+                        style: const TextStyle(
+                          fontFamily: mainFontFamily,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.02,
+                          decorationThickness: 1,
+                        ),
+                        gradientType: GradientType.linear,
+                        gradientDirection: GradientDirection.ltr,
+                        colors: const [pinkColor2, purpleColor3],
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            ),
+            SizedBox(
+              height: 50,
+              child: Stack(
+                children: [
+                  FocusZoom(builder: (focus) {
                     return TextFormField(
                       focusNode: focus,
                       decoration: InputDecoration(
                         hintText: hintText,
                         hintStyle: const TextStyle(
-                            fontFamily: mainFontFamily,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.02,
-                            color: textSecondaryColor),
+                          fontFamily: mainFontFamily,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.02,
+                          color: textSecondaryColor,
+                        ),
                         enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: blackColor1, width: 2),
+                          borderSide: BorderSide(
+                            color: blackColor1,
+                            width: 2,
+                          ),
                         ),
                         suffixIcon: textInputType ==
                                 TextInputType.visiblePassword
-                            ? FocusZoom(
-                                builder: (f) {
-                                  return InkWell(
-                                    focusNode: f,
-                                    onTap: () {
-                                      setState(() => isHideText = !isHideText);
-                                    },
-                                    child: Container(
-                                      height: 20,
-                                      width: 20,
-                                      alignment: Alignment.centerRight,
-                                      child: SvgPicture.asset(
-                                        isHideText ? hidePwdIcon : showPwdIcon,
-                                        color: textPrimaryColor,
-                                      ),
+                            ? FocusZoom(builder: (focus) {
+                                return InkWell(
+                                  focusNode: focus,
+                                  onTap: () {
+                                    setState(() => isHideText = !isHideText);
+                                  },
+                                  child: Container(
+                                    height: 20,
+                                    width: 20,
+                                    alignment: Alignment.centerRight,
+                                    child: SvgPicture.asset(
+                                      isHideText ? hidePwdIcon : showPwdIcon,
+                                      color: textPrimaryColor,
                                     ),
-                                  );
-                                },
-                              )
+                                  ),
+                                );
+                              })
                             : const SizedBox(),
                       ),
                       controller: textCtrler,
+                      keyboardType: textInputType,
                       obscureText: isHideText,
                       onTap: () => setState(() => onChangeText = true),
                       onEditingComplete: () {
@@ -100,15 +106,15 @@ StatefulBuilder customTextField({
                         FocusManager.instance.primaryFocus?.unfocus();
                       },
                       style: const TextStyle(
-                          fontFamily: mainFontFamily,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.02,
-                          color: textSecondaryColor),
+                        fontFamily: mainFontFamily,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.02,
+                        color: textSecondaryColor,
+                      ),
                     );
-                  },
-                ),
-                Positioned(
+                  }),
+                  Positioned(
                     bottom: 1,
                     child: Container(
                       height: 3,
@@ -122,12 +128,14 @@ StatefulBuilder customTextField({
                                   : [blackColor2, blackColor1],
                         ),
                       ),
-                    )),
-              ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
-      ),
-    );
-  });
+          ],
+        ),
+      );
+    },
+  );
 }

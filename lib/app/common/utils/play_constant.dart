@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 class PlayConstants {
   static const RESOLUTIONS = [
     "1280x720",

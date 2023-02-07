@@ -67,23 +67,25 @@ class _FeedsState extends State<Feeds> {
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: ListView(
-                children: [
-                  bannerWidget(firstRow),
-                  Observer(builder: (context) {
-                    _getLibrary();
-                    return library.isNotEmpty
-                        ? listGameWithLabel(
-                            GameFeedModel(title: 'My Library', games: library),
-                          )
-                        : Container();
-                  }),
-                  ...restRow.map((value) => listGameWithLabel(value)).toList()
-                ],
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: ListView(
+                  children: [
+                    bannerWidget(firstRow),
+                    Observer(builder: (context) {
+                      _getLibrary();
+                      return library.isNotEmpty
+                          ? listGameWithLabel(
+                              GameFeedModel(
+                                  title: 'My Library', games: library),
+                            )
+                          : Container();
+                    }),
+                    ...restRow.map((value) => listGameWithLabel(value)).toList()
+                  ],
+                ),
               ),
-            )),
+            ),
     );
     // return Container(
     //   padding: const EdgeInsets.all(4),

@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+// ignore_for_file: avoid_print
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -13,6 +15,9 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:validators/validators.dart';
 
 import '../widgets/popup/popup_success.dart';
+import '../widgets/submit_button/submit_button.dart';
+import 'forgot_password.dart';
+import 'signup.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,14 +27,16 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool loading = false;
   bool isSavePwd = false;
 
   final idCtrler = TextEditingController();
   final pwdCtrler = TextEditingController();
+
   String errorEmail = "";
   String errorPwd = "";
+
   login(String id, String password) async {
     final RestService restService = Modular.get<RestService>();
     final AuthService authService = Modular.get<AuthService>();
@@ -40,14 +47,18 @@ class _LoginState extends State<Login> {
       String token = await restService.login(id: id, password: password);
       await authService.login(token);
       showDialog(
+        context: context,
+        builder: (_) => alertSuccess(
           context: context,
-          builder: (_) => alertSuccess(
-              context: context,
-              title: 'Login Success',
-              description: 'You will be redirect to Feed Page'),
-          barrierDismissible: false);
+          title: 'Login Success',
+          description: 'You will be redirect to Feed Page',
+        ),
+        barrierDismissible: false,
+      );
+
       Future.delayed(const Duration(milliseconds: 2000), () {
         setState(() => loading = false);
+
         Modular.to.navigate('/feeds');
       });
     } on DioError catch (e) {
@@ -88,7 +99,7 @@ class _LoginState extends State<Login> {
             const SizedBox(height: 40),
             customTextField(
               labelText: 'Password',
-              hintText: '',
+              hintText: 'Password',
               textCtrler: pwdCtrler,
               textInputType: TextInputType.visiblePassword,
               errorText: errorPwd,
@@ -97,25 +108,54 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.all(40),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [savePwd(), forgotPwd()],
+                children: [
+                  savePwd(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ForgotPassword(),
+                        ),
+                      );
+                    },
+                    child: forgotPwd(),
+                  )
+                ],
               ),
             ),
-            loginBtn(context, () {
-              if (!isEmail(idCtrler.text)) {
-                setState(() => errorEmail = "Invalid email address");
-                return;
-              }
-              if (idCtrler.text.isEmpty) {
-                setState(() => errorEmail = "Enter your email");
-                return;
-              }
-              if (pwdCtrler.text.isEmpty) {
-                setState(() => errorPwd = "Enter your password");
-                return;
-              }
-              login(idCtrler.text.trim(), pwdCtrler.text.trim());
-            }),
-            createNewAccount(),
+            SubmitButton(
+              buttonTitle: 'Log in',
+              loadingTitle: 'Logging you in...',
+              isLoading: loading,
+              onTap: () {
+                if (!isEmail(idCtrler.text)) {
+                  setState(() => errorEmail = "Invalid email address");
+                  return;
+                }
+                if (idCtrler.text.isEmpty) {
+                  setState(() => errorEmail = "Enter your email");
+                  return;
+                }
+                if (pwdCtrler.text.isEmpty) {
+                  setState(() => errorPwd = "Enter your password");
+                  return;
+                }
+                login(idCtrler.text.trim(), pwdCtrler.text.trim());
+              },
+            ),
+            haveAccount(
+              title: 'Don\'t have an account? ',
+              btnTitle: 'Create a New',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignUp(),
+                  ),
+                );
+              },
+            ),
             commonDividerWidget(),
             needHelpWidget(),
             authFooterWidget()
@@ -127,85 +167,98 @@ class _LoginState extends State<Login> {
 
   Padding createNewAccount() {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
           const Text(
             'Don\'t have an account? ',
             style: TextStyle(
-                fontFamily: mainFontFamily,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.02,
-                color: textSecondaryColor),
+              fontFamily: mainFontFamily,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.02,
+              color: textSecondaryColor,
+            ),
           ),
-          GradientText(
-            'Create a New',
-            style: const TextStyle(
-                fontFamily: mainFontFamily,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.02),
-            gradientType: GradientType.linear,
-            gradientDirection: GradientDirection.ltr,
-            colors: const [purpleColor2, purpleColor1],
+          FocusZoom(
+            zoomEffect: false,
+            builder: (focus) {
+              return InkWell(
+                focusNode: focus,
+                onTap: () => Modular.to.pushNamed('/auth/signup'),
+                child: GradientText(
+                  'Create a New',
+                  style: const TextStyle(
+                    fontFamily: mainFontFamily,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.02,
+                  ),
+                  gradientType: GradientType.linear,
+                  gradientDirection: GradientDirection.ltr,
+                  colors: const [purpleColor2, purpleColor1],
+                ),
+              );
+            },
           ),
-        ]));
+        ],
+      ),
+    );
   }
 
   Padding loginBtn(BuildContext context, Function() onTap) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: FocusZoom(
-        builder: (focus) {
-          return InkWell(
-            focusNode: focus,
-            onTap: loading ? null : onTap,
-            child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  gradient: const LinearGradient(
-                      end: Alignment.bottomRight,
-                      begin: Alignment.topLeft,
-                      colors: [pinkColor1, blueColor1])),
-              child: Center(
-                  child: loading
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: Icon(
-                                  Icons.check_circle,
-                                  color: Colors.white,
-                                )),
-                            SizedBox(width: 15),
-                            Text(
-                              'Logging you in...',
-                              style: TextStyle(
-                                  fontFamily: mainFontFamily,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  letterSpacing: 0.02),
-                            )
-                          ],
-                        )
-                      : const Text(
-                          'Log in',
-                          style: TextStyle(
-                              fontFamily: mainFontFamily,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              letterSpacing: 0.02),
-                        )),
-            ),
-          );
-        }
-      ),
+      child: FocusZoom(builder: (focus) {
+        return InkWell(
+          focusNode: focus,
+          onTap: loading ? null : onTap,
+          child: Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                gradient: const LinearGradient(
+                    end: Alignment.bottomRight,
+                    begin: Alignment.topLeft,
+                    colors: [pinkColor1, blueColor1])),
+            child: Center(
+                child: loading
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: Icon(
+                                Icons.check_circle,
+                                color: Colors.white,
+                              )),
+                          SizedBox(width: 15),
+                          Text(
+                            'Logging you in...',
+                            style: TextStyle(
+                                fontFamily: mainFontFamily,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                letterSpacing: 0.02),
+                          )
+                        ],
+                      )
+                    : const Text(
+                        'Log in',
+                        style: TextStyle(
+                            fontFamily: mainFontFamily,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            letterSpacing: 0.02),
+                      )),
+          ),
+        );
+      }),
     );
   }
 
@@ -213,11 +266,12 @@ class _LoginState extends State<Login> {
     return const Text(
       'Forgot Password?',
       style: TextStyle(
-          fontFamily: mainFontFamily,
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-          letterSpacing: 0.02,
-          color: textPrimaryColor),
+        fontFamily: mainFontFamily,
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+        letterSpacing: 0.02,
+        color: textPrimaryColor,
+      ),
     );
   }
 
@@ -226,7 +280,7 @@ class _LoginState extends State<Login> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
+        SizedBox(
           height: 20,
           width: 34,
           child: Transform.scale(
@@ -247,13 +301,14 @@ class _LoginState extends State<Login> {
           width: 10,
         ),
         const Text(
-          'Remember me',
+          'Remember me ',
           style: TextStyle(
-              fontFamily: mainFontFamily,
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
-              letterSpacing: 0.02,
-              color: textSecondaryColor),
+            fontFamily: mainFontFamily,
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            letterSpacing: 0.02,
+            color: textSecondaryColor,
+          ),
         )
       ],
     );
@@ -261,13 +316,17 @@ class _LoginState extends State<Login> {
 
   Container headTitle() {
     return Container(
-        alignment: Alignment.center,
-        child: const Text('Log in to your account',
-            style: TextStyle(
-                fontFamily: mainFontFamily,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.02,
-                color: Colors.white,
-                fontSize: 30)));
+      alignment: Alignment.center,
+      child: const Text(
+        'Log in to your account',
+        style: TextStyle(
+          fontFamily: mainFontFamily,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.02,
+          color: Colors.white,
+          fontSize: 30,
+        ),
+      ),
+    );
   }
 }

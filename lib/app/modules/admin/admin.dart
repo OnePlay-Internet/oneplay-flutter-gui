@@ -11,6 +11,9 @@ import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 
+import '../../pages/settings/settings.dart';
+import '../../pages/signup.dart';
+
 class AdminModule extends Module {
   @override
   List<Bind> get binds => [
@@ -27,12 +30,18 @@ class AdminModule extends Module {
           '/',
           child: (context, args) => const AdminWidget(),
           children: [
-            ChildRoute('/feeds', child: (context, args) => const Feeds()),
+            ChildRoute(
+              '/feeds',
+              child: (context, args) => const Feeds(),
+            ),
             ChildRoute(
               '/game/:id',
               child: (context, args) => Game(args.params['id']),
             ),
-            ChildRoute('/search', child: (context, args) => const Search()),
+            ChildRoute(
+              '/search',
+              child: (context, args) => const Search(),
+            ),
             ChildRoute(
               '/search/games',
               child: (context, args) =>
@@ -42,6 +51,10 @@ class AdminModule extends Module {
               '/search/users',
               child: (context, args) =>
                   UsersList(query: args.queryParams['q'] ?? ''),
+            ),
+            ChildRoute(
+              '/setting',
+              child: (context, args) => const Settings(),
             ),
           ],
         )
