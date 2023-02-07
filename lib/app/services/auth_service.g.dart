@@ -106,6 +106,28 @@ mixin _$AuthService on AuthServiceBase, Store {
   }
 
   @override
+  dynamic addToWishlist(String gameId) {
+    final _$actionInfo = _$AuthServiceBaseActionController.startAction(
+        name: 'AuthServiceBase.addToWishlist');
+    try {
+      return super.addToWishlist(gameId);
+    } finally {
+      _$AuthServiceBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic removeFromWishlist(String gameId) {
+    final _$actionInfo = _$AuthServiceBaseActionController.startAction(
+        name: 'AuthServiceBase.removeFromWishlist');
+    try {
+      return super.removeFromWishlist(gameId);
+    } finally {
+      _$AuthServiceBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 user: ${user},

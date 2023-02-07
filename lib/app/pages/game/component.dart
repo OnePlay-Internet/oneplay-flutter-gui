@@ -78,72 +78,71 @@ Widget videoWidget(BuildContext context, VideoModel video) {
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 15),
     height: 370,
-    child: FocusZoom(
-      builder: (focus) {
-        return InkWell(
-          focusNode: focus,
-          onTap: () => {},
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 248,
-                width: MediaQuery.of(context).size.width,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    imageUrl: video.thumbnail,
-                    width: 125,
-                    height: 80,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                    errorWidget: (context, url, error) {
-                      return Image.asset(
-                        defaultBg,
-                        fit: BoxFit.fitHeight,
-                      );
-                    },
-                  ),
+    child: FocusZoom(builder: (focus) {
+      return InkWell(
+        focusNode: focus,
+        onTap: () {},
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: 248,
+              width: MediaQuery.of(context).size.width,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: video.thumbnail,
+                  width: 125,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return Image.asset(
+                      defaultBg,
+                      fit: BoxFit.fitHeight,
+                    );
+                  },
                 ),
               ),
-              Text(video.title,
-                  style: tinyStyle.copyWith(color: textSecondaryColor), maxLines: 2),
-              SizedBox(
-                height: 52,
-                child: Row(children: [
-                  SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(90),
-                      child: CachedNetworkImage(
-                        imageUrl: video.creatorThumbnail,
-                      ),
+            ),
+            Text(video.title,
+                style: tinyStyle.copyWith(color: textSecondaryColor),
+                maxLines: 2),
+            SizedBox(
+              height: 52,
+              child: Row(children: [
+                SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(90),
+                    child: CachedNetworkImage(
+                      imageUrl: video.creatorThumbnail,
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(video.creatorName,
-                          style: tinyStyle.copyWith(color: textSecondaryColor)),
-                      Text(video.updatedAt.toString(),
-                          style: tinyStyle.copyWith(color: textSecondaryColor)),
-                    ],
-                  )
-                ]),
-              ),
-            ],
-          ),
-        );
-      }
-    ),
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(video.creatorName,
+                        style: tinyStyle.copyWith(color: textSecondaryColor)),
+                    Text(video.updatedAt.toString(),
+                        style: tinyStyle.copyWith(color: textSecondaryColor)),
+                  ],
+                )
+              ]),
+            ),
+          ],
+        ),
+      );
+    }),
   );
 }
 
