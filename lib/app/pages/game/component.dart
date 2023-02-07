@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../common/common.dart';
@@ -35,34 +36,37 @@ Widget topVideoLiveStreamsWidget(
               return const SizedBox.shrink();
             }).toList(),
             if (maxLoadTopVideo < videos.length)
-              InkWell(
-                onTap: (() {
-                  setState(() => maxLoadTopVideo += 3);
-                }),
-                child: Container(
-                  height: 44,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      end: Alignment.centerLeft,
-                      begin: Alignment.centerRight,
-                      colors: [blackColor1, blackColor2],
+              FocusZoom(builder: (focus) {
+                return InkWell(
+                  focusNode: focus,
+                  onTap: (() {
+                    setState(() => maxLoadTopVideo += 3);
+                  }),
+                  child: Container(
+                    height: 44,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        end: Alignment.centerLeft,
+                        begin: Alignment.centerRight,
+                        colors: [blackColor1, blackColor2],
+                      ),
+                      borderRadius: BorderRadius.circular(60),
                     ),
-                    borderRadius: BorderRadius.circular(60),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Browse more streams',
-                      style: TextStyle(
-                          fontFamily: mainFontFamily,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          letterSpacing: 0.02,
-                          color: Colors.white),
+                    child: const Center(
+                      child: Text(
+                        'Browse more streams',
+                        style: TextStyle(
+                            fontFamily: mainFontFamily,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            letterSpacing: 0.02,
+                            color: Colors.white),
+                      ),
                     ),
                   ),
-                ),
-              )
+                );
+              })
           ],
         ),
       );
@@ -74,64 +78,71 @@ Widget videoWidget(BuildContext context, VideoModel video) {
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 15),
     height: 370,
-    child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            height: 248,
-            width: MediaQuery.of(context).size.width,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: video.thumbnail,
-                width: 125,
-                height: 80,
-                fit: BoxFit.cover,
-                placeholder: (context, url) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-                errorWidget: (context, url, error) {
-                  return Image.asset(
-                    defaultBg,
-                    fit: BoxFit.fitHeight,
-                  );
-                },
-              ),
-            ),
-          ),
-          Text(video.title,
-              style: tinyStyle.copyWith(color: textSecondaryColor),
-              maxLines: 2),
-          SizedBox(
-            height: 52,
-            child: Row(children: [
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(90),
-                  child: CachedNetworkImage(
-                    imageUrl: video.creatorThumbnail,
-                  ),
+    child: FocusZoom(builder: (focus) {
+      return InkWell(
+        focusNode: focus,
+        onTap: () {},
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: 248,
+              width: MediaQuery.of(context).size.width,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: video.thumbnail,
+                  width: 125,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return Image.asset(
+                      defaultBg,
+                      fit: BoxFit.fitHeight,
+                    );
+                  },
                 ),
               ),
-              const SizedBox(width: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(video.creatorName,
-                      style: tinyStyle.copyWith(color: textSecondaryColor)),
-                  Text(video.updatedAt.toString(),
-                      style: tinyStyle.copyWith(color: textSecondaryColor)),
-                ],
-              )
-            ]),
-          ),
-        ]),
+            ),
+            Text(video.title,
+                style: tinyStyle.copyWith(color: textSecondaryColor),
+                maxLines: 2),
+            SizedBox(
+              height: 52,
+              child: Row(children: [
+                SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(90),
+                    child: CachedNetworkImage(
+                      imageUrl: video.creatorThumbnail,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(video.creatorName,
+                        style: tinyStyle.copyWith(color: textSecondaryColor)),
+                    Text(video.updatedAt.toString(),
+                        style: tinyStyle.copyWith(color: textSecondaryColor)),
+                  ],
+                )
+              ]),
+            ),
+          ],
+        ),
+      );
+    }),
   );
 }
 
@@ -234,15 +245,17 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
                     height: 20,
                   ),
                   if (game != null)
-                    if (game!.storesMapping.isNotEmpty)
+                    if (game.storesMapping.isNotEmpty)
                       Row(
                         children: [
                           // CachedNetworkImage(
                           //     imageUrl: game?.storesMapping[0].link ?? "",
                           //     height: 30),
                           // const SizedBox(height: 20),
-                          Text(game?.storesMapping[0].name ?? "",
-                              style: tinyStyle)
+                          Text(
+                            game.storesMapping[0].name,
+                            style: tinyStyle,
+                          )
                         ],
                       )
                 ],
@@ -252,8 +265,10 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Developer',
-                      style: tinyStyle.copyWith(color: textSecondaryColor)),
+                  Text(
+                    'Developer',
+                    style: tinyStyle.copyWith(color: textSecondaryColor),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -266,7 +281,7 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
                         "",
                     style: tinyStyle,
                     overflow: TextOverflow.ellipsis,
-                  )
+                  ),
                 ],
               ),
             ),
@@ -304,7 +319,7 @@ List<Widget> bannerWidget(BuildContext context, GameModel? game) {
                   top: 40,
                   left: 5,
                   child: Text(
-                    game!.title,
+                    game.title,
                     style: const TextStyle(
                         color: Colors.white, fontFamily: mainFontFamily),
                     maxLines: 2,
@@ -337,36 +352,47 @@ List<Widget> bannerWidget(BuildContext context, GameModel? game) {
   ];
 }
 
-Widget addToWishlist() {
+Widget wishlistButton(IconData iconData, {void Function()? onTap}) {
   return Positioned(
-      top: 40,
-      right: 40,
-      child: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(90), color: Colors.black),
-        child: Center(
-          child: Container(
-            height: 20,
-            width: 20,
-            decoration: BoxDecoration(
+    top: 40,
+    right: 40,
+    child: FocusZoom(builder: (focus) {
+      return InkWell(
+        focusNode: focus,
+        onTap: onTap,
+        child: Container(
+          height: 48,
+          width: 48,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(90),
+            color: Colors.black,
+          ),
+          child: Center(
+            child: Container(
+              height: 20,
+              width: 20,
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 gradient: const LinearGradient(
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    colors: [
-                      Color(0xff59FEF4),
-                      Color(0xff3AA0FE),
-                    ])),
-            child: const Center(
-              child: Icon(
-                Icons.add_rounded,
-                size: 15,
-                color: Colors.black,
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                  colors: [
+                    Color(0xff59FEF4),
+                    Color(0xff3AA0FE),
+                  ],
+                ),
+              ),
+              child: Center(
+                child: Icon(
+                  iconData,
+                  size: 15,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
+    }),
+  );
 }

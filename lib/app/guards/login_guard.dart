@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:flutter_modular/flutter_modular.dart';
@@ -9,7 +11,8 @@ class LoginGuard extends RouteGuard {
   @override
   FutureOr<bool> canActivate(String path, ParallelRoute route) {
     var token = Modular.get<AuthService>().sessionToken;
-    print('Login guard : $token');
+    print('***** Login guard : $token *****');
+
     return token == null;
   }
 }

@@ -8,6 +8,7 @@ import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 
 import '../widgets/list_game_w_label/list_game_w_label.dart';
 
@@ -26,8 +27,7 @@ class _FeedsState extends State<Feeds> {
   late GameFeedModel firstRow;
   late List<GameFeedModel> restRow;
   bool starting = false;
-  List<GameModel> library = [];
-  List<String> wishlist = [];
+  List<ShortGameModel> library = [];
 
   _getHomeFeed() async {
     setState(() => starting = true);
@@ -38,9 +38,16 @@ class _FeedsState extends State<Feeds> {
     });
   }
 
+  _getLibrary() {
+    restService
+        .getWishlistGames(authService.wishlist)
+        .then((value) => setState(() => library = value));
+  }
+
   @override
   void initState() {
     _getHomeFeed();
+    _getLibrary();
     super.initState();
   }
 
@@ -60,17 +67,25 @@ class _FeedsState extends State<Feeds> {
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: ListView(
-                children: [
-                  bannerWidget(firstRow),
-                  ...restRow
-                      .map((value) => listGameWithLabel(value))
-                      .toList()
-                ],
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: ListView(
+                  children: [
+                    bannerWidget(firstRow),
+                    Observer(builder: (context) {
+                      _getLibrary();
+                      return library.isNotEmpty
+                          ? listGameWithLabel(
+                              GameFeedModel(
+                                  title: 'My Library', games: library),
+                            )
+                          : Container();
+                    }),
+                    ...restRow.map((value) => listGameWithLabel(value)).toList()
+                  ],
+                ),
               ),
-            )),
+            ),
     );
     // return Container(
     //   padding: const EdgeInsets.all(4),
@@ -97,23 +112,27 @@ class _FeedsState extends State<Feeds> {
       ),
       items: data.games.map((item) {
         return item.textBgImage!.isNotEmpty
-            ? InkWell(
-                onTap: (() => Modular.to.pushNamed('/game/${item.oneplayId}')),
-                child: Container(
-                  height: 200,
-                  width: 300,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl: item.textBgImage.toString(),
-                        height: 200,
-                        width: 300,
-                        fit: BoxFit.fitHeight,
-                      )),
-                ),
-              )
+            ? FocusZoom(builder: (focusNode) {
+                return InkWell(
+                  focusNode: focusNode,
+                  onTap: (() =>
+                      Modular.to.pushNamed('/game/${item.oneplayId}')),
+                  child: Container(
+                    height: 200,
+                    width: 300,
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 10),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl: item.textBgImage.toString(),
+                          height: 200,
+                          width: 300,
+                          fit: BoxFit.fitHeight,
+                        )),
+                  ),
+                );
+              })
             : const SizedBox.shrink();
       }).toList(),
     );

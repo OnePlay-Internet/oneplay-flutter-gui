@@ -13,9 +13,9 @@ FriendModel _$FriendModelFromJson(Map<String, dynamic> json) => FriendModel(
       createdAt: FriendModel._dateFromString2(json['created_at'] as String),
       updatedAt: FriendModel._dateFromString2(json['updated_at'] as String),
       isOnline: json['isOnline'] as bool,
-      email: json['email'] as String,
-      firstName: json['first_name'] as String,
-      lastName: json['last_name'] as String,
+      email: json['email'] as String?,
+      firstName: json['first_name'] as String?,
+      lastName: json['last_name'] as String?,
       lastLogin:
           FriendModel._dateFromString(json['last_login_timestamp'] as String?),
       profileImage: json['profile_image'] as String?,

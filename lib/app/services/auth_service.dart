@@ -11,7 +11,10 @@ class UserIdToken {
   String userId;
   String token;
 
-  UserIdToken(this.userId, this.token);
+  UserIdToken(
+    this.userId,
+    this.token,
+  );
 }
 
 abstract class AuthServiceBase with Store {
@@ -44,6 +47,16 @@ abstract class AuthServiceBase with Store {
   @action
   loadWishlist(List<String> gameIds) {
     wishlist = gameIds;
+  }
+
+  @action
+  addToWishlist(String gameId) {
+    wishlist = [...wishlist, gameId];
+  }
+
+  @action
+  removeFromWishlist(String gameId) {
+    wishlist = wishlist.where((element) => element != gameId).toList();
   }
 
   @action

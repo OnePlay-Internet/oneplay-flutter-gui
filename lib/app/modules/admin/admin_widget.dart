@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -27,13 +29,30 @@ class _AdminWidgetState extends State<AdminWidget> {
   RestService2 restService2 = Modular.get<RestService2>();
   Timer? timer;
 
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // key: _scaffoldKey,
       backgroundColor: mainColor,
+      // drawer: Drawer(
+      //   backgroundColor: mainColor,
+      //   child: Column(
+      //     children: const [],
+      //   ),
+      // ),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
-        child: AppBarWidget().menu(context),
+        child: AppBarWidget().menu(
+          context,
+          // openDrawer: () {
+          //   _scaffoldKey.currentState?.openDrawer();
+          // },
+          // onTap: () {
+          //   print('***** User *****');
+          // },
+        ),
       ),
       body: const RouterOutlet(),
       bottomNavigationBar: const BottomNav(),

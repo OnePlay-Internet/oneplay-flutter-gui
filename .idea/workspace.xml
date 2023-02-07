@@ -5,12 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Male.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/app/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/app.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/common/theme/pngPath.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/common/theme/pngPath.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/common/theme/svgPath.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/common/theme/svgPath.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/common/utils/play_constant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/common/utils/play_constant.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/app/guards/auth_guard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/guards/auth_guard.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/app/guards/login_guard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/guards/login_guard.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/modules/admin/admin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/modules/admin/admin.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/modules/admin/admin_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/modules/admin/admin_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/modules/auth/auth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/modules/auth/auth.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/feeds.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/feeds.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/game/component.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/game/component.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/services/auth_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/services/auth_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/services/rest_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/services/rest_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/footer/authFooter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/footer/authFooter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/list_game_w_label/list_game_w_label.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/list_game_w_label/list_game_w_label.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/popup_success.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/popup_success.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/textfield/custom_text_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/textfield/custom_text_field.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
@@ -21,6 +36,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2JoYDBg3tzMveBfPdPoZjxKj6sr" />
   <component name="ProjectView">
@@ -36,6 +54,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="true" />

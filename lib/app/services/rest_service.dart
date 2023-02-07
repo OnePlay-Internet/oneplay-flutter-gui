@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor.dart';
@@ -8,6 +10,8 @@ import 'package:oneplay_flutter_gui/app/models/search_model.dart';
 import 'package:oneplay_flutter_gui/app/models/user_model.dart';
 import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
+
+import '../models/signup_model.dart';
 
 class RestService {
   final Dio _dio;
@@ -27,6 +31,42 @@ class RestService {
     UserModel user = UserModel.fromJson(userData.data);
 
     return user;
+  }
+
+  Future<SignupModel> signup({
+    required String email,
+    required String firstName,
+    required String lastName,
+    required String phone,
+    required String gender,
+    required String password,
+    required String refferedId,
+  }) async {
+    print('***** Email: $email *****');
+    print('***** First name: $firstName *****');
+    print('***** Last name: $lastName *****');
+    print('***** Phone: $phone *****');
+    print('***** Gender: $gender *****');
+    print('***** Password: $password *****');
+    print('***** Reffered id: $refferedId *****');
+    print('***** PARTNER_ID: $PARTNER_ID *****');
+
+    Response signUpData = await _dio.post('/accounts/signup', data: {
+      'email': email,
+      'first_name': firstName,
+      'last_name': lastName,
+      'phone': phone,
+      'gender': gender,
+      'password': password,
+      'device': 'mobile',
+      'referred_by_id': refferedId,
+      'partnerId': PARTNER_ID,
+    });
+
+    print('***** Signup response: $signUpData *****');
+
+    final myMap = Map<String, dynamic>.from(signUpData.data);
+    return SignupModel.fromJson(myMap);
   }
 
   Future<String> login({
@@ -187,5 +227,23 @@ class RestService {
         .map((e) => ShortGameModel.fromJson(e))
         .toList();
     return data;
+  }
+
+  Future<void> addToWishlist(String gameId) async {
+    await _dio.post("/accounts/add_to_wishlist/$gameId");
+  }
+
+  Future<void> removeFromWishlist(String gameId) async {
+    await _dio.post("/accounts/remove_from_wishlist/$gameId");
+  }
+
+  Future<List<ShortGameModel>> getWishlistGames(List<String> gameIds) async {
+    Response res = await _dio.post('/games/feed/custom', data: {
+      "content_ids": gameIds.join(','),
+    });
+
+    return (res.data as List<dynamic>)
+        .map((e) => ShortGameModel.fromJson(e))
+        .toList();
   }
 }

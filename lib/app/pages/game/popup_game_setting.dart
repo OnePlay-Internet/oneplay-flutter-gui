@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:oneplay_flutter_gui/app/common/utils/play_constant.dart';
 import 'package:oneplay_flutter_gui/app/models/game_setting.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../common/common.dart';
 import '../../widgets/common_divider.dart';
 
-Widget gameSettingPopup(BuildContext context, GameSetting gameSetting) {
+Widget gameSettingPopup(
+  BuildContext context,
+  GameSetting gameSetting,
+  Function() launchGame,
+) {
   return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6.0))),
@@ -21,17 +26,36 @@ Widget gameSettingPopup(BuildContext context, GameSetting gameSetting) {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 30),
-              child: Text(
-                'Select your game settings',
-                style: TextStyle(
-                  fontFamily: mainFontFamily,
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.02,
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Select your game settings',
+                    style: TextStyle(
+                      fontFamily: mainFontFamily,
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.02,
+                    ),
+                  ),
+                  FocusZoom(
+                    builder: (focus) {
+                      return InkWell(
+                        focusNode: focus,
+                        onTap: () => Navigator.pop(context),
+                        child: SvgPicture.asset(
+                          crossIcon,
+                          height: 20,
+                          width: 20,
+                        ),
+                      );
+                    },
+                  )
+                ],
               ),
             ),
             commonDividerWidget(),
@@ -122,29 +146,38 @@ Widget gameSettingPopup(BuildContext context, GameSetting gameSetting) {
               ),
             ),
             const SizedBox(height: 30),
-            InkWell(
-              onTap: () => advancedSettingPopup(context, gameSetting),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  SvgPicture.asset(advancedSettingIcon,
-                      height: 20, color: textPrimaryColor),
-                  const SizedBox(width: 14),
-                  Text(
-                    'Advanced game options',
-                    style: tinyStyle.copyWith(color: textSecondaryColor),
-                  )
-                ]),
-              ),
-            ),
-            btnLaunchGame(context)
+            FocusZoom(builder: (focus) {
+              return InkWell(
+                focusNode: focus,
+                onTap: () => advancedSettingPopup(
+                  context,
+                  gameSetting,
+                  launchGame,
+                ),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(advancedSettingIcon,
+                            height: 20, color: textPrimaryColor),
+                        const SizedBox(width: 14),
+                        Text(
+                          'Advanced game options',
+                          style: tinyStyle.copyWith(color: textSecondaryColor),
+                        )
+                      ]),
+                ),
+              );
+            }),
+            btnLaunchGame(context, launchGame)
           ],
         ),
       ));
 }
 
-advancedSettingPopup(BuildContext context, GameSetting gameSetting) {
+advancedSettingPopup(
+    BuildContext context, GameSetting gameSetting, Function() launchGame) {
   bool showStats = true;
   bool fullScreenMode = true;
   bool onScreenControls = false;
@@ -194,14 +227,17 @@ advancedSettingPopup(BuildContext context, GameSetting gameSetting) {
                                   letterSpacing: 0.02,
                                   fontWeight: FontWeight.w600),
                             ),
-                            InkWell(
-                              onTap: () => Navigator.pop(context),
-                              child: SvgPicture.asset(
-                                crossIcon,
-                                height: 20,
-                                width: 20,
-                              ),
-                            )
+                            FocusZoom(builder: (focus) {
+                              return InkWell(
+                                focusNode: focus,
+                                onTap: () => Navigator.pop(context),
+                                child: SvgPicture.asset(
+                                  crossIcon,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                              );
+                            })
                           ],
                         ),
                       ),
@@ -245,7 +281,7 @@ advancedSettingPopup(BuildContext context, GameSetting gameSetting) {
                             () => videoDecodeValue = videoDecode.indexOf(e));
                         gameSetting.video_decoder_selection = e;
                       }, videoDecodeValue),
-                      btnLaunchGame(context),
+                      btnLaunchGame(context, launchGame),
                       const SizedBox(height: 20)
                     ],
                   ),
@@ -274,30 +310,33 @@ Container selectionGameSetting(BuildContext context, String title,
             spacing: 15,
             runSpacing: 15,
             children: audioType
-                .map((e) => InkWell(
-                      onTap: () => onTap(e),
-                      child: Container(
-                        height: 52,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 13),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                width: 2,
-                                color: audioType.indexOf(e) == audioTypeValue
-                                    ? purpleColor1
-                                    : basicLineColor)),
-                        child: GradientText(
-                          e,
-                          style: tinyStyle,
-                          gradientType: GradientType.linear,
-                          gradientDirection: GradientDirection.ltr,
-                          colors: audioType.indexOf(e) == audioTypeValue
-                              ? const [purpleColor2, purpleColor1]
-                              : [textPrimaryColor, textPrimaryColor],
+                .map((e) => FocusZoom(builder: (focus) {
+                      return InkWell(
+                        focusNode: focus,
+                        onTap: () => onTap(e),
+                        child: Container(
+                          height: 52,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 13),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  width: 2,
+                                  color: audioType.indexOf(e) == audioTypeValue
+                                      ? purpleColor1
+                                      : basicLineColor)),
+                          child: GradientText(
+                            e,
+                            style: tinyStyle,
+                            gradientType: GradientType.linear,
+                            gradientDirection: GradientDirection.ltr,
+                            colors: audioType.indexOf(e) == audioTypeValue
+                                ? const [purpleColor2, purpleColor1]
+                                : [textPrimaryColor, textPrimaryColor],
+                          ),
                         ),
-                      ),
-                    ))
+                      );
+                    }))
                 .toList(),
           )
         ]),
@@ -343,38 +382,45 @@ Container switchGameSetting({
   );
 }
 
-InkWell btnLaunchGame(BuildContext context) {
-  return InkWell(
-    onTap: () => Navigator.pop(context),
-    child: Container(
-      margin: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 30,
-      ),
-      width: MediaQuery.of(context).size.width,
-      height: 48,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          gradient: const LinearGradient(
-            colors: [pinkColor1, blueColor1],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          )),
-      child: Center(
-        child: Text(
-          'Launch Game',
-          style: tinyStyle.copyWith(color: Colors.white),
+FocusZoom btnLaunchGame(BuildContext context, Function() launchGame) {
+  return FocusZoom(builder: (focus) {
+    return InkWell(
+      focusNode: focus,
+      onTap: () {
+        Navigator.pop(context);
+        launchGame();
+      },
+      child: Container(
+        margin: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 30,
+        ),
+        width: MediaQuery.of(context).size.width,
+        height: 48,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            gradient: const LinearGradient(
+              colors: [pinkColor1, blueColor1],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            )),
+        child: Center(
+          child: Text(
+            'Launch Game',
+            style: tinyStyle.copyWith(color: Colors.white),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  });
 }
 
 Widget dropdownMenu(List<dynamic> options, dynamic selectValue) {
   return StatefulBuilder(
     builder: (context, setState) {
       return DropdownButton(
+        focusColor: Colors.blue,
         isExpanded: true,
         dropdownColor: blackColor4,
         style: tinyStyle.copyWith(color: textPrimaryColor),
