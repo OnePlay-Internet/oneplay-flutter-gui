@@ -151,6 +151,7 @@ Widget listTagWidget(BuildContext context, GameModel? game) {
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
     width: MediaQuery.of(context).size.width,
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           alignment: Alignment.topLeft,
