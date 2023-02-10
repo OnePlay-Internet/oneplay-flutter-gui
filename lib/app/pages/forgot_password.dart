@@ -1,15 +1,15 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:validators/validators.dart';
 
 import '../common/common.dart';
+import '../services/rest_service.dart';
 import '../widgets/common_divider.dart';
 import '../widgets/footer/authFooter.dart';
 import '../widgets/submit_button/submit_button.dart';
 import '../widgets/textfield/custom_text_field.dart';
-import 'email_send_success.dart';
-import 'login.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -19,6 +19,7 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  final RestService _restService = Modular.get<RestService>();
   String errorEmail = "";
   bool isLoading = false;
 
@@ -70,7 +71,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 height: size.height * 0.03,
               ),
               customTextField(
-                labelText: 'Email / Phone',
+                labelText: 'Email',
                 hintText: 'Email Address',
                 textCtrler: emailController,
                 errorText: errorEmail,
@@ -85,39 +86,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 onTap: () {
                   print("***** Signing up *****");
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EmailSentSuccess(),
-                    ),
-                  );
+                  var email = emailController.text;
 
-                  // if (!isEmail(emailController.text)) {
-                  //   setState(() => errorEmail = "Invalid email address");
+                  if (email.isEmpty) {
+                    setState(() => errorEmail = "Enter your email");
+                    return;
+                  } else if (!isEmail(email)) {
+                    setState(() => errorEmail = "Invalid email address");
+                    return;
+                  } else {
+                    setState(() => errorEmail = "");
+                  }
 
-                  //   return;
-                  // }
-
-                  // if (emailController.text.isEmpty) {
-                  //   setState(() => errorEmail = "Enter your email");
-
-                  //   return;
-                  // }
-
-                  // print("***** Call api.. *****");
+                  _forgotPassword(email);
                 },
               ),
               haveAccount(
                 title: 'Remember password? ',
                 btnTitle: 'Log in',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Login(),
-                    ),
-                  );
-                },
+                onTap: () => Modular.to.pushNamed('/auth/login'),
               ),
               commonDividerWidget(),
               needHelpWidget(),
@@ -127,5 +114,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ),
       ),
     );
+  }
+
+  _forgotPassword(String email) async {
+    setState(() => isLoading = true);
+
+    try {
+      await _restService.forgotPassword(email: email);
+
+      Modular.to.pushReplacementNamed('/auth/sentSuccess');
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 }

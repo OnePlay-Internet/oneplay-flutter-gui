@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import 'package:validators/validators.dart';
 import '../../common/common.dart';
 
 StatefulBuilder customTextField({
@@ -78,23 +77,25 @@ StatefulBuilder customTextField({
                         ),
                         suffixIcon: textInputType ==
                                 TextInputType.visiblePassword
-                            ? FocusZoom(builder: (focus) {
-                                return InkWell(
-                                  focusNode: focus,
-                                  onTap: () {
-                                    setState(() => isHideText = !isHideText);
-                                  },
-                                  child: Container(
-                                    height: 20,
-                                    width: 20,
-                                    alignment: Alignment.centerRight,
-                                    child: SvgPicture.asset(
-                                      isHideText ? hidePwdIcon : showPwdIcon,
-                                      color: textPrimaryColor,
+                            ? FocusZoom(
+                                builder: (focus) {
+                                  return InkWell(
+                                    focusNode: focus,
+                                    onTap: () {
+                                      setState(() => isHideText = !isHideText);
+                                    },
+                                    child: Container(
+                                      height: 20,
+                                      width: 20,
+                                      alignment: Alignment.centerRight,
+                                      child: SvgPicture.asset(
+                                        isHideText ? hidePwdIcon : showPwdIcon,
+                                        color: textPrimaryColor,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              })
+                                  );
+                                },
+                              )
                             : const SizedBox(),
                       ),
                       controller: textCtrler,

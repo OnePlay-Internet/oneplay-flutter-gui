@@ -10,3 +10,5 @@ const femalePng = 'assets/png/icon_female.png';
 const transgenderPng = 'assets/png/icon_transgender.png';
 const checkPng = 'assets/png/icon_check.png';
 const editPng = 'assets/png/icon_edit.png';
+const timePng = 'assets/png/icon_time.png';
+const settingPng = 'assets/png/icon_settings.png';
