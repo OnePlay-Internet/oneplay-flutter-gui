@@ -23,8 +23,6 @@ Widget gameSettingPopup(
         height: MediaQuery.of(context).size.height * 0.8,
         width: MediaQuery.of(context).size.width,
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceAround,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 8),
@@ -306,9 +304,8 @@ Container selectionGameSetting(BuildContext context, String title,
             title,
             style: tinyStyle.copyWith(color: textSecondaryColor),
           ),
-          Wrap(
-            spacing: 15,
-            runSpacing: 15,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: audioType
                 .map((e) => FocusZoom(builder: (focus) {
                       return InkWell(
