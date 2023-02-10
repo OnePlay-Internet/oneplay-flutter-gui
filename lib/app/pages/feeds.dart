@@ -78,10 +78,12 @@ class _FeedsState extends State<Feeds> {
                           ? listGameWithLabel(
                               GameFeedModel(
                                   title: 'My Library', games: library),
-                            )
+                              context)
                           : Container();
                     }),
-                    ...restRow.map((value) => listGameWithLabel(value)).toList()
+                    ...restRow
+                        .map((value) => listGameWithLabel(value, context))
+                        .toList()
                   ],
                 ),
               ),

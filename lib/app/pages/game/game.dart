@@ -93,10 +93,11 @@ class _GameState extends State<Game> {
           const SizedBox(height: 30),
           if (genreGames.isNotEmpty)
             listGameWithLabel(
-                GameFeedModel(title: 'From Genre', games: genreGames)),
+                GameFeedModel(title: 'From Genre', games: genreGames), context),
           if (genreGames.isNotEmpty)
             listGameWithLabel(
-                GameFeedModel(title: 'From Developer', games: devGames)),
+                GameFeedModel(title: 'From Developer', games: devGames),
+                context),
 
           // Center(child: Text('${game?.title}')),
           // const SizedBox(height: 32),

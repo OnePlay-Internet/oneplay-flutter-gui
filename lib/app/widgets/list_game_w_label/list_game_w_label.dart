@@ -5,14 +5,14 @@ import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import '../../common/common.dart';
 
-Widget listGameWithLabel(GameFeedModel value) {
+Widget listGameWithLabel(GameFeedModel value, BuildContext context) {
   return Container(
     height: 167.59,
     margin: const EdgeInsets.only(left: 20, bottom: 10),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [titleLabelGames(value), listGames(value)],
+      children: [titleLabelGames(value), listGames(value, context)],
     ),
   );
 }
@@ -30,7 +30,7 @@ Text titleLabelGames(GameFeedModel value) {
   );
 }
 
-SizedBox listGames(GameFeedModel value) {
+SizedBox listGames(GameFeedModel value, BuildContext context) {
   return SizedBox(
     height: 127.59,
     child: ListView(
@@ -44,6 +44,7 @@ SizedBox listGames(GameFeedModel value) {
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(right: 20),
                     height: 127.59,
+                    width: MediaQuery.of(context).size.width * 2.3 / 4,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: ColorFiltered(
@@ -54,8 +55,9 @@ SizedBox listGames(GameFeedModel value) {
                             BlendMode.srcOver),
                         child: CachedNetworkImage(
                           imageUrl: e.textBgImage.toString(),
-                          fit: BoxFit.fitHeight,
+                          fit: BoxFit.fitWidth,
                           height: 127.59,
+                          width: MediaQuery.of(context).size.width * 2.3 / 4,
                           placeholder: (context, url) {
                             return const Center(
                               child: CircularProgressIndicator(),
