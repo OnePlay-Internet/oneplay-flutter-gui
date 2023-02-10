@@ -47,6 +47,7 @@ dependencies:
   validators: ^3.0.0
   readmore: ^2.2.0
   image_picker: ^0.8.6+1
+  url_launcher: ^6.1.9
 
 dev_dependencies:
   flutter_test:
