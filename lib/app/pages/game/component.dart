@@ -10,68 +10,70 @@ import '../../models/video_model.dart';
 Widget topVideoLiveStreamsWidget(
     BuildContext context, List<VideoModel> videos) {
   int maxLoadTopVideo = 3;
-  return StatefulBuilder(
-    builder: (_, setState) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topLeft,
-              child: const Text(
-                'Top Live Streams',
-                style: TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textPrimaryColor),
-              ),
-            ),
-            const SizedBox(height: 15),
-            ...videos.map((e) {
-              if (videos.indexOf(e) < maxLoadTopVideo)
-                return videoWidget(context, e);
-              return const SizedBox.shrink();
-            }).toList(),
-            if (maxLoadTopVideo < videos.length)
-              FocusZoom(builder: (focus) {
-                return InkWell(
-                  focusNode: focus,
-                  onTap: (() {
-                    setState(() => maxLoadTopVideo += 3);
-                  }),
-                  child: Container(
-                    height: 44,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        end: Alignment.centerLeft,
-                        begin: Alignment.centerRight,
-                        colors: [blackColor1, blackColor2],
-                      ),
-                      borderRadius: BorderRadius.circular(60),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Browse more streams',
-                        style: TextStyle(
-                            fontFamily: mainFontFamily,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            letterSpacing: 0.02,
-                            color: Colors.white),
-                      ),
+  return videos.isEmpty
+      ? const SizedBox.shrink()
+      : StatefulBuilder(
+          builder: (_, setState) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: const Text(
+                      'Top Live Streams',
+                      style: TextStyle(
+                          fontFamily: mainFontFamily,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.02,
+                          color: textPrimaryColor),
                     ),
                   ),
-                );
-              })
-          ],
-        ),
-      );
-    },
-  );
+                  const SizedBox(height: 15),
+                  ...videos.map((e) {
+                    if (videos.indexOf(e) < maxLoadTopVideo)
+                      return videoWidget(context, e);
+                    return const SizedBox.shrink();
+                  }).toList(),
+                  if (maxLoadTopVideo < videos.length)
+                    FocusZoom(builder: (focus) {
+                      return InkWell(
+                        focusNode: focus,
+                        onTap: (() {
+                          setState(() => maxLoadTopVideo += 3);
+                        }),
+                        child: Container(
+                          height: 44,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              end: Alignment.centerLeft,
+                              begin: Alignment.centerRight,
+                              colors: [blackColor1, blackColor2],
+                            ),
+                            borderRadius: BorderRadius.circular(60),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Browse more streams',
+                              style: TextStyle(
+                                  fontFamily: mainFontFamily,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  letterSpacing: 0.02,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      );
+                    })
+                ],
+              ),
+            );
+          },
+        );
 }
 
 Widget videoWidget(BuildContext context, VideoModel video) {
@@ -223,7 +225,7 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
             trimLines: 3,
             colorClickableText: textPrimaryColor,
             trimCollapsedText: 'Read more',
-            trimExpandedText: 'Collapse',
+            trimExpandedText: '',
             textAlign: TextAlign.left,
           ),
         ),
