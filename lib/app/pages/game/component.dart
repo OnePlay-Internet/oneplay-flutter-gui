@@ -217,7 +217,7 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: ReadMoreText(
-            game?.description ?? "",
+            game?.description.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), "") ?? "",
             style: tinyStyle.copyWith(color: textSecondaryColor),
             trimMode: TrimMode.Line,
             trimLines: 3,
