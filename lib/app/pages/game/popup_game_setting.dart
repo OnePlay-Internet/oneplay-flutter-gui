@@ -19,6 +19,7 @@ Widget gameSettingPopup(
           borderRadius: BorderRadius.all(Radius.circular(6.0))),
       backgroundColor: mainColor,
       contentPadding: EdgeInsets.zero,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       content: SizedBox(
         height: MediaQuery.of(context).size.height * 0.8,
         width: MediaQuery.of(context).size.width,
@@ -60,7 +61,7 @@ Widget gameSettingPopup(
             Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                // height: 38,
+                height: 38,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
