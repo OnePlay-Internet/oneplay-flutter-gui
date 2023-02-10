@@ -29,7 +29,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool loading = false;
-  bool isSavePwd = false;
 
   final idCtrler = TextEditingController();
   final pwdCtrler = TextEditingController();
@@ -107,9 +106,8 @@ class _LoginState extends State<Login> {
             Padding(
               padding: const EdgeInsets.all(40),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  savePwd(),
                   InkWell(
                     onTap: () {
                       Navigator.push(
@@ -275,44 +273,6 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Row savePwd() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 20,
-          width: 34,
-          child: Transform.scale(
-            scale: 0.8,
-            child: CupertinoSwitch(
-              value: isSavePwd,
-              thumbColor: textPrimaryColor,
-              activeColor: Colors.purple,
-              onChanged: (value) {
-                setState(() {
-                  isSavePwd = value;
-                });
-              },
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        const Text(
-          'Remember me ',
-          style: TextStyle(
-            fontFamily: mainFontFamily,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-            letterSpacing: 0.02,
-            color: textSecondaryColor,
-          ),
-        )
-      ],
-    );
-  }
 
   Container headTitle() {
     return Container(
