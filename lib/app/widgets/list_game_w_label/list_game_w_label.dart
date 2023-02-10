@@ -44,6 +44,7 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(right: 20),
                     height: 127.59,
+                    width: MediaQuery.of(context).size.width * 2.3 / 4,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: ColorFiltered(
@@ -54,8 +55,9 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                             BlendMode.srcOver),
                         child: CachedNetworkImage(
                           imageUrl: e.textBgImage.toString(),
-                          fit: BoxFit.fitHeight,
+                          fit: BoxFit.fitWidth,
                           height: 127.59,
+                          width: MediaQuery.of(context).size.width * 2.3 / 4,
                           placeholder: (context, url) {
                             return const Center(
                               child: CircularProgressIndicator(),
