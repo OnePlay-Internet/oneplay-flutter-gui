@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../common/common.dart';
 
-class EmailSentSuccess extends StatelessWidget {
+class EmailSentSuccess extends StatefulWidget {
   const EmailSentSuccess({super.key});
 
+  @override
+  State<EmailSentSuccess> createState() => _EmailSentSuccessState();
+}
+
+class _EmailSentSuccessState extends State<EmailSentSuccess> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -14,7 +20,6 @@ class EmailSentSuccess extends StatelessWidget {
         top: size.height * 0.18,
       ),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
@@ -71,5 +76,17 @@ class EmailSentSuccess extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  initState() {
+    _navigateToLogin();
+    super.initState();
+  }
+
+  _navigateToLogin() async {
+    await Future.delayed(const Duration(seconds: 3), () {
+      Modular.to.pushNamedAndRemoveUntil('/auth/login', (route) => false);
+    });
   }
 }

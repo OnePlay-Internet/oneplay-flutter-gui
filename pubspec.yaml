@@ -48,6 +48,9 @@ dependencies:
   readmore: ^2.2.0
   image_picker: ^0.8.6+1
   url_launcher: ^6.1.9
+  intl: ^0.18.0
+  mime_type: ^1.0.0
+  user_agent_parser: ^0.0.1+2
 
 dev_dependencies:
   flutter_test:

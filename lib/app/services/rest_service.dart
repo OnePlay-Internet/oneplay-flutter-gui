@@ -11,6 +11,7 @@ import 'package:oneplay_flutter_gui/app/models/user_model.dart';
 import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
+import '../models/device_history_model.dart';
 import '../models/signup_model.dart';
 
 class RestService {
@@ -33,6 +34,49 @@ class RestService {
     return user;
   }
 
+  Future<UserModel> updateProfile({
+    FormData? profileImage,
+    String? firstName,
+    String? lastName,
+    String? bio,
+    String? phone,
+    String? userName,
+    String? age,
+  }) async {
+    Response userData = await _dio.put('/accounts/profile', data: {
+      'profile_image': profileImage,
+      'first_name': firstName,
+      'last_name': lastName,
+      'bio': bio,
+      'phone': phone,
+      'username': userName,
+      'age': age,
+    });
+
+    UserModel user = UserModel.fromJson(userData.data);
+
+    return user;
+  }
+
+  Future<String> updatePassword({
+    required String updatePassword,
+  }) async {
+    Response userPassword = await _dio.put('/accounts/password', data: {
+      'password': updatePassword,
+    });
+
+    return userPassword.data['data'];
+  }
+
+  Future<String> forgotPassword({
+    required String email,
+  }) async {
+    Response response =
+        await _dio.post('/accounts/request_reset_password/$email');
+
+    return response.data['data'];
+  }
+
   Future<SignupModel> signup({
     required String email,
     required String firstName,
@@ -42,15 +86,6 @@ class RestService {
     required String password,
     required String refferedId,
   }) async {
-    print('***** Email: $email *****');
-    print('***** First name: $firstName *****');
-    print('***** Last name: $lastName *****');
-    print('***** Phone: $phone *****');
-    print('***** Gender: $gender *****');
-    print('***** Password: $password *****');
-    print('***** Reffered id: $refferedId *****');
-    print('***** PARTNER_ID: $PARTNER_ID *****');
-
     Response signUpData = await _dio.post('/accounts/signup', data: {
       'email': email,
       'first_name': firstName,
@@ -245,5 +280,20 @@ class RestService {
     return (res.data as List<dynamic>)
         .map((e) => ShortGameModel.fromJson(e))
         .toList();
+  }
+
+  Future<List<DeviceHistoryModel>> getDeviceHistory() async {
+    Response res = await _dio.get('/accounts/sessions', queryParameters: {});
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => DeviceHistoryModel.fromJson(e))
+        .toList();
+
+    return data;
+  }
+
+  Future<bool> logoutFromDevice(String userKey) async {
+    Response res = await _dio.delete("/accounts/sessions/$userKey");
+    return res.data['success'];
   }
 }
