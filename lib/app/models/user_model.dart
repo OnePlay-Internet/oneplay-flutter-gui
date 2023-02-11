@@ -27,7 +27,7 @@ class UserModel {
   String type;
 
   @JsonKey(name: 'subscribed_plan')
-  String subscribedPlan;
+  dynamic subscribedPlan;
 
   @JsonKey(name: 'subscription_is_active')
   bool subscriptionIsActive;
@@ -36,7 +36,7 @@ class UserModel {
   bool isVerified;
 
   @JsonKey(name: 'profile_image')
-  String? photo;
+  dynamic photo;
 
   UserModel({
     required this.id,

@@ -29,7 +29,11 @@ class _BottomNavState extends State<BottomNav> {
         _item(icon: const Icon(Icons.people), label: "Social"),
         // _item(icon: const Icon(Icons.store), label: "Store"),
         _item(
-          icon: SvgPicture.asset(settingIcon),
+          icon: Image.asset(
+            settingPng,
+            height: 22,
+            color: _selectedIndex == 4 ? null : textPrimaryColor,
+          ),
           label: "Settings",
           isImage: true,
         ),

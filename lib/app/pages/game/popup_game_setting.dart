@@ -19,12 +19,11 @@ Widget gameSettingPopup(
           borderRadius: BorderRadius.all(Radius.circular(6.0))),
       backgroundColor: mainColor,
       contentPadding: EdgeInsets.zero,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       content: SizedBox(
         height: MediaQuery.of(context).size.height * 0.8,
         width: MediaQuery.of(context).size.width,
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceAround,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 8),
@@ -62,7 +61,7 @@ Widget gameSettingPopup(
             Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                // height: 38,
+                height: 38,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
@@ -306,9 +305,8 @@ Container selectionGameSetting(BuildContext context, String title,
             title,
             style: tinyStyle.copyWith(color: textSecondaryColor),
           ),
-          Wrap(
-            spacing: 15,
-            runSpacing: 15,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: audioType
                 .map((e) => FocusZoom(builder: (focus) {
                       return InkWell(

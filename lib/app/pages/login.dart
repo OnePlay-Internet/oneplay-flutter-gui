@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-// ignore_for_file: avoid_print
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,16 +7,12 @@ import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
-import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:oneplay_flutter_gui/app/widgets/footer/authFooter.dart';
 import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:validators/validators.dart';
 
 import '../widgets/popup/popup_success.dart';
 import '../widgets/submit_button/submit_button.dart';
-import 'forgot_password.dart';
-import 'signup.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -27,9 +22,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool loading = false;
-  bool isSavePwd = false;
 
   final idCtrler = TextEditingController();
   final pwdCtrler = TextEditingController();
@@ -107,18 +100,10 @@ class _LoginState extends State<Login> {
             Padding(
               padding: const EdgeInsets.all(40),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  savePwd(),
                   InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ForgotPassword(),
-                        ),
-                      );
-                    },
+                    onTap: () => Modular.to.pushNamed('/auth/forgotPass'),
                     child: forgotPwd(),
                   )
                 ],
@@ -147,14 +132,7 @@ class _LoginState extends State<Login> {
             haveAccount(
               title: 'Don\'t have an account? ',
               btnTitle: 'Create a New',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SignUp(),
-                  ),
-                );
-              },
+              onTap: () => Modular.to.pushNamed('/auth/signup'),
             ),
             commonDividerWidget(),
             needHelpWidget(),
@@ -163,103 +141,6 @@ class _LoginState extends State<Login> {
         ),
       ),
     ));
-  }
-
-  Padding createNewAccount() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Don\'t have an account? ',
-            style: TextStyle(
-              fontFamily: mainFontFamily,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.02,
-              color: textSecondaryColor,
-            ),
-          ),
-          FocusZoom(
-            zoomEffect: false,
-            builder: (focus) {
-              return InkWell(
-                focusNode: focus,
-                onTap: () => Modular.to.pushNamed('/auth/signup'),
-                child: GradientText(
-                  'Create a New',
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                  ),
-                  gradientType: GradientType.linear,
-                  gradientDirection: GradientDirection.ltr,
-                  colors: const [purpleColor2, purpleColor1],
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding loginBtn(BuildContext context, Function() onTap) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: FocusZoom(builder: (focus) {
-        return InkWell(
-          focusNode: focus,
-          onTap: loading ? null : onTap,
-          child: Container(
-            height: 50,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: const LinearGradient(
-                    end: Alignment.bottomRight,
-                    begin: Alignment.topLeft,
-                    colors: [pinkColor1, blueColor1])),
-            child: Center(
-                child: loading
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Icon(
-                                Icons.check_circle,
-                                color: Colors.white,
-                              )),
-                          SizedBox(width: 15),
-                          Text(
-                            'Logging you in...',
-                            style: TextStyle(
-                                fontFamily: mainFontFamily,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                letterSpacing: 0.02),
-                          )
-                        ],
-                      )
-                    : const Text(
-                        'Log in',
-                        style: TextStyle(
-                            fontFamily: mainFontFamily,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            letterSpacing: 0.02),
-                      )),
-          ),
-        );
-      }),
-    );
   }
 
   Text forgotPwd() {
@@ -275,44 +156,6 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Row savePwd() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 20,
-          width: 34,
-          child: Transform.scale(
-            scale: 0.8,
-            child: CupertinoSwitch(
-              value: isSavePwd,
-              thumbColor: textPrimaryColor,
-              activeColor: Colors.purple,
-              onChanged: (value) {
-                setState(() {
-                  isSavePwd = value;
-                });
-              },
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        const Text(
-          'Remember me ',
-          style: TextStyle(
-            fontFamily: mainFontFamily,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-            letterSpacing: 0.02,
-            color: textSecondaryColor,
-          ),
-        )
-      ],
-    );
-  }
 
   Container headTitle() {
     return Container(

@@ -39,9 +39,9 @@ class _FeedsState extends State<Feeds> {
   }
 
   _getLibrary() {
-    restService
-        .getWishlistGames(authService.wishlist)
-        .then((value) => setState(() => library = value));
+    restService.getWishlistGames(authService.wishlist).then((value) {
+      if (mounted) setState(() => library = value);
+    });
   }
 
   @override
@@ -78,10 +78,12 @@ class _FeedsState extends State<Feeds> {
                           ? listGameWithLabel(
                               GameFeedModel(
                                   title: 'My Library', games: library),
-                            )
+                              context)
                           : Container();
                     }),
-                    ...restRow.map((value) => listGameWithLabel(value)).toList()
+                    ...restRow
+                        .map((value) => listGameWithLabel(value, context))
+                        .toList()
                   ],
                 ),
               ),

@@ -19,7 +19,7 @@ FriendModel _$FriendModelFromJson(Map<String, dynamic> json) => FriendModel(
       lastLogin:
           FriendModel._dateFromString(json['last_login_timestamp'] as String?),
       profileImage: json['profile_image'] as String?,
-      userId: json['user_id'] as String,
+      userId: json['user_id'] as String?,
       username: json['username'] as String?,
     );
 

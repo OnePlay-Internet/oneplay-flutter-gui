@@ -59,7 +59,7 @@ class FriendModel {
   String? profileImage;
 
   @JsonKey(name: 'user_id')
-  String userId;
+  String? userId;
 
   String? username;
 

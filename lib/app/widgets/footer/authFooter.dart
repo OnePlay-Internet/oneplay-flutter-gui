@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 authFooterWidget() {
   return Column(
@@ -24,18 +25,55 @@ authFooterWidget() {
             letterSpacing: 0.02,
             color: whiteColor1),
       ),
-      GradientText(
-        'Privacy Policy . Terms & Conditions',
-        style: const TextStyle(
-          fontFamily: mainFontFamily,
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0.02,
-          decoration: TextDecoration.underline,
-        ),
-        gradientType: GradientType.linear,
-        gradientDirection: GradientDirection.ltr,
-        colors: const [purpleColor2, purpleColor1],
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () =>
+                launchUrl(Uri.parse('https://www.oneplay.in/privacy.html')),
+            child: GradientText(
+              'Privacy Policy',
+              style: const TextStyle(
+                fontFamily: mainFontFamily,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.02,
+                decoration: TextDecoration.underline,
+              ),
+              gradientType: GradientType.linear,
+              gradientDirection: GradientDirection.ltr,
+              colors: const [purpleColor2, purpleColor1],
+            ),
+          ),
+          const Text(
+            ' . ',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: mainFontFamily,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.02,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          GestureDetector(
+            onTap: () =>
+                launchUrl(Uri.parse('https://www.oneplay.in/tnc.html')),
+            child: GradientText(
+              'Terms & Conditions',
+              style: const TextStyle(
+                fontFamily: mainFontFamily,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.02,
+                decoration: TextDecoration.underline,
+              ),
+              gradientType: GradientType.linear,
+              gradientDirection: GradientDirection.ltr,
+              colors: const [purpleColor2, purpleColor1],
+            ),
+          ),
+        ],
       ),
       const SizedBox(
         height: 30,
@@ -100,19 +138,23 @@ Padding needHelpWidget() {
               letterSpacing: 0.02,
               color: textSecondaryColor),
         ),
-        GradientText(
-          'Browse FAQ',
-          style: const TextStyle(
-            fontFamily: mainFontFamily,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            letterSpacing: 0.02,
-            decorationThickness: 1,
-            decoration: TextDecoration.underline,
+        GestureDetector(
+          onTap: () =>
+              launchUrl(Uri.parse('https://www.oneplay.in/contact.html')),
+          child: GradientText(
+            'Browse FAQ',
+            style: const TextStyle(
+              fontFamily: mainFontFamily,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.02,
+              decorationThickness: 1,
+              decoration: TextDecoration.underline,
+            ),
+            gradientType: GradientType.linear,
+            gradientDirection: GradientDirection.ltr,
+            colors: const [purpleColor2, purpleColor1],
           ),
-          gradientType: GradientType.linear,
-          gradientDirection: GradientDirection.ltr,
-          colors: const [purpleColor2, purpleColor1],
         ),
       ],
     ),
