@@ -10,12 +10,10 @@ import '../models/signup_model.dart';
 import '../services/rest_service.dart';
 import '../widgets/common_divider.dart';
 import '../widgets/footer/authFooter.dart';
-import '../widgets/gender_toggle/gender_toggle.dart';
 import '../widgets/popup/popup_success.dart';
 import '../widgets/referral_textfield/referral_textfield.dart';
 import '../widgets/submit_button/submit_button.dart';
 import '../widgets/textfield/custom_text_field.dart';
-import 'login.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -85,7 +83,6 @@ class _SignUpState extends State<SignUp> {
             return alertSuccess(
               context: context,
               title: 'SignUp Success',
-              // description: signupModel.msg.toString(),
               description: 'Sign up successfully!',
             );
           },
@@ -222,9 +219,6 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(
                   height: size.height * 0.03,
                 ),
-                // const GenderToggle(
-                //   title: 'Gender',
-                // ),
                 Container(
                   margin: EdgeInsets.symmetric(
                     horizontal: size.width * 0.11,
@@ -315,7 +309,7 @@ class _SignUpState extends State<SignUp> {
                     if (password.isEmpty) {
                       setState(() => errorPassword = "Enter your password");
                       return;
-                    } else if (password.length <= 8) {
+                    } else if (password.length < 8) {
                       setState(() => errorPassword = "at least 8 characters");
                       return;
                     } else {
@@ -339,14 +333,7 @@ class _SignUpState extends State<SignUp> {
                 haveAccount(
                   title: 'Already have an account? ',
                   btnTitle: 'Login',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Login(),
-                      ),
-                    );
-                  },
+                  onTap: () => Modular.to.pushNamed('/auth/login'),
                 ),
                 commonDividerWidget(),
                 needHelpWidget(),

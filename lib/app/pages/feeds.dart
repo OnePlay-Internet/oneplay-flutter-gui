@@ -39,9 +39,9 @@ class _FeedsState extends State<Feeds> {
   }
 
   _getLibrary() {
-    restService
-        .getWishlistGames(authService.wishlist)
-        .then((value) => setState(() => library = value));
+    restService.getWishlistGames(authService.wishlist).then((value) {
+      if (mounted) setState(() => library = value);
+    });
   }
 
   @override
