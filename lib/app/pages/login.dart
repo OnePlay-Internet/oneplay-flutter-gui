@@ -84,7 +84,7 @@ class _LoginState extends State<Login> {
             headTitle(),
             const SizedBox(height: 40),
             customTextField(
-              labelText: 'Email / Phone',
+              labelText: 'Email',
               hintText: 'Email Address',
               textCtrler: idCtrler,
               errorText: errorEmail,
@@ -155,7 +155,6 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
 
   Container headTitle() {
     return Container(
