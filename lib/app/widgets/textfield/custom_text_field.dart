@@ -57,64 +57,60 @@ StatefulBuilder customTextField({
               height: 50,
               child: Stack(
                 children: [
-                  FocusZoom(builder: (focus) {
-                    return TextFormField(
-                      focusNode: focus,
-                      decoration: InputDecoration(
-                        hintText: hintText,
-                        hintStyle: const TextStyle(
-                          fontFamily: mainFontFamily,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.02,
-                          color: textSecondaryColor,
-                        ),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: blackColor1,
-                            width: 2,
-                          ),
-                        ),
-                        suffixIcon: textInputType ==
-                                TextInputType.visiblePassword
-                            ? FocusZoom(
-                                builder: (focus) {
-                                  return InkWell(
-                                    focusNode: focus,
-                                    onTap: () {
-                                      setState(() => isHideText = !isHideText);
-                                    },
-                                    child: Container(
-                                      height: 20,
-                                      width: 20,
-                                      alignment: Alignment.centerRight,
-                                      child: SvgPicture.asset(
-                                        isHideText ? hidePwdIcon : showPwdIcon,
-                                        color: textPrimaryColor,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              )
-                            : const SizedBox(),
-                      ),
-                      controller: textCtrler,
-                      keyboardType: textInputType,
-                      obscureText: isHideText,
-                      onTap: () => setState(() => onChangeText = true),
-                      onEditingComplete: () {
-                        setState(() => onChangeText = false);
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      style: const TextStyle(
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      hintStyle: const TextStyle(
                         fontFamily: mainFontFamily,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.02,
                         color: textSecondaryColor,
                       ),
-                    );
-                  }),
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: blackColor1,
+                          width: 2,
+                        ),
+                      ),
+                      suffixIcon: textInputType == TextInputType.visiblePassword
+                          ? FocusZoom(
+                              builder: (focus) {
+                                return InkWell(
+                                  // focusNode: focus,
+                                  onTap: () {
+                                    setState(() => isHideText = !isHideText);
+                                  },
+                                  child: Container(
+                                    height: 20,
+                                    width: 20,
+                                    alignment: Alignment.centerRight,
+                                    child: SvgPicture.asset(
+                                      isHideText ? hidePwdIcon : showPwdIcon,
+                                      color: textPrimaryColor,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : const SizedBox(),
+                    ),
+                    controller: textCtrler,
+                    keyboardType: textInputType,
+                    obscureText: isHideText,
+                    onTap: () => setState(() => onChangeText = true),
+                    onEditingComplete: () {
+                      setState(() => onChangeText = false);
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: textSecondaryColor,
+                    ),
+                  ),
                   Positioned(
                     bottom: 1,
                     child: Container(
