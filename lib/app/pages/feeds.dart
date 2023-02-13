@@ -34,7 +34,7 @@ class _FeedsState extends State<Feeds> {
     await restService.getHomeFeed().then((value) async {
       firstRow = value[0];
       restRow = value.getRange(2, value.length).toList();
-      setState(() => starting = false);
+      if (mounted) setState(() => starting = false);
     });
   }
 

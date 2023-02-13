@@ -12,7 +12,7 @@ import '../widgets/common_divider.dart';
 import '../widgets/footer/authFooter.dart';
 import '../widgets/popup/popup_success.dart';
 import '../widgets/referral_textfield/referral_textfield.dart';
-import '../widgets/submit_button/submit_button.dart';
+import '../widgets/Submit_Button/submit_button.dart';
 import '../widgets/textfield/custom_text_field.dart';
 
 class SignUp extends StatefulWidget {
@@ -267,65 +267,71 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(
                   height: size.height * 0.05,
                 ),
-                SubmitButton(
-                  buttonTitle: 'Create Account',
-                  loadingTitle: 'Signing up...',
-                  isLoading: isLoading,
-                  onTap: () {
-                    var firstName = nameController.text;
-                    var lastName = nameController.text;
-                    var email = emailController.text;
-                    var phone = phoneController.text;
-                    var password = passController.text;
-                    var refferedId = refferedController.text;
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.105,
+                  ),
+                  child: SubmitButton(
+                    buttonTitle: 'Create Account',
+                    loadingTitle: 'Signing up...',
+                    isLoading: isLoading,
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      var firstName = nameController.text;
+                      var lastName = nameController.text;
+                      var email = emailController.text;
+                      var phone = phoneController.text;
+                      var password = passController.text;
+                      var refferedId = refferedController.text;
 
-                    if (firstName.isEmpty) {
-                      setState(() => errorName = "Enter your name");
-                      return;
-                    } else {
-                      setState(() => errorName = "");
-                    }
+                      if (firstName.isEmpty) {
+                        setState(() => errorName = "Enter your name");
+                        return;
+                      } else {
+                        setState(() => errorName = "");
+                      }
 
-                    if (email.isEmpty) {
-                      setState(() => errorEmail = "Enter your email");
-                      return;
-                    } else if (!isEmail(email)) {
-                      setState(() => errorEmail = "Invalid email address");
-                      return;
-                    } else {
-                      setState(() => errorEmail = "");
-                    }
+                      if (email.isEmpty) {
+                        setState(() => errorEmail = "Enter your email");
+                        return;
+                      } else if (!isEmail(email)) {
+                        setState(() => errorEmail = "Invalid email address");
+                        return;
+                      } else {
+                        setState(() => errorEmail = "");
+                      }
 
-                    if (phone.isEmpty) {
-                      setState(() => errorPhone = "Enter your phone no.");
-                      return;
-                    } else if (phone.length != 10) {
-                      setState(() => errorPhone = "Invalid phone no.");
-                      return;
-                    } else {
-                      setState(() => errorPhone = "");
-                    }
+                      if (phone.isEmpty) {
+                        setState(() => errorPhone = "Enter your phone no.");
+                        return;
+                      } else if (phone.length != 10) {
+                        setState(() => errorPhone = "Invalid phone no.");
+                        return;
+                      } else {
+                        setState(() => errorPhone = "");
+                      }
 
-                    if (password.isEmpty) {
-                      setState(() => errorPassword = "Enter your password");
-                      return;
-                    } else if (password.length < 8) {
-                      setState(() => errorPassword = "at least 8 characters");
-                      return;
-                    } else {
-                      setState(() => errorPassword = "");
-                    }
+                      if (password.isEmpty) {
+                        setState(() => errorPassword = "Enter your password");
+                        return;
+                      } else if (password.length < 8) {
+                        setState(() => errorPassword = "at least 8 characters");
+                        return;
+                      } else {
+                        setState(() => errorPassword = "");
+                      }
 
-                    signUp(
-                      email: email,
-                      firstName: firstName,
-                      lastName: lastName,
-                      phone: '+91$phone',
-                      gender: selectedGender,
-                      password: password,
-                      refferedId: refferedId,
-                    );
-                  },
+                      signUp(
+                        email: email,
+                        firstName: firstName,
+                        lastName: lastName,
+                        phone: '+91$phone',
+                        gender: selectedGender,
+                        password: password,
+                        refferedId: refferedId,
+                      );
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.03,

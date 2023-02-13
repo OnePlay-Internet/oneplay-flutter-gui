@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../common/common.dart';
-import 'device_history.dart';
-import 'login_and_security.dart';
-import 'profile.dart';
-import 'subscription.dart';
+import 'Components/device_history_tab.dart';
+import 'Components/login_and_security_tab.dart';
+import 'Components/profile_tab.dart';
+import 'Components/subscription_tab.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -19,9 +19,9 @@ class Settings extends StatelessWidget {
       const Tab(
         text: 'Login & Security',
       ),
-      // const Tab(
-      //   text: 'Subscription',
-      // ),
+      const Tab(
+        text: 'Subscription',
+      ),
       const Tab(
         text: 'Device History',
       ),
@@ -92,10 +92,10 @@ class Settings extends StatelessWidget {
                           child: TabBarView(
                             physics: BouncingScrollPhysics(),
                             children: [
-                              Profile(),
-                              LoginAndSecurity(),
-                              // Subscription(),
-                              DeviceHistory(),
+                              ProfileTab(),
+                              LoginAndSecurityTab(),
+                              SubscriptionTab(),
+                              DeviceHistoryTab(),
                             ],
                           ),
                         ),

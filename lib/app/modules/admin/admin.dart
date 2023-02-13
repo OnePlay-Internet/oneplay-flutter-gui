@@ -11,7 +11,7 @@ import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 
-import '../../pages/settings/settings.dart';
+import '../../pages/Settings_Screen/settings.dart';
 
 class AdminModule extends Module {
   @override

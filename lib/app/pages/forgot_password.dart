@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:validators/validators.dart';
@@ -8,7 +9,8 @@ import '../common/common.dart';
 import '../services/rest_service.dart';
 import '../widgets/common_divider.dart';
 import '../widgets/footer/authFooter.dart';
-import '../widgets/submit_button/submit_button.dart';
+import '../widgets/Submit_Button/submit_button.dart';
+import '../widgets/popup/popup_success.dart';
 import '../widgets/textfield/custom_text_field.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -79,27 +81,31 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              SubmitButton(
-                buttonTitle: 'Submit',
-                loadingTitle: 'Submiting...',
-                isLoading: isLoading,
-                onTap: () {
-                  print("***** Signing up *****");
+              Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.105,
+                ),
+                child: SubmitButton(
+                  buttonTitle: 'Submit',
+                  loadingTitle: 'Submiting...',
+                  isLoading: isLoading,
+                  onTap: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    var email = emailController.text;
 
-                  var email = emailController.text;
+                    if (email.isEmpty) {
+                      setState(() => errorEmail = "Enter your email");
+                      return;
+                    } else if (!isEmail(email)) {
+                      setState(() => errorEmail = "Invalid email address");
+                      return;
+                    } else {
+                      setState(() => errorEmail = "");
+                    }
 
-                  if (email.isEmpty) {
-                    setState(() => errorEmail = "Enter your email");
-                    return;
-                  } else if (!isEmail(email)) {
-                    setState(() => errorEmail = "Invalid email address");
-                    return;
-                  } else {
-                    setState(() => errorEmail = "");
-                  }
-
-                  _forgotPassword(email);
-                },
+                    _forgotPassword(email);
+                  },
+                ),
               ),
               haveAccount(
                 title: 'Remember password? ',
@@ -123,8 +129,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       await _restService.forgotPassword(email: email);
 
       Modular.to.pushReplacementNamed('/auth/sentSuccess');
-    } finally {
-      setState(() => isLoading = false);
+    } on DioError catch (e) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          Future.delayed(const Duration(milliseconds: 3000), () {
+            setState(() => isLoading = false);
+            Navigator.pop(_);
+          });
+          return alertError(
+            context: context,
+            title: 'Login Error',
+            description: e.error['message'],
+          );
+        },
+        barrierDismissible: false,
+      );
     }
   }
 }

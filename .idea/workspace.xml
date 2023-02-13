@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="signup done">
+    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="settings done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/common/theme/pngPath.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/common/theme/pngPath.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/settings/profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/settings/profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/settings/settings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/settings/settings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/signup.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/signup.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/services/rest_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/services/rest_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/textfield/custom_text_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/textfield/custom_text_field.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +58,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675758221779</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="settings done">
+      <created>1676035870966</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1676035870966</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -96,6 +94,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="signup done" />
-    <option name="LAST_COMMIT_MESSAGE" value="signup done" />
+    <MESSAGE value="settings done" />
+    <option name="LAST_COMMIT_MESSAGE" value="settings done" />
   </component>
 </project>
