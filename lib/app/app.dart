@@ -13,7 +13,13 @@ class AppModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ModuleRoute('/', module: AdminModule(), guards: [AuthGuard()]),
-        ModuleRoute('/auth', module: AuthModule(), guards: [LoginGuard()]),
+        ModuleRoute('/',
+            module: AdminModule(),
+            guards: [AuthGuard()],
+            transition: TransitionType.noTransition),
+        ModuleRoute('/auth',
+            module: AuthModule(),
+            guards: [LoginGuard()],
+            transition: TransitionType.noTransition),
       ];
 }
