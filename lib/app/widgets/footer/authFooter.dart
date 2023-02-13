@@ -53,7 +53,6 @@ authFooterWidget() {
               fontSize: 14,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.02,
-              decoration: TextDecoration.underline,
             ),
           ),
           GestureDetector(
