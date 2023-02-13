@@ -10,6 +10,7 @@ StatefulBuilder customTextField({
   required TextEditingController textCtrler,
   TextInputType textInputType = TextInputType.text,
   String errorText = '',
+  Function(String text)? onChanged
 }) {
   bool isHideText = textInputType == TextInputType.visiblePassword;
   bool onChangeText = false;
@@ -103,6 +104,7 @@ StatefulBuilder customTextField({
                       setState(() => onChangeText = false);
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
+                    onChanged: onChanged,
                     style: const TextStyle(
                       fontFamily: mainFontFamily,
                       fontSize: 16,
