@@ -225,7 +225,7 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
             trimLines: 3,
             colorClickableText: textPrimaryColor,
             trimCollapsedText: 'Read more',
-            trimExpandedText: '',
+            trimExpandedText: 'Read less',
             textAlign: TextAlign.left,
           ),
         ),
@@ -295,7 +295,7 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
   );
 }
 
-List<Widget> bannerWidget(BuildContext context, GameModel? game) {
+List<Widget> bannerWidget(BuildContext context, GameModel game) {
   return [
     Container(
       height: 244,
@@ -304,7 +304,7 @@ List<Widget> bannerWidget(BuildContext context, GameModel? game) {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: CachedNetworkImage(
-          imageUrl: game!.bgImage,
+          imageUrl: game.bgImage,
           fit: BoxFit.fitHeight,
           placeholder: (context, url) {
             return const Center(
