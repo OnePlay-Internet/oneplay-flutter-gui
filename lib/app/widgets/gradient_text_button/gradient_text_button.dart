@@ -5,14 +5,16 @@ import '../../common/common.dart';
 
 class GradientTextButton extends StatelessWidget {
   final String title;
-  final Function() onTap;
+  final Function()? onTap;
   final EdgeInsetsGeometry? padding;
+  final List<Color>? colors;
 
   const GradientTextButton({
     super.key,
     required this.title,
-    required this.onTap,
+    this.onTap,
     this.padding,
+    this.colors,
   });
 
   @override
@@ -32,7 +34,7 @@ class GradientTextButton extends StatelessWidget {
           ),
           gradientType: GradientType.linear,
           gradientDirection: GradientDirection.ltr,
-          colors: const [purpleColor2, purpleColor1],
+          colors: colors != null ? colors! : [purpleColor2, purpleColor1],
         ),
       ),
     );

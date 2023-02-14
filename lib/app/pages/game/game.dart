@@ -58,80 +58,87 @@ class _GameState extends State<Game> {
   GameSetting gameSetting = GameSetting();
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _reloadGameStatus,
-      child: ListView(
-        children: [
-          if (game?.bgImage != null)
-            Stack(
+      child: starting
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
               children: [
-                ...bannerWidget(context, game),
-                Observer(builder: (_) {
-                  bool isInWishlist =
-                      authService.wishlist.contains(game?.oneplayId);
-                  return wishlistButton(
-                    isInWishlist ? Icons.remove : Icons.add_rounded,
-                    onTap: wishlistLoading
-                        ? null
-                        : () => _wishlistAction(isInWishlist),
-                  );
-                }),
-                statusActionBtn()
+                Stack(
+                  children: [
+                    ...bannerWidget(context, game!),
+                    Observer(builder: (_) {
+                      bool isInWishlist =
+                          authService.wishlist.contains(game?.oneplayId);
+                      return wishlistButton(
+                        isInWishlist ? Icons.remove : Icons.add_rounded,
+                        onTap: wishlistLoading
+                            ? null
+                            : () => _wishlistAction(isInWishlist),
+                      );
+                    }),
+                    statusActionBtn()
+                  ],
+                ),
+                checkShowSettingWidget(),
+                commonDividerWidget(),
+                FakeFocus(child: detailGameWidget(context, game)),
+                FakeFocus(child: listTagWidget(context, game)),
+                const SizedBox(
+                  height: 10,
+                ),
+                commonDividerWidget(),
+                topVideoLiveStreamsWidget(context, videos),
+                commonDividerWidget(),
+                const SizedBox(height: 30),
+                if (genreGames.isNotEmpty)
+                  listGameWithLabel(
+                      GameFeedModel(title: 'From Genre', games: genreGames),
+                      context),
+                if (devGames.isNotEmpty)
+                  listGameWithLabel(
+                      GameFeedModel(title: 'From Developer', games: devGames),
+                      context),
+
+                // Center(child: Text('${game?.title}')),
+                // const SizedBox(height: 32),
+                // if (game?.bgImage != null)
+                //   Column(
+                //     children: [
+                //       Image(image: NetworkImage(game?.bgImage ?? '')),
+                //       const SizedBox(height: 32),
+                //     ],
+                //   ),
+                // Observer(
+                //   builder: (_) {
+                //     String action = _getAction(gameService.gameStatus);
+                //     return Column(
+                //       children: [
+                //         OutlinedButton(
+                //           onPressed: starting || game == null ? null : _startgame,
+                //           child: Text(action),
+                //         ),
+                //         if (action == 'Resume') const SizedBox(height: 32),
+                //         if (action == 'Resume')
+                //           OutlinedButton(
+                //             onPressed: terminating
+                //                 ? null
+                //                 : () => _terminateSession(
+                //                     gameService.gameStatus.sessionId!),
+                //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
+                //           ),
+                //       ],
+                //     );
+                //   },
+                // )
               ],
             ),
-          checkShowSettingWidget(),
-          commonDividerWidget(),
-          FakeFocus(child: detailGameWidget(context, game)),
-          FakeFocus(child: listTagWidget(context, game)),
-          const SizedBox(
-            height: 10,
-          ),
-          commonDividerWidget(),
-          topVideoLiveStreamsWidget(context, videos),
-          commonDividerWidget(),
-          const SizedBox(height: 30),
-          if (genreGames.isNotEmpty)
-            listGameWithLabel(
-                GameFeedModel(title: 'From Genre', games: genreGames), context),
-          if (genreGames.isNotEmpty)
-            listGameWithLabel(
-                GameFeedModel(title: 'From Developer', games: devGames),
-                context),
-
-          // Center(child: Text('${game?.title}')),
-          // const SizedBox(height: 32),
-          // if (game?.bgImage != null)
-          //   Column(
-          //     children: [
-          //       Image(image: NetworkImage(game?.bgImage ?? '')),
-          //       const SizedBox(height: 32),
-          //     ],
-          //   ),
-          // Observer(
-          //   builder: (_) {
-          //     String action = _getAction(gameService.gameStatus);
-          //     return Column(
-          //       children: [
-          //         OutlinedButton(
-          //           onPressed: starting || game == null ? null : _startgame,
-          //           child: Text(action),
-          //         ),
-          //         if (action == 'Resume') const SizedBox(height: 32),
-          //         if (action == 'Resume')
-          //           OutlinedButton(
-          //             onPressed: terminating
-          //                 ? null
-          //                 : () => _terminateSession(
-          //                     gameService.gameStatus.sessionId!),
-          //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
-          //           ),
-          //       ],
-          //     );
-          //   },
-          // )
-        ],
-      ),
     );
   }
 
@@ -313,6 +320,7 @@ class _GameState extends State<Game> {
 
   @override
   void initState() {
+    starting = true;
     init();
     super.initState();
   }
@@ -322,7 +330,8 @@ class _GameState extends State<Game> {
     _getCurrGameSetting();
     var game = await restService.getGameDetails(widget.id);
 
-    setState(() => this.game = game);
+    this.game = game;
+    setState(() => starting = false);
 
     _getTopVideoById();
     _getFromGenreBydId();
