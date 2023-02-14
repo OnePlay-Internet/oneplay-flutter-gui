@@ -225,7 +225,7 @@ Widget detailGameWidget(BuildContext context, GameModel? game) {
             trimLines: 3,
             colorClickableText: textPrimaryColor,
             trimCollapsedText: 'Read more',
-            trimExpandedText: '',
+            trimExpandedText: 'Read less',
             textAlign: TextAlign.left,
           ),
         ),
