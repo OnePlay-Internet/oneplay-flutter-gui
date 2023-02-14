@@ -43,8 +43,8 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                   child: Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(right: 20),
-                    height: 127.59,
-                    width: MediaQuery.of(context).size.width * 2.3 / 4,
+                    height: MediaQuery.of(context).size.height * 1 / 7,
+                    width: MediaQuery.of(context).size.width * 2.3 / 4.5,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: ColorFiltered(
@@ -55,9 +55,9 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                             BlendMode.srcOver),
                         child: CachedNetworkImage(
                           imageUrl: e.textBgImage.toString(),
-                          fit: BoxFit.fitWidth,
-                          height: 127.59,
-                          width: MediaQuery.of(context).size.width * 2.3 / 4,
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.height * 1 / 7,
+                          width: MediaQuery.of(context).size.width * 2.3 / 4.5,
                           placeholder: (context, url) {
                             return const Center(
                               child: CircularProgressIndicator(),
@@ -68,7 +68,10 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                               children: [
                                 Image.asset(
                                   defaultBg,
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.cover,
+                                  width: MediaQuery.of(context).size.width *
+                                      2.3 /
+                                      4.5,
                                 ),
                                 Positioned(
                                   top: 40,
