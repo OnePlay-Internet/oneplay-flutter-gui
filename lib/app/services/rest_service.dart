@@ -12,7 +12,9 @@ import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
 import '../models/device_history_model.dart';
+import '../models/ip_location_model.dart';
 import '../models/signup_model.dart';
+import '../models/subscription_model.dart';
 
 class RestService {
   final Dio _dio;
@@ -97,8 +99,6 @@ class RestService {
       'referred_by_id': refferedId,
       'partnerId': PARTNER_ID,
     });
-
-    print('***** Signup response: $signUpData *****');
 
     final myMap = Map<String, dynamic>.from(signUpData.data);
     return SignupModel.fromJson(myMap);
@@ -287,6 +287,34 @@ class RestService {
 
     var data = (res.data as List<dynamic>)
         .map((e) => DeviceHistoryModel.fromJson(e))
+        .toList();
+
+    return data;
+  }
+
+  Future<IPLocationModel> getLocation({required String ip}) async {
+    Response res = await _dio.get('/location/$ip');
+
+    var data = IPLocationModel.fromJson(res.data);
+
+    return data;
+  }
+
+  Future<List<SubscriptionModel>> getCurrentSubscription() async {
+    Response res = await _dio.get('/accounts/subscription/current');
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => SubscriptionModel.fromJson(e))
+        .toList();
+
+    return data;
+  }
+
+  Future<List<SubscriptionModel>> getSubscriptionHistory() async {
+    Response res = await _dio.get('/accounts/subscription/all');
+
+    var data = (res.data as List<dynamic>)
+        .map((e) => SubscriptionModel.fromJson(e))
         .toList();
 
     return data;

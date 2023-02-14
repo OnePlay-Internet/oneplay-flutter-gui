@@ -12,3 +12,5 @@ const checkPng = 'assets/png/icon_check.png';
 const editPng = 'assets/png/icon_edit.png';
 const timePng = 'assets/png/icon_time.png';
 const settingPng = 'assets/png/icon_settings.png';
+const imgStep1 = 'assets/png/img_step1.png';
+const imgStep2 = 'assets/png/img_step2.png';

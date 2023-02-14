@@ -7,22 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../common/common.dart';
-import '../../models/user_model.dart';
-import '../../services/rest_service.dart';
-import '../../widgets/popup/popup_success.dart';
-import '../../widgets/renew_button/renew_button.dart';
-import '../../widgets/textfieldsetting/custom_text_field_setting.dart';
-import '../../widgets/textfieldsetting/custom_text_field_setting.dart';
+import '../../../common/common.dart';
+import '../../../models/user_model.dart';
+import '../../../services/rest_service.dart';
+import '../../../widgets/popup/popup_success.dart';
+import '../../../widgets/Submit_Button/submit_button.dart';
+import '../../../widgets/textfieldsetting/custom_text_field_setting.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class ProfileTab extends StatefulWidget {
+  const ProfileTab({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ProfileTab> createState() => _ProfileTabState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileTabState extends State<ProfileTab> {
   final RestService _restService = Modular.get<RestService>();
   UserModel? userModel;
   bool isLoading = false;
@@ -172,7 +171,7 @@ class _ProfileState extends State<Profile> {
                       SizedBox(
                         height: size.height * 0.03,
                       ),
-                      RenewButton(
+                      SubmitButton(
                         buttonTitle: 'Update Profile',
                         loadingTitle: 'Updating...',
                         isLoading: isLoading,
