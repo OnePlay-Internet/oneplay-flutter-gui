@@ -71,11 +71,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 height: size.height * 0.03,
               ),
               customTextField(
-                labelText: 'Email',
-                hintText: 'Email Address',
-                textCtrler: emailController,
-                errorText: errorEmail,
-              ),
+                  labelText: 'Email',
+                  hintText: 'Email Address',
+                  textCtrler: emailController,
+                  errorText: errorEmail,
+                  onChanged: ((text) {
+                    setState(() {});
+                  })),
               SizedBox(
                 height: size.height * 0.05,
               ),
@@ -83,6 +85,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 buttonTitle: 'Submit',
                 loadingTitle: 'Submiting...',
                 isLoading: isLoading,
+                disabled: emailController.text.isEmpty,
                 onTap: () {
                   print("***** Signing up *****");
 
