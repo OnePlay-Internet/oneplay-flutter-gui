@@ -101,7 +101,7 @@ class _GameState extends State<Game> {
                   listGameWithLabel(
                       GameFeedModel(title: 'From Genre', games: genreGames),
                       context),
-                if (genreGames.isNotEmpty)
+                if (devGames.isNotEmpty)
                   listGameWithLabel(
                       GameFeedModel(title: 'From Developer', games: devGames),
                       context),
