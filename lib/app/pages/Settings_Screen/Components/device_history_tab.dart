@@ -7,7 +7,6 @@ import 'package:user_agent_parser/user_agent_parser.dart';
 
 import '../../../common/common.dart';
 import '../../../models/device_history_model.dart';
-import '../../../models/ip_location_model.dart';
 import '../../../models/session.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/rest_service.dart';
@@ -136,11 +135,14 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
   }
 
   _userAgent(String agent) {
+    print('***** User agent: $agent *****');
+
     UserAgentParser parser = UserAgentParser();
     if (agent != '' &&
         agent != 'Dart/2.19 (dart:io)' &&
         agent != 'PostmanRuntime/7.30.1' &&
-        agent != 'Dart/2.18 (dart:io)') {
+        agent != 'Dart/2.18 (dart:io)' &&
+        agent != 'OnePlayAndroid/V1.1.1') {
       Result result = parser.parseResult(agent);
 
       print('***** Browser name: ${result.browser.name} *****');
@@ -150,9 +152,9 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
     return '-';
   }
 
-  _isActive(Sesstion sesstion) {
-    return sesstion.key == AuthService().sessionKey();
-  }
+  // _isActive(String key) {
+  //   return key == AuthService().sessionKey();
+  // }
 
   _logoutAllUser() async {
     try {

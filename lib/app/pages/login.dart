@@ -10,6 +10,7 @@ import 'package:oneplay_flutter_gui/app/widgets/footer/authFooter.dart';
 import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart';
 import 'package:validators/validators.dart';
 
+import '../widgets/popup/alert_game_dialog.dart';
 import '../widgets/popup/popup_success.dart';
 import '../widgets/Submit_Button/submit_button.dart';
 
@@ -22,6 +23,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool loading = false;
+  bool isChecked = false;
 
   final idCtrler = TextEditingController();
   final pwdCtrler = TextEditingController();
@@ -48,11 +50,39 @@ class _LoginState extends State<Login> {
         barrierDismissible: false,
       );
 
-      Future.delayed(const Duration(milliseconds: 2000), () {
-        setState(() => loading = false);
+      // Future.delayed(const Duration(milliseconds: 2000), () {
+      //   setState(() => loading = false);
 
-        Modular.to.navigate('/feeds');
-      });
+      //   Modular.to.navigate('/feeds');
+      // });
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertGamePopUp(
+            onTap: () {
+              Navigator.pop(_);
+
+              Modular.to.navigate('/feeds');
+            },
+          );
+          // alertGamePopUp(
+          //   context: context,
+          //   isChecked: isChecked,
+          //   onChanged: (bool? value) {
+          //     setState(() {
+          //       isChecked = value!;
+          //     });
+          //   },
+          //   onTap: () {
+          //     Navigator.pop(_);
+
+          //     Modular.to.navigate('/feeds');
+          //   },
+          // );
+        },
+      );
     } on DioError catch (e) {
       showDialog(
         context: context,

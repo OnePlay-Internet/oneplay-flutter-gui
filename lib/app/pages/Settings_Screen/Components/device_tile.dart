@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
+import 'package:oneplay_flutter_gui/app/widgets/popup/popup_success.dart';
 
 import '../../../common/common.dart';
 import '../../../models/device_history_model.dart';
@@ -32,6 +33,7 @@ class _DeviceTileState extends State<DeviceTile> {
   final RestService _restService = Modular.get<RestService>();
   IPLocationModel ipLocationModel = IPLocationModel();
   String? activeNow;
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,69 +82,100 @@ class _DeviceTileState extends State<DeviceTile> {
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.userAgent,
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textPrimaryColor,
-                    fontSize: 14,
+            SizedBox(
+              width: size.width * 0.275,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.userAgent,
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: textPrimaryColor,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                Text(
-                  deviceName,
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textSecondaryColor,
-                    fontSize: 14,
+                  Text(
+                    deviceName,
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: textSecondaryColor,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                activeNow != null
-                    ? Text(
-                        '$activeNow',
-                        style: const TextStyle(
-                          fontFamily: mainFontFamily,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.02,
-                          color: textPrimaryColor,
-                          fontSize: 14,
-                        ),
-                      )
-                    : Text(
-                        '$cityName, \n$countryName',
-                        style: const TextStyle(
-                          fontFamily: mainFontFamily,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.02,
-                          color: textPrimaryColor,
-                          fontSize: 14,
-                        ),
-                      ),
-                Text(
-                  '$difference days ago',
-                  // timeAgo(receivedTime),
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textSecondaryColor,
-                    fontSize: 14,
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      activeNow != null
+                          ? GradientTextButton(
+                              title: '$activeNow',
+                              colors: const [blueColor3, blueColor2],
+                              // onTap: () {
+                              //   showDialog(
+                              //     context: context,
+                              //     barrierDismissible: false,
+                              //     builder: (_) {
+                              //       return alertGamePopUp(
+                              //         context: context,
+                              //         isChecked: isChecked,
+                              //         onChanged: (value) {
+                              //           print(
+                              //               '***** Checked: $isChecked *****');
+                              //           setState(() {
+                              //             isChecked = value!;
+                              //             print(
+                              //                 '***** Checked 1: $isChecked *****');
+                              //           });
+                              //         },
+                              //         onTap: () {
+                              //           Navigator.pop(_);
+                              //         },
+                              //       );
+                              //     },
+                              //   );
+                              // },
+                            )
+                          : Text(
+                              '$cityName, \n$countryName',
+                              style: const TextStyle(
+                                fontFamily: mainFontFamily,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 0.02,
+                                color: textPrimaryColor,
+                                fontSize: 14,
+                              ),
+                            ),
+                      activeNow != null
+                          ? Container()
+                          : Text(
+                              '$difference days ago',
+                              // timeAgo(receivedTime),
+                              style: const TextStyle(
+                                fontFamily: mainFontFamily,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 0.02,
+                                color: textSecondaryColor,
+                                fontSize: 14,
+                              ),
+                            ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             GradientTextButton(
               title: 'Logout',
@@ -164,21 +197,18 @@ class _DeviceTileState extends State<DeviceTile> {
 
   @override
   initState() {
-    // if (_isActive(widget.deviceHistory.key.toString())) {
-    //   activeNow = 'Active Now';
-    // } else {
-    _getLocation(widget.deviceHistory.ip ?? '');
-    // }
+    if (_isActive(widget.deviceHistory.key.toString())) {
+      activeNow = 'Active Now';
+    } else {
+      _getLocation(widget.deviceHistory.ip ?? '');
+    }
 
     super.initState();
   }
 
-  // _isActive(String key) {
-  //   print('KEY: $key, sessionkey: ${AuthService().userIdToken!.toke}');
-  //   print('KEY: $key, sessionkey: ${AuthService().userIdToken!.userId}');
-  //   print("*******");
-  //   return key == AuthService().sessionKey();
-  // }
+  _isActive(String key) {
+    return key == AuthService().sessionKey();
+  }
 
   _getLocation(String ip) async {
     final res = await _restService.getLocation(ip: ip);

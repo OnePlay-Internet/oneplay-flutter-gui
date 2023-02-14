@@ -83,7 +83,7 @@ class _SignUpState extends State<SignUp> {
             return alertSuccess(
               context: context,
               title: 'SignUp Success',
-              description: 'Sign up successfully!',
+              description: 'Please check your email to confirm your email id',
             );
           },
           barrierDismissible: false,

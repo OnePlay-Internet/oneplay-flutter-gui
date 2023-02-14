@@ -11,6 +11,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 
 import '../widgets/list_game_w_label/list_game_w_label.dart';
+import '../widgets/popup/popup_success.dart';
 
 class Feeds extends StatefulWidget {
   const Feeds({super.key});
