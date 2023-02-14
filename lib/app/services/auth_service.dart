@@ -40,6 +40,13 @@ abstract class AuthServiceBase with Store {
   }
 
   @action
+  sessionKey() {
+    var idToken = userIdToken;
+
+    return 'user:${idToken!.userId}:session:${idToken.token}';
+  }
+
+  @action
   loadUser(UserModel user) {
     this.user = user;
   }

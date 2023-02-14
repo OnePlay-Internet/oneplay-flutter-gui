@@ -11,6 +11,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 
 import '../widgets/list_game_w_label/list_game_w_label.dart';
+import '../widgets/popup/popup_success.dart';
 
 class Feeds extends StatefulWidget {
   const Feeds({super.key});
@@ -34,7 +35,7 @@ class _FeedsState extends State<Feeds> {
     await restService.getHomeFeed().then((value) async {
       firstRow = value[0];
       restRow = value.getRange(2, value.length).toList();
-      setState(() => starting = false);
+      if (mounted) setState(() => starting = false);
     });
   }
 
