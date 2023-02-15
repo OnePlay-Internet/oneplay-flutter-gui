@@ -50,7 +50,6 @@ dependencies:
   url_launcher: ^6.1.9
   intl: ^0.18.0
   mime_type: ^1.0.0
-  user_agent_parser: ^0.0.1+2
 
 dev_dependencies:
   flutter_test:
