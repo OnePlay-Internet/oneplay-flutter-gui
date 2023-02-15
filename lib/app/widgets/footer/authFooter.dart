@@ -3,6 +3,15 @@ import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+_launchURL(String url) async {
+  final uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
 authFooterWidget() {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -29,8 +38,7 @@ authFooterWidget() {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: () =>
-                launchUrl(Uri.parse('https://www.oneplay.in/privacy.html')),
+            onTap: () => _launchURL('https://www.oneplay.in/privacy.html'),
             child: GradientText(
               'Privacy Policy',
               style: const TextStyle(
@@ -53,12 +61,10 @@ authFooterWidget() {
               fontSize: 14,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.02,
-              decoration: TextDecoration.underline,
             ),
           ),
           GestureDetector(
-            onTap: () =>
-                launchUrl(Uri.parse('https://www.oneplay.in/tnc.html')),
+            onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
             child: GradientText(
               'Terms & Conditions',
               style: const TextStyle(
@@ -139,8 +145,7 @@ Padding needHelpWidget() {
               color: textSecondaryColor),
         ),
         GestureDetector(
-          onTap: () =>
-              launchUrl(Uri.parse('https://www.oneplay.in/contact.html')),
+          onTap: () => _launchURL('https://www.oneplay.in/contact.html'),
           child: GradientText(
             'Browse FAQ',
             style: const TextStyle(
