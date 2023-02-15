@@ -3,12 +3,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:user_agent_parser/user_agent_parser.dart';
 
 import '../../../common/common.dart';
 import '../../../models/device_history_model.dart';
 import '../../../models/session.dart';
-import '../../../services/auth_service.dart';
 import '../../../services/rest_service.dart';
 import '../../../widgets/logout_button/logout_button.dart';
 import '../../../widgets/popup/popup_success.dart';
@@ -135,21 +133,18 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
   }
 
   _userAgent(String agent) {
-    print('***** User agent: $agent *****');
+    // UserAgent userAgent = UserAgent(agent);
 
-    UserAgentParser parser = UserAgentParser();
-    if (agent != '' &&
-        agent != 'Dart/2.19 (dart:io)' &&
-        agent != 'PostmanRuntime/7.30.1' &&
-        agent != 'Dart/2.18 (dart:io)' &&
-        agent != 'OnePlayAndroid/V1.1.1') {
-      Result result = parser.parseResult(agent);
+    // if (agent != '' &&
+    //     agent != 'Dart/2.19 (dart:io)' &&
+    //     agent != 'PostmanRuntime/7.30.1' &&
+    //     agent != 'Dart/2.18 (dart:io)' &&
+    //     agent != 'OnePlayAndroid/V1.1.1') {
 
-      print('***** Browser name: ${result.browser.name} *****');
-
-      return result.browser.name;
-    }
-    return '-';
+    //   return result.browser.name;
+    // }
+    // return '-';
+    return 'Mobile';
   }
 
   // _isActive(String key) {
