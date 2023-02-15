@@ -10,6 +10,8 @@ const basicLineColor = Color(0xFF3E4246);
 const blackColor4 = Color(0xFF212123);
 
 const blueColor1 = Color(0xFF0575E6);
+const blueColor2 = Color(0xFF3AA0FE);
+const blueColor3 = Color(0xFF59FEF4);
 
 const pinkColor1 = Color(0xFFFF0CF5);
 const pinkColor2 = Color(0xFFD71F7B);

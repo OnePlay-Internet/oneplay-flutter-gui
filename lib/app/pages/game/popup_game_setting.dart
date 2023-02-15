@@ -26,7 +26,8 @@ Widget gameSettingPopup(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 8),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,7 +108,8 @@ Widget gameSettingPopup(
                         children: [
                           Text(
                             'Vsync',
-                            style: tinyStyle.copyWith(color: textPrimaryColor),
+                            style:
+                                tinyStyle.copyWith(color: textPrimaryColor),
                           ),
                           StatefulBuilder(
                             builder: (_, setState) => SizedBox(
@@ -137,7 +139,8 @@ Widget gameSettingPopup(
                       height: 52,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: basicLineColor, width: 2)),
+                          border:
+                              Border.all(color: basicLineColor, width: 2)),
                       child: dropdownMenu(PlayConstants.FPS, gameSetting.fps),
                     ),
                   ),
@@ -163,7 +166,8 @@ Widget gameSettingPopup(
                         const SizedBox(width: 14),
                         Text(
                           'Advanced game options',
-                          style: tinyStyle.copyWith(color: textSecondaryColor),
+                          style:
+                              tinyStyle.copyWith(color: textSecondaryColor),
                         )
                       ]),
                 ),
@@ -296,7 +300,7 @@ Container selectionGameSetting(BuildContext context, String title,
   return Container(
     height: 88,
     width: MediaQuery.of(context).size.width,
-    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+    margin: const EdgeInsets.symmetric(horizontal: 17, vertical: 15),
     child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -306,39 +310,52 @@ Container selectionGameSetting(BuildContext context, String title,
             style: tinyStyle.copyWith(color: textSecondaryColor),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: audioType
-                .map((e) => FocusZoom(builder: (focus) {
-                      return InkWell(
-                        focusNode: focus,
-                        onTap: () => onTap(e),
-                        child: Container(
-                          height: 52,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 13),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                  width: 2,
-                                  color: audioType.indexOf(e) == audioTypeValue
-                                      ? purpleColor1
-                                      : basicLineColor)),
-                          child: GradientText(
-                            e,
-                            style: tinyStyle,
-                            gradientType: GradientType.linear,
-                            gradientDirection: GradientDirection.ltr,
-                            colors: audioType.indexOf(e) == audioTypeValue
-                                ? const [purpleColor2, purpleColor1]
-                                : [textPrimaryColor, textPrimaryColor],
-                          ),
-                        ),
-                      );
-                    }))
-                .toList(),
-          )
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children:
+                  addElementIntoListWidget(audioType, onTap, audioTypeValue))
         ]),
   );
+}
+
+List<Widget> addElementIntoListWidget(
+    List<String> data, Function(String e) onTap, int value) {
+  List<Widget> widgets = [];
+  data.forEach((element) {
+    if (data.indexOf(element) > 0 && data.indexOf(element) < data.length) {
+      widgets.add(const SizedBox(
+        width: 30,
+      ));
+    }
+    widgets.add(Flexible(
+      fit: FlexFit.loose,
+      child: InkWell(
+        onTap: () => onTap(element),
+        child: Container(
+          height: 52,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                  width: 2,
+                  color: data.indexOf(element) == value
+                      ? purpleColor1
+                      : basicLineColor)),
+          child: Center(
+            child: GradientText(
+              element,
+              style: tinyStyle,
+              gradientType: GradientType.linear,
+              gradientDirection: GradientDirection.ltr,
+              colors: data.indexOf(element) == value
+                  ? const [purpleColor2, purpleColor1]
+                  : [textPrimaryColor, textPrimaryColor],
+            ),
+          ),
+        ),
+      ),
+    ));
+  });
+  return widgets;
 }
 
 Container switchGameSetting({

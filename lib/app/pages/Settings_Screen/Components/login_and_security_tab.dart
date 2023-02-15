@@ -4,23 +4,21 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../common/common.dart';
-import '../../models/user_model.dart';
-import '../../services/rest_service.dart';
-import '../../services/shared_pref_service.dart';
-import '../../widgets/popup/popup_success.dart';
-import '../../widgets/renew_button/renew_button.dart';
-import '../../widgets/textfieldsetting/custom_text_field_setting.dart';
-import '../../widgets/textfieldsetting/custom_text_field_setting.dart';
+import '../../../common/common.dart';
+import '../../../models/user_model.dart';
+import '../../../services/rest_service.dart';
+import '../../../widgets/popup/popup_success.dart';
+import '../../../widgets/Submit_Button/submit_button.dart';
+import '../../../widgets/textfieldsetting/custom_text_field_setting.dart';
 
-class LoginAndSecurity extends StatefulWidget {
-  const LoginAndSecurity({super.key});
+class LoginAndSecurityTab extends StatefulWidget {
+  const LoginAndSecurityTab({super.key});
 
   @override
-  State<LoginAndSecurity> createState() => _LoginAndSecurityState();
+  State<LoginAndSecurityTab> createState() => _LoginAndSecurityTabState();
 }
 
-class _LoginAndSecurityState extends State<LoginAndSecurity> {
+class _LoginAndSecurityTabState extends State<LoginAndSecurityTab> {
   final RestService _restService = Modular.get<RestService>();
   UserModel? userModel;
   bool isLoading = false;
@@ -85,7 +83,7 @@ class _LoginAndSecurityState extends State<LoginAndSecurity> {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  RenewButton(
+                  SubmitButton(
                     buttonTitle: 'Update Phone',
                     loadingTitle: 'Updating...',
                     isLoading: isLoading,
@@ -132,7 +130,7 @@ class _LoginAndSecurityState extends State<LoginAndSecurity> {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  RenewButton(
+                  SubmitButton(
                     buttonTitle: 'Update Password',
                     loadingTitle: 'Updating...',
                     isLoading: isLoading,

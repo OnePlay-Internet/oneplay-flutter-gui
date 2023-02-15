@@ -51,7 +51,7 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void _onTap(int value) {
-    if (value == _selectedIndex) {
+    if (value == _selectedIndex && _selectedIndex != 0) {
       return;
     }
 

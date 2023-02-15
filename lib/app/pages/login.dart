@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
@@ -11,8 +10,9 @@ import 'package:oneplay_flutter_gui/app/widgets/footer/authFooter.dart';
 import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart';
 import 'package:validators/validators.dart';
 
+import '../widgets/popup/alert_game_dialog.dart';
 import '../widgets/popup/popup_success.dart';
-import '../widgets/submit_button/submit_button.dart';
+import '../widgets/Submit_Button/submit_button.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -23,6 +23,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool loading = false;
+  bool isChecked = false;
 
   final idCtrler = TextEditingController();
   final pwdCtrler = TextEditingController();
@@ -49,31 +50,62 @@ class _LoginState extends State<Login> {
         barrierDismissible: false,
       );
 
-      Future.delayed(const Duration(milliseconds: 2000), () {
-        setState(() => loading = false);
+      // Future.delayed(const Duration(milliseconds: 2000), () {
+      //   setState(() => loading = false);
 
-        Modular.to.navigate('/feeds');
-      });
+      //   Modular.to.navigate('/feeds');
+      // });
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertGamePopUp(
+            onTap: () {
+              Navigator.pop(_);
+
+              Modular.to.navigate('/feeds');
+            },
+          );
+          // alertGamePopUp(
+          //   context: context,
+          //   isChecked: isChecked,
+          //   onChanged: (bool? value) {
+          //     setState(() {
+          //       isChecked = value!;
+          //     });
+          //   },
+          //   onTap: () {
+          //     Navigator.pop(_);
+
+          //     Modular.to.navigate('/feeds');
+          //   },
+          // );
+        },
+      );
     } on DioError catch (e) {
       showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 3000), () {
-              setState(() => loading = false);
-              Navigator.pop(_);
-            });
-            return alertError(
-              context: context,
-              title: 'Login Error',
-              description: e.error['message'],
-            );
-          },
-          barrierDismissible: false);
+        context: context,
+        builder: (_) {
+          Future.delayed(const Duration(milliseconds: 3000), () {
+            setState(() => loading = false);
+            Navigator.pop(_);
+          });
+          return alertError(
+            context: context,
+            title: 'Login Error',
+            description: e.error['message'],
+          );
+        },
+        barrierDismissible: false,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return SafeArea(
         child: SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -109,25 +141,31 @@ class _LoginState extends State<Login> {
                 ],
               ),
             ),
-            SubmitButton(
-              buttonTitle: 'Log in',
-              loadingTitle: 'Logging you in...',
-              isLoading: loading,
-              onTap: () {
-                if (!isEmail(idCtrler.text)) {
-                  setState(() => errorEmail = "Invalid email address");
-                  return;
-                }
-                if (idCtrler.text.isEmpty) {
-                  setState(() => errorEmail = "Enter your email");
-                  return;
-                }
-                if (pwdCtrler.text.isEmpty) {
-                  setState(() => errorPwd = "Enter your password");
-                  return;
-                }
-                login(idCtrler.text.trim(), pwdCtrler.text.trim());
-              },
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: size.width * 0.105,
+              ),
+              child: SubmitButton(
+                buttonTitle: 'Log in',
+                loadingTitle: 'Logging you in...',
+                isLoading: loading,
+                onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  if (!isEmail(idCtrler.text)) {
+                    setState(() => errorEmail = "Invalid email address");
+                    return;
+                  }
+                  if (idCtrler.text.isEmpty) {
+                    setState(() => errorEmail = "Enter your email");
+                    return;
+                  }
+                  if (pwdCtrler.text.isEmpty) {
+                    setState(() => errorPwd = "Enter your password");
+                    return;
+                  }
+                  login(idCtrler.text.trim(), pwdCtrler.text.trim());
+                },
+              ),
             ),
             haveAccount(
               title: 'Don\'t have an account? ',
@@ -155,7 +193,6 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
 
   Container headTitle() {
     return Container(
