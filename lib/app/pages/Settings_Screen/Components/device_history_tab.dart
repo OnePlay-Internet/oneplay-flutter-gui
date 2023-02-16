@@ -142,7 +142,8 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
         agent != 'Dart/2.19 (dart:io)' &&
         agent != 'PostmanRuntime/7.30.1' &&
         agent != 'Dart/2.18 (dart:io)' &&
-        agent != 'OnePlayAndroid/V1.1.1') {
+        agent != 'OnePlayAndroid/V1.1.1' &&
+        agent != 'PostmanRuntime/7.31.0') {
       Result result = parser.parseResult(agent);
 
       print('***** Browser name: ${result.browser.name} *****');

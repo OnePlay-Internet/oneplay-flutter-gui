@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/color.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/pngPath.dart';
@@ -48,15 +49,32 @@ class AppBarWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // InkWell(
+          //   // onTap: openDrawer,
+          //   child: Container(
+          //     padding: const EdgeInsets.all(10.0),
+          //     margin: const EdgeInsets.only(left: 10.0),
+          //     child: SvgPicture.asset(
+          //       menuIcon,
+          //       color: Colors.white,
+          //       height: 18,
+          //     ),
+          //   ),
+          // ),
           InkWell(
-            // onTap: openDrawer,
+            onTap: () {
+              Modular.to.pushNamedAndRemoveUntil('/search', (r) => false);
+            },
             child: Container(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(8.0),
               margin: const EdgeInsets.only(left: 10.0),
-              child: SvgPicture.asset(
-                menuIcon,
-                color: Colors.white,
-                height: 18,
+              decoration: BoxDecoration(
+                color: blackColor1,
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              child: const Icon(
+                Icons.search,
+                color: textPrimaryColor,
               ),
             ),
           ),
@@ -68,7 +86,9 @@ class AppBarWidget {
             ],
           ),
           InkWell(
-            // onTap: onTap,
+            onTap: () {
+              Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);
+            },
             child: Container(
               height: 48,
               width: 48,
@@ -76,8 +96,9 @@ class AppBarWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
                 child: CachedNetworkImage(
-                    imageUrl:
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7KwDl1w4ReBuWUjLiEd6AQNSEHjnqF8VH7Aflhq179xxAEOyHw6pbgKJtCewBexVFshk&usqp=CAU'),
+                  imageUrl:
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7KwDl1w4ReBuWUjLiEd6AQNSEHjnqF8VH7Aflhq179xxAEOyHw6pbgKJtCewBexVFshk&usqp=CAU',
+                ),
               ),
             ),
           )

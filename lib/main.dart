@@ -4,6 +4,8 @@ import 'package:oneplay_flutter_gui/app/app.dart';
 import 'package:oneplay_flutter_gui/app/app_widget.dart';
 import 'package:oneplay_flutter_gui/app/services/shared_pref_service.dart';
 
+import 'app/models/game_model.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefService.init();

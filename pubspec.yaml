@@ -84,6 +84,6 @@ flutter:
         - asset: assets/fonts/Poppins-Regular.ttf
           weight: 400
 
-  module:
-    androidX: true
-    androidPackage: com.example.oneplay_flutter_gui
+  # module:
+  #   androidX: true
+  #   androidPackage: com.example.oneplay_flutter_gui

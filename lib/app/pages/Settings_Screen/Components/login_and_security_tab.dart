@@ -64,7 +64,9 @@ class _LoginAndSecurityTabState extends State<LoginAndSecurityTab> {
                     context: context,
                     textFieldTitle: 'Email',
                     hintText: 'Email',
+                    textInputType: TextInputType.emailAddress,
                     controller: TextEditingController(text: email),
+                    enabled: false,
                   ),
                   SizedBox(
                     height: size.height * 0.01,
