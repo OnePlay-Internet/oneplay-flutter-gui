@@ -5,4 +5,5 @@ export 'theme/style.dart';
 export 'theme/svgPath.dart';
 export 'theme/textStyle.dart';
 export 'utils/text_utils.dart';
+export 'utils/play_constant.dart';
 export 'config/config.dart';

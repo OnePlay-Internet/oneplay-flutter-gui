@@ -46,6 +46,7 @@ Widget gameSettingPopup(
                     builder: (focus) {
                       return InkWell(
                         focusNode: focus,
+                        autofocus: true,
                         onTap: () => Navigator.pop(context),
                         child: SvgPicture.asset(
                           crossIcon,
@@ -233,6 +234,7 @@ advancedSettingPopup(
                             FocusZoom(builder: (focus) {
                               return InkWell(
                                 focusNode: focus,
+                                autofocus: true,
                                 onTap: () => Navigator.pop(context),
                                 child: SvgPicture.asset(
                                   crossIcon,

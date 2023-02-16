@@ -7,6 +7,7 @@ import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
 import 'package:oneplay_flutter_gui/app/widgets/footer/authFooter.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart';
 import 'package:validators/validators.dart';
 
@@ -91,10 +92,13 @@ class _LoginState extends State<Login> {
             setState(() => loading = false);
             Navigator.pop(_);
           });
-          return alertError(
-            context: context,
-            title: 'Login Error',
-            description: e.error['message'],
+          return GamepadPop(
+            context: _,
+            child: alertError(
+              context: context,
+              title: 'Login Error',
+              description: e.error['message'],
+            ),
           );
         },
         barrierDismissible: false,
@@ -106,79 +110,82 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return SafeArea(
-        child: SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Form(
-        child: SingleChildScrollView(
-          child: Column(children: [
-            headTitle(),
-            const SizedBox(height: 40),
-            customTextField(
-              labelText: 'Email / Phone',
-              hintText: 'Email Address',
-              textCtrler: idCtrler,
-              errorText: errorEmail,
-            ),
-            const SizedBox(height: 40),
-            customTextField(
-              labelText: 'Password',
-              hintText: 'Password',
-              textCtrler: pwdCtrler,
-              textInputType: TextInputType.visiblePassword,
-              errorText: errorPwd,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () => Modular.to.pushNamed('/auth/forgotPass'),
-                    child: forgotPwd(),
-                  )
-                ],
+    return GamepadPop(
+      context: context,
+      child: SafeArea(
+          child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Form(
+          child: SingleChildScrollView(
+            child: Column(children: [
+              headTitle(),
+              const SizedBox(height: 40),
+              customTextField(
+                labelText: 'Email / Phone',
+                hintText: 'Email Address',
+                textCtrler: idCtrler,
+                errorText: errorEmail,
               ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: size.width * 0.105,
+              const SizedBox(height: 40),
+              customTextField(
+                labelText: 'Password',
+                hintText: 'Password',
+                textCtrler: pwdCtrler,
+                textInputType: TextInputType.visiblePassword,
+                errorText: errorPwd,
               ),
-              child: SubmitButton(
-                buttonTitle: 'Log in',
-                loadingTitle: 'Logging you in...',
-                isLoading: loading,
-                onTap: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  if (!isEmail(idCtrler.text)) {
-                    setState(() => errorEmail = "Invalid email address");
-                    return;
-                  }
-                  if (idCtrler.text.isEmpty) {
-                    setState(() => errorEmail = "Enter your email");
-                    return;
-                  }
-                  if (pwdCtrler.text.isEmpty) {
-                    setState(() => errorPwd = "Enter your password");
-                    return;
-                  }
-                  login(idCtrler.text.trim(), pwdCtrler.text.trim());
-                },
+              Padding(
+                padding: const EdgeInsets.all(40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () => Modular.to.pushNamed('/auth/forgotPass'),
+                      child: forgotPwd(),
+                    )
+                  ],
+                ),
               ),
-            ),
-            haveAccount(
-              title: 'Don\'t have an account? ',
-              btnTitle: 'Create a New',
-              onTap: () => Modular.to.pushNamed('/auth/signup'),
-            ),
-            commonDividerWidget(),
-            needHelpWidget(),
-            authFooterWidget()
-          ]),
+              Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.105,
+                ),
+                child: SubmitButton(
+                  buttonTitle: 'Log in',
+                  loadingTitle: 'Logging you in...',
+                  isLoading: loading,
+                  onTap: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    if (!isEmail(idCtrler.text)) {
+                      setState(() => errorEmail = "Invalid email address");
+                      return;
+                    }
+                    if (idCtrler.text.isEmpty) {
+                      setState(() => errorEmail = "Enter your email");
+                      return;
+                    }
+                    if (pwdCtrler.text.isEmpty) {
+                      setState(() => errorPwd = "Enter your password");
+                      return;
+                    }
+                    login(idCtrler.text.trim(), pwdCtrler.text.trim());
+                  },
+                ),
+              ),
+              haveAccount(
+                title: 'Don\'t have an account? ',
+                btnTitle: 'Create a New',
+                onTap: () => Modular.to.pushNamed('/auth/signup'),
+              ),
+              commonDividerWidget(),
+              needHelpWidget(),
+              authFooterWidget()
+            ]),
+          ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 
   Text forgotPwd() {

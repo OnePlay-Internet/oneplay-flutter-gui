@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 
 import '../../common/common.dart';
 import '../Submit_Button/submit_button.dart';
@@ -153,14 +154,21 @@ class _AlertGamePopUpState extends State<AlertGamePopUp> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Checkbox(
-                    activeColor: textSecondaryColor,
-                    value: isChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isChecked = value!;
-                      });
-                    },
+                  FocusZoom(
+                    zoomEffect: false,
+                    builder: (context) {
+                      return Checkbox(
+                        focusNode: context,
+                        autofocus: true,
+                        activeColor: textSecondaryColor,
+                        value: isChecked,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isChecked = value!;
+                          });
+                        },
+                      );
+                    }
                   ),
                   SizedBox(
                     width: size.width * 0.01,

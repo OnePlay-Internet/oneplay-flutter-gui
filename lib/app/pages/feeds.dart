@@ -9,6 +9,7 @@ import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 
 import '../widgets/list_game_w_label/list_game_w_label.dart';
 import '../widgets/popup/popup_success.dart';
@@ -62,33 +63,36 @@ class _FeedsState extends State<Feeds> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: mainColor,
-      body: starting
-          ? const Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: ListView(
-                  children: [
-                    bannerWidget(firstRow),
-                    Observer(builder: (context) {
-                      _getLibrary();
-                      return library.isNotEmpty
-                          ? listGameWithLabel(
-                              GameFeedModel(
-                                  title: 'My Library', games: library),
-                              context)
-                          : Container();
-                    }),
-                    ...restRow
-                        .map((value) => listGameWithLabel(value, context))
-                        .toList()
-                  ],
+    return GamepadPop(
+      context: context,
+      child: Scaffold(
+        backgroundColor: mainColor,
+        body: starting
+            ? const Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView(
+                    children: [
+                      bannerWidget(firstRow),
+                      Observer(builder: (context) {
+                        _getLibrary();
+                        return library.isNotEmpty
+                            ? listGameWithLabel(
+                                GameFeedModel(
+                                    title: 'My Library', games: library),
+                                context)
+                            : Container();
+                      }),
+                      ...restRow
+                          .map((value) => listGameWithLabel(value, context))
+                          .toList()
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
     // return Container(
     //   padding: const EdgeInsets.all(4),
