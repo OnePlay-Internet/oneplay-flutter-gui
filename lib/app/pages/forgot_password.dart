@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:validators/validators.dart';
 
 import '../common/common.dart';
@@ -31,93 +32,96 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: SizedBox(
-        height: size.height,
-        width: size.width,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: const Text(
-                  'Forgot Password',
-                  style: TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.02,
-                    color: Colors.white,
-                    fontSize: 30,
+    return GamepadPop(
+      context: context,
+      child: SafeArea(
+        child: SizedBox(
+          height: size.height,
+          width: size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Forgot Password',
+                    style: TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.02,
+                      color: Colors.white,
+                      fontSize: 30,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.11,
+                SizedBox(
+                  height: size.height * 0.03,
                 ),
-                child: const Text(
-                  'Enter the email address associated with your account.',
-                  style: TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textSecondaryColor,
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.11,
+                  ),
+                  child: const Text(
+                    'Enter the email address associated with your account.',
+                    style: TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: textSecondaryColor,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              customTextField(
-                  labelText: 'Email',
-                  hintText: 'Email Address',
-                  textCtrler: emailController,
-                  errorText: errorEmail,
-                  onChanged: ((text) {
-                    setState(() {});
-                  })),
-              SizedBox(
-                height: size.height * 0.05,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.105,
+                SizedBox(
+                  height: size.height * 0.03,
                 ),
-                child: SubmitButton(
-                  buttonTitle: 'Submit',
-                  loadingTitle: 'Submiting...',
-                  isLoading: isLoading,
-                  onTap: () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    var email = emailController.text;
-
-                    if (email.isEmpty) {
-                      setState(() => errorEmail = "Enter your email");
-                      return;
-                    } else if (!isEmail(email)) {
-                      setState(() => errorEmail = "Invalid email address");
-                      return;
-                    } else {
-                      setState(() => errorEmail = "");
-                    }
-
-                    _forgotPassword(email);
-                  },
+                customTextField(
+                    labelText: 'Email',
+                    hintText: 'Email Address',
+                    textCtrler: emailController,
+                    errorText: errorEmail,
+                    onChanged: ((text) {
+                      setState(() {});
+                    })),
+                SizedBox(
+                  height: size.height * 0.05,
                 ),
-              ),
-              haveAccount(
-                title: 'Remember password? ',
-                btnTitle: 'Log in',
-                onTap: () => Modular.to.pushNamed('/auth/login'),
-              ),
-              commonDividerWidget(),
-              needHelpWidget(),
-              authFooterWidget()
-            ],
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.105,
+                  ),
+                  child: SubmitButton(
+                    buttonTitle: 'Submit',
+                    loadingTitle: 'Submiting...',
+                    isLoading: isLoading,
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      var email = emailController.text;
+    
+                      if (email.isEmpty) {
+                        setState(() => errorEmail = "Enter your email");
+                        return;
+                      } else if (!isEmail(email)) {
+                        setState(() => errorEmail = "Invalid email address");
+                        return;
+                      } else {
+                        setState(() => errorEmail = "");
+                      }
+    
+                      _forgotPassword(email);
+                    },
+                  ),
+                ),
+                haveAccount(
+                  title: 'Remember password? ',
+                  btnTitle: 'Log in',
+                  onTap: () => Modular.to.pushNamed('/auth/login'),
+                ),
+                commonDividerWidget(),
+                needHelpWidget(),
+                authFooterWidget()
+              ],
+            ),
           ),
         ),
       ),
@@ -139,10 +143,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             setState(() => isLoading = false);
             Navigator.pop(_);
           });
-          return alertError(
-            context: context,
-            title: 'Login Error',
-            description: e.error['message'],
+          return GamepadPop(
+            context: _,
+            child: alertError(
+              context: context,
+              title: 'Login Error',
+              description: e.error['message'],
+            ),
           );
         },
         barrierDismissible: false,

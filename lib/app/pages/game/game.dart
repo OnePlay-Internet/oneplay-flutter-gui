@@ -20,6 +20,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/fake_focus.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/common.dart';
@@ -64,81 +65,84 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _reloadGameStatus,
-      child: starting
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              children: [
-                Stack(
-                  children: [
-                    ...bannerWidget(context, game!),
-                    Observer(builder: (_) {
-                      bool isInWishlist =
-                          authService.wishlist.contains(game?.oneplayId);
-                      return wishlistButton(
-                        isInWishlist ? Icons.remove : Icons.add_rounded,
-                        onTap: wishlistLoading
-                            ? null
-                            : () => _wishlistAction(isInWishlist),
-                      );
-                    }),
-                    statusActionBtn()
-                  ],
-                ),
-                checkShowSettingWidget(),
-                commonDividerWidget(),
-                FakeFocus(child: detailGameWidget(context, game)),
-                FakeFocus(child: listTagWidget(context, game)),
-                const SizedBox(
-                  height: 10,
-                ),
-                commonDividerWidget(),
-                topVideoLiveStreamsWidget(context, videos),
-                commonDividerWidget(),
-                const SizedBox(height: 30),
-                if (genreGames.isNotEmpty)
-                  listGameWithLabel(
-                      GameFeedModel(title: 'From Genre', games: genreGames),
-                      context),
-                if (devGames.isNotEmpty)
-                  listGameWithLabel(
-                      GameFeedModel(title: 'From Developer', games: devGames),
-                      context),
+    return GamepadPop(
+      context: context,
+      child: RefreshIndicator(
+        onRefresh: _reloadGameStatus,
+        child: starting
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+                children: [
+                  Stack(
+                    children: [
+                      ...bannerWidget(context, game!),
+                      Observer(builder: (_) {
+                        bool isInWishlist =
+                            authService.wishlist.contains(game?.oneplayId);
+                        return wishlistButton(
+                          isInWishlist ? Icons.remove : Icons.add_rounded,
+                          onTap: wishlistLoading
+                              ? null
+                              : () => _wishlistAction(isInWishlist),
+                        );
+                      }),
+                      statusActionBtn()
+                    ],
+                  ),
+                  checkShowSettingWidget(),
+                  commonDividerWidget(),
+                  FakeFocus(child: detailGameWidget(context, game)),
+                  FakeFocus(child: listTagWidget(context, game)),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonDividerWidget(),
+                  topVideoLiveStreamsWidget(context, videos),
+                  commonDividerWidget(),
+                  const SizedBox(height: 30),
+                  if (genreGames.isNotEmpty)
+                    listGameWithLabel(
+                        GameFeedModel(title: 'From Genre', games: genreGames),
+                        context),
+                  if (devGames.isNotEmpty)
+                    listGameWithLabel(
+                        GameFeedModel(title: 'From Developer', games: devGames),
+                        context),
 
-                // Center(child: Text('${game?.title}')),
-                // const SizedBox(height: 32),
-                // if (game?.bgImage != null)
-                //   Column(
-                //     children: [
-                //       Image(image: NetworkImage(game?.bgImage ?? '')),
-                //       const SizedBox(height: 32),
-                //     ],
-                //   ),
-                // Observer(
-                //   builder: (_) {
-                //     String action = _getAction(gameService.gameStatus);
-                //     return Column(
-                //       children: [
-                //         OutlinedButton(
-                //           onPressed: starting || game == null ? null : _startgame,
-                //           child: Text(action),
-                //         ),
-                //         if (action == 'Resume') const SizedBox(height: 32),
-                //         if (action == 'Resume')
-                //           OutlinedButton(
-                //             onPressed: terminating
-                //                 ? null
-                //                 : () => _terminateSession(
-                //                     gameService.gameStatus.sessionId!),
-                //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
-                //           ),
-                //       ],
-                //     );
-                //   },
-                // )
-              ],
-            ),
+                  // Center(child: Text('${game?.title}')),
+                  // const SizedBox(height: 32),
+                  // if (game?.bgImage != null)
+                  //   Column(
+                  //     children: [
+                  //       Image(image: NetworkImage(game?.bgImage ?? '')),
+                  //       const SizedBox(height: 32),
+                  //     ],
+                  //   ),
+                  // Observer(
+                  //   builder: (_) {
+                  //     String action = _getAction(gameService.gameStatus);
+                  //     return Column(
+                  //       children: [
+                  //         OutlinedButton(
+                  //           onPressed: starting || game == null ? null : _startgame,
+                  //           child: Text(action),
+                  //         ),
+                  //         if (action == 'Resume') const SizedBox(height: 32),
+                  //         if (action == 'Resume')
+                  //           OutlinedButton(
+                  //             onPressed: terminating
+                  //                 ? null
+                  //                 : () => _terminateSession(
+                  //                     gameService.gameStatus.sessionId!),
+                  //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
+                  //           ),
+                  //       ],
+                  //     );
+                  //   },
+                  // )
+                ],
+              ),
+      ),
     );
   }
 
@@ -493,18 +497,21 @@ class _GameState extends State<Game> {
   void _showError({required String title, required String message}) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          FocusZoom(builder: (focus) {
-            return TextButton(
-              focusNode: focus,
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Ok'),
-            );
-          }),
-        ],
+      builder: (context) => GamepadPop(
+        context: context,
+        child: AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            FocusZoom(builder: (focus) {
+              return TextButton(
+                focusNode: focus,
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Ok'),
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
@@ -592,6 +599,7 @@ class _GameState extends State<Game> {
         actions: [
           FocusZoom(builder: (focus) {
             return TextButton(
+              autofocus: true,
               focusNode: focus,
               onPressed: () async {
                 Navigator.of(context).pop();
