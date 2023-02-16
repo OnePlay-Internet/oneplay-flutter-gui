@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 
 import '../../../common/common.dart';
 import '../../../models/device_history_model.dart';
@@ -192,10 +193,13 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
             Navigator.pop(_);
           });
 
-          return alertError(
-            context: context,
-            title: 'Logout Error',
-            description: e.error["message"],
+          return GamepadPop(
+            context: _,
+            child: alertError(
+              context: context,
+              title: 'Logout Error',
+              description: e.error["message"],
+            ),
           );
         },
         barrierDismissible: false,
@@ -235,10 +239,13 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
             Navigator.pop(_);
           });
 
-          return alertError(
-            context: context,
-            title: 'Logout Error',
-            description: e.error["message"],
+          return GamepadPop(
+            context: _,
+            child: alertError(
+              context: context,
+              title: 'Logout Error',
+              description: e.error["message"],
+            ),
           );
         },
         barrierDismissible: false,
