@@ -21,13 +21,13 @@ Widget gameSettingPopup(
       contentPadding: EdgeInsets.zero,
       insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.8,
+        height: MediaQuery.of(context).size.height * 0.65,
         width: MediaQuery.of(context).size.width,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,7 +61,7 @@ Widget gameSettingPopup(
             commonDividerWidget(),
             Container(
                 margin:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 height: 38,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -71,7 +71,7 @@ Widget gameSettingPopup(
                     child: Text('You need to own this game in steam.',
                         style: tinyStyle.copyWith(fontSize: 15)))),
             Container(
-              margin: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
+              margin: const EdgeInsets.only(top: 10, left: 20),
               alignment: Alignment.topLeft,
               child: Text(
                 'Resolution',
@@ -89,9 +89,8 @@ Widget gameSettingPopup(
               child: dropdownMenu(
                   PlayConstants.MOBILE_RESOLUTIONS, gameSetting.resolution),
             ),
-            const SizedBox(height: 30),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -108,8 +107,7 @@ Widget gameSettingPopup(
                         children: [
                           Text(
                             'Vsync',
-                            style:
-                                tinyStyle.copyWith(color: textPrimaryColor),
+                            style: tinyStyle.copyWith(color: textPrimaryColor),
                           ),
                           StatefulBuilder(
                             builder: (_, setState) => SizedBox(
@@ -139,15 +137,13 @@ Widget gameSettingPopup(
                       height: 52,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border:
-                              Border.all(color: basicLineColor, width: 2)),
+                          border: Border.all(color: basicLineColor, width: 2)),
                       child: dropdownMenu(PlayConstants.FPS, gameSetting.fps),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 30),
             FocusZoom(builder: (focus) {
               return InkWell(
                 focusNode: focus,
@@ -166,8 +162,7 @@ Widget gameSettingPopup(
                         const SizedBox(width: 14),
                         Text(
                           'Advanced game options',
-                          style:
-                              tinyStyle.copyWith(color: textSecondaryColor),
+                          style: tinyStyle.copyWith(color: textSecondaryColor),
                         )
                       ]),
                 ),
@@ -326,30 +321,27 @@ List<Widget> addElementIntoListWidget(
         width: 30,
       ));
     }
-    widgets.add(Flexible(
-      fit: FlexFit.loose,
-      child: InkWell(
-        onTap: () => onTap(element),
-        child: Container(
-          height: 52,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                  width: 2,
-                  color: data.indexOf(element) == value
-                      ? purpleColor1
-                      : basicLineColor)),
-          child: Center(
-            child: GradientText(
-              element,
-              style: tinyStyle,
-              gradientType: GradientType.linear,
-              gradientDirection: GradientDirection.ltr,
-              colors: data.indexOf(element) == value
-                  ? const [purpleColor2, purpleColor1]
-                  : [textPrimaryColor, textPrimaryColor],
-            ),
+    widgets.add(InkWell(
+      onTap: () => onTap(element),
+      child: Container(
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                width: 2,
+                color: data.indexOf(element) == value
+                    ? purpleColor1
+                    : basicLineColor)),
+        child: Center(
+          child: GradientText(
+            element,
+            style: tinyStyle,
+            gradientType: GradientType.linear,
+            gradientDirection: GradientDirection.ltr,
+            colors: data.indexOf(element) == value
+                ? const [purpleColor2, purpleColor1]
+                : [textPrimaryColor, textPrimaryColor],
           ),
         ),
       ),
@@ -406,11 +398,7 @@ FocusZoom btnLaunchGame(BuildContext context, Function() launchGame) {
         launchGame();
       },
       child: Container(
-        margin: const EdgeInsets.only(
-          left: 20,
-          right: 20,
-          top: 30,
-        ),
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
         width: MediaQuery.of(context).size.width,
         height: 48,
         decoration: BoxDecoration(
