@@ -321,30 +321,27 @@ List<Widget> addElementIntoListWidget(
         width: 30,
       ));
     }
-    widgets.add(Flexible(
-      fit: FlexFit.loose,
-      child: InkWell(
-        onTap: () => onTap(element),
-        child: Container(
-          height: 52,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                  width: 2,
-                  color: data.indexOf(element) == value
-                      ? purpleColor1
-                      : basicLineColor)),
-          child: Center(
-            child: GradientText(
-              element,
-              style: tinyStyle,
-              gradientType: GradientType.linear,
-              gradientDirection: GradientDirection.ltr,
-              colors: data.indexOf(element) == value
-                  ? const [purpleColor2, purpleColor1]
-                  : [textPrimaryColor, textPrimaryColor],
-            ),
+    widgets.add(InkWell(
+      onTap: () => onTap(element),
+      child: Container(
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                width: 2,
+                color: data.indexOf(element) == value
+                    ? purpleColor1
+                    : basicLineColor)),
+        child: Center(
+          child: GradientText(
+            element,
+            style: tinyStyle,
+            gradientType: GradientType.linear,
+            gradientDirection: GradientDirection.ltr,
+            colors: data.indexOf(element) == value
+                ? const [purpleColor2, purpleColor1]
+                : [textPrimaryColor, textPrimaryColor],
           ),
         ),
       ),
