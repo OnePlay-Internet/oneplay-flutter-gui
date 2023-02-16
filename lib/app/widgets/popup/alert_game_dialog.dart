@@ -153,14 +153,18 @@ class _AlertGamePopUpState extends State<AlertGamePopUp> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Checkbox(
-                    activeColor: textSecondaryColor,
-                    value: isChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      unselectedWidgetColor: textSecondaryColor,
+                    ),
+                    child: Checkbox(
+                      value: isChecked,
+                      activeColor: textSecondaryColor,
+                      checkColor: Colors.black,
+                      onChanged: (value) => setState(() {
                         isChecked = value!;
-                      });
-                    },
+                      }),
+                    ),
                   ),
                   SizedBox(
                     width: size.width * 0.01,

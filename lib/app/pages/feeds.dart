@@ -9,8 +9,10 @@ import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/list_game_w_label/list_game_w_label.dart';
+import '../widgets/popup/alert_game_dialog.dart';
 import '../widgets/popup/popup_success.dart';
 
 class Feeds extends StatefulWidget {
@@ -47,9 +49,29 @@ class _FeedsState extends State<Feeds> {
 
   @override
   void initState() {
+    _termPopup();
     _getHomeFeed();
     _getLibrary();
     super.initState();
+  }
+
+  _termPopup() async {
+    if ((await SharedPreferences.getInstance()).getBool('agreeTerm') != true) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertGamePopUp(
+            onTap: () async {
+              (await SharedPreferences.getInstance())
+                  .setBool('agreeTerm', true);
+              Navigator.pop(_);
+              Modular.to.navigate('/feeds');
+            },
+          );
+        },
+      );
+    }
   }
 
   logout() async {
