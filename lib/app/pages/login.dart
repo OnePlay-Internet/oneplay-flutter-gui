@@ -8,6 +8,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
 import 'package:oneplay_flutter_gui/app/widgets/footer/authFooter.dart';
 import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
 
 import '../widgets/popup/alert_game_dialog.dart';
@@ -61,7 +62,9 @@ class _LoginState extends State<Login> {
         barrierDismissible: false,
         builder: (_) {
           return AlertGamePopUp(
-            onTap: () {
+            onTap: () async {
+              (await SharedPreferences.getInstance())
+                  .setBool('agreeTerm', true);
               Navigator.pop(_);
 
               Modular.to.navigate('/feeds');
