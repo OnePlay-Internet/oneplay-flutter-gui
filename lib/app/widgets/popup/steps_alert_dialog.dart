@@ -4,19 +4,19 @@ import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import '../../common/common.dart';
 import '../Submit_Button/submit_button.dart';
 
-class AlertGamePopUp extends StatefulWidget {
+class AlertStepsPopUp extends StatefulWidget {
   final Function()? onTap;
 
-  const AlertGamePopUp({
+  const AlertStepsPopUp({
     super.key,
     this.onTap,
   });
 
   @override
-  State<AlertGamePopUp> createState() => _AlertGamePopUpState();
+  State<AlertStepsPopUp> createState() => _AlertStepsPopUpState();
 }
 
-class _AlertGamePopUpState extends State<AlertGamePopUp> {
+class _AlertStepsPopUpState extends State<AlertStepsPopUp> {
   bool isChecked = false;
 
   @override

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +13,8 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
-
 import '../widgets/list_game_w_label/list_game_w_label.dart';
-import '../widgets/popup/alert_game_dialog.dart';
-import '../widgets/popup/popup_success.dart';
+import '../widgets/popup/game_alert_dialog.dart';
 
 class Feeds extends StatefulWidget {
   const Feeds({super.key});
@@ -30,8 +30,9 @@ class _FeedsState extends State<Feeds> {
 
   late GameFeedModel firstRow;
   late List<GameFeedModel> restRow;
-  bool starting = false;
   List<ShortGameModel> library = [];
+  bool starting = false;
+  bool isDiolog = false;
 
   _getHomeFeed() async {
     setState(() => starting = true);
@@ -45,14 +46,33 @@ class _FeedsState extends State<Feeds> {
   _getLibrary() {
     restService.getWishlistGames(authService.wishlist).then((value) {
       if (mounted) setState(() => library = value);
+
+      _showGameDialog();
     });
+  }
+
+  _showGameDialog() {
+    if (library.isEmpty) {
+      if (isDiolog == true) {
+      } else {
+        isDiolog = true;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return const GameAlertDialog();
+          },
+        );
+      }
+    }
   }
 
   @override
   void initState() {
     _termPopup();
     _getHomeFeed();
-    _getLibrary();
+    // _getLibrary();
+
     super.initState();
   }
 
@@ -62,14 +82,7 @@ class _FeedsState extends State<Feeds> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return AlertGamePopUp(
-            onTap: () async {
-              (await SharedPreferences.getInstance())
-                  .setBool('agreeTerm', true);
-              Navigator.pop(_);
-              Modular.to.navigate('/feeds');
-            },
-          );
+          return const GameAlertDialog();
         },
       );
     }

@@ -14,6 +14,7 @@ StatefulBuilder settingsTextField({
   String errorMessage = '',
   String? hintText,
   bool expands = false,
+  bool enabled = true,
   int? maxLines = 1,
   TextInputType textInputType = TextInputType.text,
 }) {
@@ -49,7 +50,6 @@ StatefulBuilder settingsTextField({
               errorMessage != ''
                   ? GradientTextButton(
                       title: errorMessage,
-                      onTap: () {},
                     )
                   : const SizedBox.shrink(),
             ],
@@ -68,6 +68,7 @@ StatefulBuilder settingsTextField({
             ),
             child: TextFormField(
               focusNode: FocusNode(),
+              enabled: enabled,
               expands: expands,
               maxLines: maxLines,
               controller: controller,
@@ -104,6 +105,17 @@ StatefulBuilder settingsTextField({
                           );
                         },
                       )
+                    // : textInputType == TextInputType.emailAddress ||
+                    //         textInputType == TextInputType.emailAddress
+                    //     ? Container(
+                    //         height: 2,
+                    //         width: 2,
+                    //         alignment: Alignment.centerRight,
+                    //         child: Image.asset(
+                    //           checkPng,
+                    //           color: textPrimaryColor,
+                    //         ),
+                    //       )
                     : null,
                 hintStyle: const TextStyle(
                   fontFamily: mainFontFamily,
