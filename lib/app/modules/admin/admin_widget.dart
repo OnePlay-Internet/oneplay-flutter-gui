@@ -49,9 +49,9 @@ class _AdminWidgetState extends State<AdminWidget> {
           // openDrawer: () {
           //   _scaffoldKey.currentState?.openDrawer();
           // },
-          // onTap: () {
-          //   print('***** User *****');
-          // },
+          onTap: () {
+            Modular.to.pushNamedAndRemoveUntil('/search', (r) => false);
+          },
         ),
       ),
       body: const RouterOutlet(),
