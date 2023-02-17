@@ -144,7 +144,7 @@ class _GameState extends State<Game> {
 
   Container checkShowSettingWidget() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.only(top: 15, bottom: 15, right: 12),
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -173,9 +173,9 @@ class _GameState extends State<Game> {
 
   Widget statusActionBtn() {
     return Container(
-      height: 270,
+      height: 268,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0 ),
       child: Observer(builder: (_) {
         String action = _getAction(gameService.gameStatus);
         return Stack(fit: StackFit.expand, children: [
