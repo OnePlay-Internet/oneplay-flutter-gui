@@ -28,7 +28,8 @@ class _BottomNavState extends State<BottomNav> {
   @override
   void initState() {
     _initGames();
-    timer = Timer.periodic(const Duration(seconds: 5), (timer) => _initGames());
+    timer =
+        Timer.periodic(const Duration(seconds: 10), (timer) => _initGames());
     super.initState();
   }
 
@@ -132,6 +133,8 @@ class _BottomNavState extends State<BottomNav> {
         gameService;
         if (gameService.gameStatus.isRunning == true) {
           Modular.to.pushNamed('/game/${gameService.gameStatus.gameId}');
+        } else if (gameService.gameStatus.sessionId != null) {
+          //
         }
         break;
       case 4:

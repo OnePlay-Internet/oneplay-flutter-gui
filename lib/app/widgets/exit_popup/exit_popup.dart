@@ -1,21 +1,19 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import '../../common/common.dart';
 
 Future<bool> showExitBottomSheet(context) async {
   return await showModalBottomSheet(
-    backgroundColor: basicLineColor,
+    backgroundColor: mainColor,
     context: context,
     builder: (context) {
       return ConfirmationBottomsheetCard(
         title: "Do you want to exit?",
         pressNo: () {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(false);
         },
         pressYes: () {
-          exit(0);
+          Navigator.of(context).pop(true);
         },
       );
     },
@@ -51,7 +49,7 @@ class ConfirmationBottomsheetCard extends StatelessWidget {
                   fontFamily: mainFontFamily,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.02,
-                  color: textSecondaryColor,
+                  color: textPrimaryColor,
                   fontSize: 14,
                 ),
               )),

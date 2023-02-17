@@ -11,10 +11,13 @@ import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/shared_pref_service.dart';
 import '../widgets/list_game_w_label/list_game_w_label.dart';
 import '../widgets/popup/game_alert_dialog.dart';
+import '../widgets/popup/steps_alert_dialog.dart';
+import '../widgets/popup/steps_alert_dialog_2.dart';
 
 class Feeds extends StatefulWidget {
   const Feeds({super.key});
@@ -69,22 +72,29 @@ class _FeedsState extends State<Feeds> {
 
   @override
   void initState() {
-    _termPopup();
     _getHomeFeed();
-    // _getLibrary();
-
+    getIsAgree = SharedPrefService.getIsAgree();
+    Future.delayed(Duration.zero, () => _popAgreeDialog());
     super.initState();
   }
 
-  _termPopup() async {
-    if ((await SharedPreferences.getInstance()).getBool('agreeTerm') != true) {
+  bool? getIsAgree;
+  _popAgreeDialog() {
+    print("***** isAgree: $getIsAgree *****");
+
+    if (getIsAgree == false) {
       showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return const GameAlertDialog();
-        },
-      );
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return AlertStepsPopUp(
+              onTap: () {
+                SharedPrefService.storeIsAgree(true);
+
+                Navigator.pop(_);
+              },
+            );
+          });
     }
   }
 

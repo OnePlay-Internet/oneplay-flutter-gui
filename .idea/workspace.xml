@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="settings done">
+    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="library,header-footer">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/feeds.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/feeds.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/exit_popup/exit_popup.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/exit_popup/exit_popup.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/popup_success.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/popup_success.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/steps_alert_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/steps_alert_dialog.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +87,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676382217662</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="library,header-footer">
+      <created>1676557545128</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1676557545128</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -94,6 +109,17 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/dev2" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
               <option name="COLUMN_ID_WIDTH">
                 <map>
                   <entry key="Table.Default.Author.ColumnIdWidth" value="76" />
@@ -109,6 +135,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="signup done" />
     <MESSAGE value="settings done" />
-    <option name="LAST_COMMIT_MESSAGE" value="settings done" />
+    <MESSAGE value="library,header-footer" />
+    <option name="LAST_COMMIT_MESSAGE" value="library,header-footer" />
   </component>
 </project>

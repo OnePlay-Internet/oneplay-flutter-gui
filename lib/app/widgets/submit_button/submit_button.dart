@@ -8,10 +8,12 @@ class SubmitButton extends StatelessWidget {
   final double? width;
   final String buttonTitle;
   final String loadingTitle;
+
   final bool isLoading;
   final double borderRadius;
   final double fontSize;
   final List<Color>? colors;
+  final Color? color;
   final Function()? onTap;
 
   const SubmitButton({
@@ -24,6 +26,7 @@ class SubmitButton extends StatelessWidget {
     this.borderRadius = 8.0,
     this.fontSize = 16.0,
     this.colors,
+    this.color,
     this.onTap,
   });
 
@@ -43,13 +46,16 @@ class SubmitButton extends StatelessWidget {
             height: buttonHeight,
             width: buttonWidth,
             decoration: BoxDecoration(
-              color: textSecondaryColor,
+              color: color,
               borderRadius: BorderRadius.circular(borderRadius),
-              gradient: LinearGradient(
-                end: Alignment.bottomRight,
-                begin: Alignment.topLeft,
-                colors: colors != null ? colors! : [pinkColor1, blueColor1],
-              ),
+              gradient: color != null
+                  ? null
+                  : LinearGradient(
+                      end: Alignment.bottomRight,
+                      begin: Alignment.topLeft,
+                      colors:
+                          colors != null ? colors! : [pinkColor1, blueColor1],
+                    ),
             ),
             child: Center(
               child: isLoading
@@ -92,7 +98,7 @@ class SubmitButton extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }
