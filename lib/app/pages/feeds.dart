@@ -150,8 +150,8 @@ class _FeedsState extends State<Feeds> {
   CarouselSlider bannerWidget(GameFeedModel data) {
     return CarouselSlider(
       options: CarouselOptions(
-        viewportFraction: 0.75,
-      ),
+          viewportFraction: 0.75,
+          height: MediaQuery.of(context).size.height * 1 / 4.2),
       items: data.games.map((item) {
         return item.textBgImage!.isNotEmpty
             ? FocusZoom(builder: (focusNode) {
@@ -170,7 +170,7 @@ class _FeedsState extends State<Feeds> {
                           imageUrl: item.textBgImage.toString(),
                           height: 200,
                           width: 300,
-                          fit: BoxFit.fitHeight,
+                          fit: BoxFit.fitWidth,
                         )),
                   ),
                 );
