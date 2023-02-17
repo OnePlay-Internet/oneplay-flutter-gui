@@ -16,6 +16,15 @@ class SharedPrefService {
     await _pref?.setString('sessionToken', token);
   }
 
+  static bool? getIsAgree() {
+    _ensureInitialized();
+    return _pref?.getBool('isAgree');
+  }
+
+  static Future storeIsAgree(bool isAgree) async {
+    await _pref?.setBool('isAgree', isAgree);
+  }
+
   static Future removeSessionToken() async {
     await _pref?.remove('sessionToken');
   }

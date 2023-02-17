@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 
-import '../Submit_Button/submit_button.dart';
-
 AlertDialog alertSuccess({
   required BuildContext context,
   required String title,
   required String description,
 }) {
+  Size size = MediaQuery.of(context).size;
+
   return AlertDialog(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
@@ -16,7 +16,8 @@ AlertDialog alertSuccess({
     ),
     backgroundColor: mainColor,
     content: SizedBox(
-      width: MediaQuery.of(context).size.width,
+      height: size.height * 0.55,
+      width: size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,6 +32,8 @@ AlertDialog alertSuccess({
             ),
             child: Text(
               title,
+              maxLines: 2,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: mainFontFamily,
                 fontWeight: FontWeight.w800,
@@ -38,25 +41,18 @@ AlertDialog alertSuccess({
                 letterSpacing: 0.02,
                 color: Colors.white,
               ),
-              maxLines: 2,
-              textAlign: TextAlign.center,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 40,
-            ),
-            child: Text(
-              description,
-              style: const TextStyle(
-                fontFamily: mainFontFamily,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                letterSpacing: 0.02,
-                color: textSecondaryColor,
-              ),
-              maxLines: 2,
-              textAlign: TextAlign.center,
+          Text(
+            description,
+            maxLines: 4,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: mainFontFamily,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              letterSpacing: 0.02,
+              color: textSecondaryColor,
             ),
           )
         ],
@@ -70,6 +66,8 @@ AlertDialog alertError({
   required String title,
   required String description,
 }) {
+  Size size = MediaQuery.of(context).size;
+
   return AlertDialog(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
@@ -78,7 +76,8 @@ AlertDialog alertError({
     ),
     backgroundColor: mainColor,
     content: SizedBox(
-      width: MediaQuery.of(context).size.width,
+      height: size.height * 0.55,
+      width: size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,6 +92,8 @@ AlertDialog alertError({
             ),
             child: Text(
               title,
+              maxLines: 2,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: mainFontFamily,
                 fontWeight: FontWeight.w800,
@@ -100,8 +101,6 @@ AlertDialog alertError({
                 letterSpacing: 0.02,
                 color: Colors.white,
               ),
-              maxLines: 2,
-              textAlign: TextAlign.center,
             ),
           ),
           Padding(
@@ -110,6 +109,8 @@ AlertDialog alertError({
             ),
             child: Text(
               description,
+              maxLines: 4,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: mainFontFamily,
                 fontWeight: FontWeight.w500,
@@ -117,8 +118,6 @@ AlertDialog alertError({
                 letterSpacing: 0.02,
                 color: textSecondaryColor,
               ),
-              maxLines: 2,
-              textAlign: TextAlign.center,
             ),
           ),
         ],

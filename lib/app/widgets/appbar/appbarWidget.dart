@@ -3,11 +3,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/color.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/pngPath.dart';
-
-import '../../common/theme/svgPath.dart';
 
 class AppBarWidget {
   Widget logoWidget(BuildContext context) {
@@ -26,12 +23,10 @@ class AppBarWidget {
   }
 
   Widget menu(
-    BuildContext context,
-    //   {
+    BuildContext context, {
     //   Function()? openDrawer,
-    //   Function()? onTap,
-    // }
-  ) {
+    Function()? onTap,
+  }) {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(
@@ -62,9 +57,7 @@ class AppBarWidget {
           //   ),
           // ),
           InkWell(
-            onTap: () {
-              Modular.to.pushNamedAndRemoveUntil('/search', (r) => false);
-            },
+            onTap: onTap,
             child: Container(
               padding: const EdgeInsets.all(8.0),
               margin: const EdgeInsets.only(left: 10.0),

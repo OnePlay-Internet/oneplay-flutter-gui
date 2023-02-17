@@ -10,11 +10,14 @@ import 'package:oneplay_flutter_gui/app/widgets/footer/authFooter.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:validators/validators.dart';
 
+import '../services/shared_pref_service.dart';
 import '../widgets/popup/steps_alert_dialog.dart';
 import '../widgets/popup/popup_success.dart';
 import '../widgets/Submit_Button/submit_button.dart';
+import '../widgets/popup/steps_alert_dialog_2.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -64,6 +67,8 @@ class _LoginState extends State<Login> {
         builder: (_) {
           return AlertStepsPopUp(
             onTap: () {
+              SharedPrefService.storeIsAgree(true);
+
               Navigator.pop(_);
 
               Modular.to.navigate('/feeds');
@@ -91,6 +96,12 @@ class _LoginState extends State<Login> {
         barrierDismissible: false,
       );
     }
+  }
+
+  @override
+  void initState() {
+    SharedPrefService.storeIsAgree(false);
+    super.initState();
   }
 
   @override
