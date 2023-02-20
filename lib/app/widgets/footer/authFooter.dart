@@ -198,19 +198,22 @@ bySigningUpFooter() {
             ),
             Row(
               children: [
-                GradientText(
-                  'Cookie Policy',
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    decorationThickness: 1,
-                    decoration: TextDecoration.underline,
+                GestureDetector(
+                  onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
+                  child: GradientText(
+                    'Cookie Policy',
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      decorationThickness: 1,
+                      decoration: TextDecoration.underline,
+                    ),
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: const [purpleColor2, purpleColor1],
                   ),
-                  gradientType: GradientType.linear,
-                  gradientDirection: GradientDirection.ltr,
-                  colors: const [purpleColor2, purpleColor1],
                 ),
                 const Text(
                   ' & ',
@@ -222,19 +225,23 @@ bySigningUpFooter() {
                     color: textSecondaryColor,
                   ),
                 ),
-                GradientText(
-                  'Privacy Policy',
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    decorationThickness: 1,
-                    decoration: TextDecoration.underline,
+                GestureDetector(
+                  onTap: () =>
+                      _launchURL('https://www.oneplay.in/privacy.html'),
+                  child: GradientText(
+                    'Privacy Policy',
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      decorationThickness: 1,
+                      decoration: TextDecoration.underline,
+                    ),
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: const [purpleColor2, purpleColor1],
                   ),
-                  gradientType: GradientType.linear,
-                  gradientDirection: GradientDirection.ltr,
-                  colors: const [purpleColor2, purpleColor1],
                 ),
                 const Text(
                   ' &',
@@ -248,19 +255,22 @@ bySigningUpFooter() {
                 ),
               ],
             ),
-            GradientText(
-              'Terms and Conditions',
-              style: const TextStyle(
-                fontFamily: mainFontFamily,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.02,
-                decorationThickness: 1,
-                decoration: TextDecoration.underline,
+            GestureDetector(
+              onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
+              child: GradientText(
+                'Terms and Conditions',
+                style: const TextStyle(
+                  fontFamily: mainFontFamily,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.02,
+                  decorationThickness: 1,
+                  decoration: TextDecoration.underline,
+                ),
+                gradientType: GradientType.linear,
+                gradientDirection: GradientDirection.ltr,
+                colors: const [purpleColor2, purpleColor1],
               ),
-              gradientType: GradientType.linear,
-              gradientDirection: GradientDirection.ltr,
-              colors: const [purpleColor2, purpleColor1],
             ),
           ],
         ),
