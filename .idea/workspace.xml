@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="new steps dialog">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/modules/admin/admin_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/modules/admin/admin_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +42,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../AICS_App_Master/AICS_Flutter_New-master" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -93,7 +97,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676633266240</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="new steps dialog">
+      <created>1676634746759</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1676634746759</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">

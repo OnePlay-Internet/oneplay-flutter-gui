@@ -289,14 +289,14 @@ class _SignUpState extends State<SignUp> {
                         var phone = phoneController.text;
                         var password = passController.text;
                         var refferedId = refferedController.text;
-    
+
                         if (firstName.isEmpty) {
                           setState(() => errorName = "Enter your name");
                           return;
                         } else {
                           setState(() => errorName = "");
                         }
-    
+
                         if (email.isEmpty) {
                           setState(() => errorEmail = "Enter your email");
                           return;
@@ -306,7 +306,7 @@ class _SignUpState extends State<SignUp> {
                         } else {
                           setState(() => errorEmail = "");
                         }
-    
+
                         if (phone.isEmpty) {
                           setState(() => errorPhone = "Enter your phone no.");
                           return;
@@ -316,17 +316,18 @@ class _SignUpState extends State<SignUp> {
                         } else {
                           setState(() => errorPhone = "");
                         }
-    
+
                         if (password.isEmpty) {
                           setState(() => errorPassword = "Enter your password");
                           return;
                         } else if (password.length < 8) {
-                          setState(() => errorPassword = "at least 8 characters");
+                          setState(
+                              () => errorPassword = "at least 8 characters");
                           return;
                         } else {
                           setState(() => errorPassword = "");
                         }
-    
+
                         signUp(
                           email: email,
                           firstName: firstName,

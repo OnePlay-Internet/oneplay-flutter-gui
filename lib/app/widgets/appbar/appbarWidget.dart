@@ -2,7 +2,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/color.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/pngPath.dart';
 
@@ -25,7 +24,8 @@ class AppBarWidget {
   Widget menu(
     BuildContext context, {
     //   Function()? openDrawer,
-    Function()? onTap,
+    Function()? searchTap,
+    Function()? profileTap,
   }) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -57,7 +57,7 @@ class AppBarWidget {
           //   ),
           // ),
           InkWell(
-            onTap: onTap,
+            onTap: searchTap,
             child: Container(
               padding: const EdgeInsets.all(8.0),
               margin: const EdgeInsets.only(left: 10.0),
@@ -79,9 +79,7 @@ class AppBarWidget {
             ],
           ),
           InkWell(
-            onTap: () {
-              Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);
-            },
+            onTap: profileTap,
             child: Container(
               height: 48,
               width: 48,

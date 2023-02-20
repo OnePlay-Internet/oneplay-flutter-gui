@@ -13,6 +13,8 @@ const blueColor1 = Color(0xFF0575E6);
 const blueColor2 = Color(0xFF3AA0FE);
 const blueColor3 = Color(0xFF59FEF4);
 
+const redColor = Color(0xffE31C34);
+
 const pinkColor1 = Color(0xFFFF0CF5);
 const pinkColor2 = Color(0xFFD71F7B);
 
@@ -21,3 +23,4 @@ const purpleColor2 = Color(0xFF6E59FE);
 const purpleColor3 = Color(0xFF8A54D0);
 
 const whiteColor1 = Color(0xFFE1E1E1);
+const whiteColor2 = Color(0xFFFFFFFF);

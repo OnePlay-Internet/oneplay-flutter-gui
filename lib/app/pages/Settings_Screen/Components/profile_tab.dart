@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:validators/validators.dart';
 
 import '../../../common/common.dart';
 import '../../../models/user_model.dart';
@@ -28,10 +29,12 @@ class _ProfileTabState extends State<ProfileTab> {
 
   String photo = '';
   String userName = '';
-  String fullName = '';
+  String firstName = '';
+  String lastName = '';
   String bio = '';
   String errorUserName = '';
-  String errorFullName = '';
+  String errorFirstName = '';
+  String errorLastName = '';
   String errorBio = '';
 
   File? imageFile;
@@ -144,12 +147,25 @@ class _ProfileTabState extends State<ProfileTab> {
                       ),
                       settingsTextField(
                         context: context,
-                        textFieldTitle: 'Full Name',
-                        hintText: 'Full Name',
-                        errorMessage: errorFullName,
-                        controller: TextEditingController(text: fullName),
+                        textFieldTitle: 'First Name',
+                        hintText: 'First Name',
+                        errorMessage: errorFirstName,
+                        controller: TextEditingController(text: firstName),
                         onChanged: (value) {
-                          fullName = value;
+                          firstName = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      settingsTextField(
+                        context: context,
+                        textFieldTitle: 'Last Name',
+                        hintText: 'Last Name',
+                        errorMessage: errorLastName,
+                        controller: TextEditingController(text: lastName),
+                        onChanged: (value) {
+                          lastName = value;
                         },
                       ),
                       SizedBox(
@@ -187,12 +203,36 @@ class _ProfileTabState extends State<ProfileTab> {
                             setState(() => errorUserName = "");
                           }
 
-                          if (fullName.isEmpty) {
+                          if (!isAlpha(firstName)) {
+                            setState(() => errorFirstName =
+                                "Please enter valid firstname");
+                            return;
+                          } else if (firstName.isEmpty) {
                             setState(
-                                () => errorFullName = "Enter your fullname");
+                                () => errorFirstName = "Enter your firstname");
+                            return;
+                          } else if (firstName.length > 15) {
+                            setState(() => errorFirstName =
+                                "Enter firstname under 15 characters");
                             return;
                           } else {
-                            setState(() => errorFullName = "");
+                            setState(() => errorFirstName = "");
+                          }
+
+                          if (!isAlpha(lastName)) {
+                            setState(() =>
+                                errorLastName = "Please enter valid lastname");
+                            return;
+                          } else if (lastName.isEmpty) {
+                            setState(
+                                () => errorLastName = "Enter your lastname");
+                            return;
+                          } else if (lastName.length > 15) {
+                            setState(() => errorLastName =
+                                "Enter lastname under 15 characters");
+                            return;
+                          } else {
+                            setState(() => errorLastName = "");
                           }
 
                           if (bio.isEmpty) {
@@ -248,7 +288,8 @@ class _ProfileTabState extends State<ProfileTab> {
         photo = userModel!.photo.toString();
         userName =
             userModel!.username != null ? userModel!.username.toString() : '';
-        fullName = '${userModel!.firstName} ${userModel!.lastName}';
+        firstName = userModel!.firstName.toString();
+        lastName = userModel!.lastName.toString();
         bio = userModel!.bio != null ? userModel!.bio.toString() : '';
       });
     } finally {
@@ -274,7 +315,8 @@ class _ProfileTabState extends State<ProfileTab> {
       await _restService.updateProfile(
         // profileImage: imageFile,
         userName: userName,
-        firstName: fullName,
+        firstName: firstName,
+        lastName: lastName,
         bio: bio,
       );
       showDialog(
