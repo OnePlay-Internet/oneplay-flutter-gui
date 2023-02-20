@@ -20,7 +20,7 @@ StatefulBuilder settingsTextField({
 }) {
   Size size = MediaQuery.of(context).size;
 
-  double containerHeight = height ?? size.height * 0.055;
+  double containerHeight = height ?? size.height * 0.06;
 
   bool isHideText = textInputType == TextInputType.visiblePassword;
 
@@ -61,7 +61,7 @@ StatefulBuilder settingsTextField({
               horizontal: size.width * 0.04,
             ),
             decoration: const BoxDecoration(
-              color: blackColor2,
+              color: blackColor4,
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
@@ -105,18 +105,17 @@ StatefulBuilder settingsTextField({
                           );
                         },
                       )
-                    // : textInputType == TextInputType.emailAddress ||
-                    //         textInputType == TextInputType.emailAddress
-                    //     ? Container(
-                    //         height: 2,
-                    //         width: 2,
-                    //         alignment: Alignment.centerRight,
-                    //         child: Image.asset(
-                    //           checkPng,
-                    //           color: textPrimaryColor,
-                    //         ),
-                    //       )
-                    : null,
+                    : textInputType == TextInputType.emailAddress ||
+                            textInputType == TextInputType.emailAddress
+                        ? Container(
+                            height: 2,
+                            width: 2,
+                            alignment: Alignment.centerRight,
+                            child: Image.asset(
+                              checkedPng,
+                            ),
+                          )
+                        : null,
                 hintStyle: const TextStyle(
                   fontFamily: mainFontFamily,
                   fontSize: 14,

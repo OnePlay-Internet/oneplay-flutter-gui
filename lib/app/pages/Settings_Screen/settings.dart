@@ -3,6 +3,7 @@ import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 
 import '../../common/common.dart';
 import 'Components/device_history_tab.dart';
+import 'Components/general_tab.dart';
 import 'Components/login_and_security_tab.dart';
 import 'Components/profile_tab.dart';
 import 'Components/subscription_tab.dart';
@@ -14,6 +15,9 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final List<Widget> tabs = <Widget>[
+      const Tab(
+        text: 'General',
+      ),
       const Tab(
         text: 'Profile',
       ),
@@ -95,6 +99,7 @@ class Settings extends StatelessWidget {
                             child: TabBarView(
                               physics: BouncingScrollPhysics(),
                               children: [
+                                GeneralTab(),
                                 ProfileTab(),
                                 LoginAndSecurityTab(),
                                 SubscriptionTab(),

@@ -179,7 +179,7 @@ class _GameState extends State<Game> {
     return Container(
       height: 268,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0 ),
+      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Observer(builder: (_) {
         String action = _getAction(gameService.gameStatus);
         return Stack(fit: StackFit.expand, children: [
