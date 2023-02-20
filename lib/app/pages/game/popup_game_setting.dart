@@ -177,9 +177,9 @@ Widget gameSettingPopup(
 
 advancedSettingPopup(
     BuildContext context, GameSetting gameSetting, Function() launchGame) {
-  bool showStats = true;
-  bool fullScreenMode = true;
-  bool onScreenControls = false;
+  bool showStats = gameSetting.show_stats ?? true;
+  bool fullScreenMode = gameSetting.fullscreen ?? true;
+  bool onScreenControls = gameSetting.onscreen_controls ?? false;
 
   List<String> audioType = ['Stereo', '5.1'];
   List<String> streamCodec = ['Auto', 'HEVC', 'H.265'];
@@ -247,23 +247,33 @@ advancedSettingPopup(
                           content: 'Show Stats',
                           setState: setState,
                           value: showStats,
-                          onChanged: (value) =>
-                              {setState(() => gameSetting.show_stats = value)}),
+                          onChanged: (value) => {
+                                setState(() {
+                                  gameSetting.show_stats = value;
+                                  showStats = value;
+                                })
+                              }),
                       switchGameSetting(
                           context: context,
                           content: 'Fullscreen Mode',
                           setState: setState,
                           value: fullScreenMode,
-                          onChanged: (value) =>
-                              {setState(() => gameSetting.fullscreen = value)}),
+                          onChanged: (value) => {
+                                setState(() {
+                                  gameSetting.fullscreen = value;
+                                  fullScreenMode = value;
+                                })
+                              }),
                       switchGameSetting(
                           context: context,
                           content: 'Onscreen Controls',
                           setState: setState,
                           value: onScreenControls,
                           onChanged: (value) => {
-                                setState(
-                                    () => gameSetting.onscreen_controls = value)
+                                setState(() {
+                                  gameSetting.onscreen_controls = value;
+                                  onScreenControls = value;
+                                })
                               }),
                       selectionGameSetting(context, 'Audio Type', audioType,
                           (e) {
