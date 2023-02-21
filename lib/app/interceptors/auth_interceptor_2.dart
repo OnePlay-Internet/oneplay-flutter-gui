@@ -25,7 +25,7 @@ class AuthInterceptor2 extends Interceptor {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    String? message = err.response?.data?['msg'];
+    String? message = err.response?.data?['message'];
     if (message != null || message != '') {
       err.error = {'message': message};
     } else {

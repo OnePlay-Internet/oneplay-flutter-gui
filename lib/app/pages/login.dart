@@ -1,3 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
@@ -34,6 +38,8 @@ class _LoginState extends State<Login> {
 
   String errorEmail = "";
   String errorPwd = "";
+  String? userId;
+  List<String> userIdList = [];
 
   login(String id, String password) async {
     final RestService restService = Modular.get<RestService>();
@@ -44,37 +50,47 @@ class _LoginState extends State<Login> {
     try {
       String token = await restService.login(id: id, password: password);
       await authService.login(token);
-      showDialog(
-        context: context,
-        builder: (_) => alertSuccess(
+
+      if (userId != null) {
+        showDialog(
           context: context,
-          title: 'Login Success',
-          description: 'You will be redirect to Feed Page',
-        ),
-        barrierDismissible: false,
-      );
+          builder: (_) => alertSuccess(
+            context: context,
+            title: 'Login Success',
+            description: 'You will be redirect to Feed Page',
+          ),
+          barrierDismissible: false,
+        );
 
-      // Future.delayed(const Duration(milliseconds: 2000), () {
-      //   setState(() => loading = false);
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          setState(() => loading = false);
 
-      //   Modular.to.navigate('/feeds');
-      // });
+          SharedPrefService.storeIsAgree(true);
 
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return AlertStepsPopUp(
-            onTap: () {
-              SharedPrefService.storeIsAgree(true);
+          Modular.to.navigate('/feeds');
+        });
+      } else {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return AlertStepsPopUp(
+              onTap: () {
+                userIdList.add(AuthService().userIdToken!.userId);
+                final user_Id = jsonEncode(userIdList);
 
-              Navigator.pop(_);
+                SharedPrefService.storeUserId(user_Id);
 
-              Modular.to.navigate('/feeds');
-            },
-          );
-        },
-      );
+                SharedPrefService.storeIsAgree(true);
+
+                Navigator.pop(_);
+
+                Modular.to.navigate('/feeds');
+              },
+            );
+          },
+        );
+      }
     } on DioError catch (e) {
       showDialog(
         context: context,
@@ -100,6 +116,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     SharedPrefService.storeIsAgree(false);
+    userId = SharedPrefService.getUserId();
     super.initState();
   }
 

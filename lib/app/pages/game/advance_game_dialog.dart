@@ -5,6 +5,7 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../common/common.dart';
 import '../../models/game_setting.dart';
+import '../../widgets/Submit_Button/submit_button.dart';
 import '../../widgets/common_divider.dart';
 import '../../widgets/focus_zoom/focus_zoom.dart';
 
@@ -23,10 +24,6 @@ class AdvanceGameDialog extends StatefulWidget {
 }
 
 class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
-  bool showStats = true;
-  bool fullScreenMode = true;
-  bool onScreenControls = false;
-
   List<String> audioType = ['Stereo', '5.1 Channel'];
   List<String> streamCodec = ['Auto', 'HEVC', 'H.265'];
   List<String> videoDecode = ['Auto', 'Software', 'Hardware'];
@@ -102,7 +99,7 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
                 context: context,
                 content: 'Show Stats',
                 setState: setState,
-                value: showStats,
+                value: widget.gameSetting.show_stats!,
                 onChanged: (value) {
                   setState(() => widget.gameSetting.show_stats = value);
                 },
@@ -111,7 +108,7 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
                 context: context,
                 content: 'Fullscreen Mode',
                 setState: setState,
-                value: fullScreenMode,
+                value: widget.gameSetting.fullscreen!,
                 onChanged: (value) {
                   setState(() => widget.gameSetting.fullscreen = value);
                 },
@@ -120,10 +117,9 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
                 context: context,
                 content: 'Onscreen Controls',
                 setState: setState,
-                value: onScreenControls,
+                value: widget.gameSetting.onscreen_controls!,
                 onChanged: (value) {
-                  print('******$onScreenControls ');
-                  setState(() => onScreenControls = value);
+                  setState(() => widget.gameSetting.onscreen_controls = value);
                 },
               ),
               audioTypeSelection(
@@ -155,7 +151,19 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
                 },
                 videoDecodeValue,
               ),
-              btnLaunchGame(context, widget.launchGame),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.05,
+                ),
+                child: SubmitButton(
+                  buttonTitle: 'Launch Game',
+                  borderRadius: 6.0,
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.launchGame();
+                  },
+                ),
+              ),
               SizedBox(
                 height: size.height * 0.022,
               ),
@@ -164,37 +172,6 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
         ),
       ),
     );
-  }
-
-  FocusZoom btnLaunchGame(BuildContext context, Function() launchGame) {
-    return FocusZoom(builder: (focus) {
-      return InkWell(
-        focusNode: focus,
-        onTap: () {
-          Navigator.pop(context);
-          launchGame();
-        },
-        child: Container(
-          margin:
-              const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-          width: MediaQuery.of(context).size.width,
-          height: 48,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              gradient: const LinearGradient(
-                colors: [pinkColor1, blueColor1],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )),
-          child: Center(
-            child: Text(
-              'Launch Game',
-              style: tinyStyle.copyWith(color: Colors.white),
-            ),
-          ),
-        ),
-      );
-    });
   }
 
   Container switchGameSetting({
@@ -209,9 +186,6 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
     return Container(
       width: size.width,
       height: size.height * 0.064,
-      padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.05,
-      ),
       margin: EdgeInsets.symmetric(
         vertical: size.height * 0.012,
         horizontal: size.width * 0.05,
@@ -224,21 +198,27 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            content,
-            style: tinyStyle.copyWith(
-              color: textSecondaryColor,
+          Padding(
+            padding: EdgeInsets.only(
+              left: size.width * 0.05,
+            ),
+            child: Text(
+              content,
+              style: tinyStyle.copyWith(
+                color: textSecondaryColor,
+              ),
             ),
           ),
-          SizedBox(
-            height: size.height * 0.02,
-            width: size.width * 0.09,
-            child: Transform.scale(
-              scale: 0.8,
+          Transform.scale(
+            scale: 0.85,
+            child: Padding(
+              padding: EdgeInsets.all(
+                size.width * 0.04,
+              ),
               child: CupertinoSwitch(
                 value: value,
                 thumbColor: textPrimaryColor,
-                activeColor: Colors.purple,
+                activeColor: purpleColor1,
                 onChanged: onChanged,
               ),
             ),

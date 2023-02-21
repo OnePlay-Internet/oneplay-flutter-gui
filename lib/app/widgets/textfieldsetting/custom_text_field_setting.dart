@@ -115,7 +115,31 @@ StatefulBuilder settingsTextField({
                               checkedPng,
                             ),
                           )
-                        : null,
+                        : textInputType == TextInputType.name ||
+                                textInputType == TextInputType.name
+                            ? Container(
+                                height: 2,
+                                width: 2,
+                                alignment: Alignment.centerRight,
+                                child: Image.asset(
+                                  editPng,
+                                  fit: BoxFit.cover,
+                                  height: size.height * 0.024,
+                                ),
+                              )
+                            : textInputType == TextInputType.phone ||
+                                    textInputType == TextInputType.phone
+                                ? Container(
+                                    height: 2,
+                                    width: 2,
+                                    alignment: Alignment.centerRight,
+                                    child: Image.asset(
+                                      editPng,
+                                      fit: BoxFit.cover,
+                                      height: size.height * 0.024,
+                                    ),
+                                  )
+                                : null,
                 hintStyle: const TextStyle(
                   fontFamily: mainFontFamily,
                   fontSize: 14,

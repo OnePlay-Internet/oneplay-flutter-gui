@@ -18,8 +18,7 @@ class AlertStepsPopUp extends StatefulWidget {
 
 class _AlertStepsPopUpState extends State<AlertStepsPopUp> {
   final controller = PageController();
-  bool isLastPage = false;
-  bool isChecked = false;
+  bool isShowBottom = false;
 
   @override
   void dispose() {
@@ -45,7 +44,7 @@ class _AlertStepsPopUpState extends State<AlertStepsPopUp> {
       ),
       content: SizedBox(
         width: size.width,
-        height: size.height * 0.8,
+        height: isShowBottom == true ? size.height * 0.78 : size.height * 0.62,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -71,6 +70,7 @@ class _AlertStepsPopUpState extends State<AlertStepsPopUp> {
             ),
             Flexible(
               child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
                 controller: controller,
                 onPageChanged: (index) {
                   setState(() {
@@ -80,6 +80,10 @@ class _AlertStepsPopUpState extends State<AlertStepsPopUp> {
                 children: [
                   FirstStep(
                     onTap: () {
+                      setState(() {
+                        isShowBottom = true;
+                      });
+
                       controller.nextPage(
                         duration: const Duration(
                           milliseconds: 500,
@@ -89,6 +93,7 @@ class _AlertStepsPopUpState extends State<AlertStepsPopUp> {
                     },
                   ),
                   SecondStep(
+                    isShowBottom: isShowBottom,
                     onTap: widget.onTap,
                   ),
                 ],

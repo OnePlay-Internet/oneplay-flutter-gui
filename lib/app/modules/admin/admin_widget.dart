@@ -36,17 +36,9 @@ class _AdminWidgetState extends State<AdminWidget> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        setState(() {
-          selectedIndex = 0;
-        });
-
-        if (selectedIndex == 0) return exitDialog(context);
-
-        return false;
-      },
+      onWillPop: () => exitDialog(context),
       child: Scaffold(
-        // key: _scaffoldKey,
+        // key: scaffoldKey,
         backgroundColor: mainColor,
         // drawer: Drawer(
         //   backgroundColor: mainColor,
@@ -67,11 +59,6 @@ class _AdminWidgetState extends State<AdminWidget> {
             },
             profileTap: () {
               //  Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);
-              setState(() {
-                selectedIndex = 4;
-              });
-
-              print('***** Selected index: $selectedIndex *****');
 
               Modular.to.pushNamed('/setting');
             },

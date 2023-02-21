@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="new steps dialog">
+    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="settings, improvements">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/modules/admin/admin_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/modules/admin/admin_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +100,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676634746759</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="settings, improvements">
+      <created>1676901807196</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1676901807196</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -147,6 +150,7 @@
     <MESSAGE value="settings done" />
     <MESSAGE value="library,header-footer" />
     <MESSAGE value="new steps dialog" />
-    <option name="LAST_COMMIT_MESSAGE" value="new steps dialog" />
+    <MESSAGE value="settings, improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="settings, improvements" />
   </component>
 </project>

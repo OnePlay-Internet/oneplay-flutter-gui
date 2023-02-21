@@ -24,6 +24,7 @@ class _BottomNavState extends State<BottomNav> {
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
   Timer? timer;
+  int selectedIndex = 0;
 
   @override
   void initState() {
