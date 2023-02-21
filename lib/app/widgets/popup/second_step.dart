@@ -6,10 +6,12 @@ import '../focus_zoom/focus_zoom.dart';
 
 class SecondStep extends StatefulWidget {
   final Function()? onTap;
+  final bool isShowBottom;
 
   const SecondStep({
     super.key,
     this.onTap,
+    this.isShowBottom = false,
   });
 
   @override

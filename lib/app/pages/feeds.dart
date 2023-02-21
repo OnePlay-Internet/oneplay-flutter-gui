@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +14,9 @@ import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../services/shared_pref_service.dart';
 import '../widgets/list_game_w_label/list_game_w_label.dart';
 import '../widgets/popup/game_alert_dialog.dart';
-import '../widgets/popup/steps_alert_dialog.dart';
 import '../widgets/popup/steps_alert_dialog_2.dart';
 
 class Feeds extends StatefulWidget {
@@ -36,6 +36,7 @@ class _FeedsState extends State<Feeds> {
   List<ShortGameModel> library = [];
   bool starting = false;
   bool isDiolog = false;
+  bool? getIsAgree;
 
   _getHomeFeed() async {
     setState(() => starting = true);
@@ -78,7 +79,6 @@ class _FeedsState extends State<Feeds> {
     super.initState();
   }
 
-  bool? getIsAgree;
   _popAgreeDialog() {
     print("***** isAgree: $getIsAgree *****");
 
@@ -89,6 +89,10 @@ class _FeedsState extends State<Feeds> {
           builder: (_) {
             return AlertStepsPopUp(
               onTap: () {
+                SharedPrefService.storeUserId(
+                  AuthService().userIdToken!.userId,
+                );
+
                 SharedPrefService.storeIsAgree(true);
 
                 Navigator.pop(_);

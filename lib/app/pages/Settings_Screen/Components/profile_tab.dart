@@ -137,6 +137,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         textFieldTitle: 'Username',
                         hintText: 'Username',
                         errorMessage: errorUserName,
+                        textInputType: TextInputType.name,
                         controller: TextEditingController(text: userName),
                         onChanged: (value) {
                           userName = value;
@@ -150,6 +151,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         textFieldTitle: 'First Name',
                         hintText: 'First Name',
                         errorMessage: errorFirstName,
+                        textInputType: TextInputType.name,
                         controller: TextEditingController(text: firstName),
                         onChanged: (value) {
                           firstName = value;
@@ -163,6 +165,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         textFieldTitle: 'Last Name',
                         hintText: 'Last Name',
                         errorMessage: errorLastName,
+                        textInputType: TextInputType.name,
                         controller: TextEditingController(text: lastName),
                         onChanged: (value) {
                           lastName = value;

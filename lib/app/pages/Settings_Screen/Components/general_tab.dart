@@ -53,7 +53,7 @@ class _GeneralTabState extends State<GeneralTab> {
               title: 'Support',
               iconPath: supportPng,
               onTap: () {
-                //
+                _launchURL('https://www.oneplay.in/contact.html');
               },
             ),
             GeneralTile(

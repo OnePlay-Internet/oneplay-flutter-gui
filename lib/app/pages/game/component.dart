@@ -33,8 +33,9 @@ Widget topVideoLiveStreamsWidget(
                   ),
                   const SizedBox(height: 15),
                   ...videos.map((e) {
-                    if (videos.indexOf(e) < maxLoadTopVideo)
+                    if (videos.indexOf(e) < maxLoadTopVideo) {
                       return videoWidget(context, e);
+                    }
                     return const SizedBox.shrink();
                   }).toList(),
                   if (maxLoadTopVideo < videos.length)
@@ -323,9 +324,11 @@ List<Widget> bannerWidget(BuildContext context, GameModel game) {
                   left: 5,
                   child: Text(
                     game.title,
-                    style: const TextStyle(
-                        color: Colors.white, fontFamily: mainFontFamily),
                     maxLines: 2,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontFamily: mainFontFamily,
+                    ),
                   ),
                 ),
               ],
@@ -338,19 +341,18 @@ List<Widget> bannerWidget(BuildContext context, GameModel game) {
       height: 244,
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(10),
-          gradient: LinearGradient(
-              begin: FractionalOffset.center,
-              end: FractionalOffset.bottomCenter,
-              colors: [
-                Colors.black.withAlpha(65),
-                Colors.black,
-              ],
-              stops: const [
-                0.0,
-                1.0
-              ])),
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(10),
+        gradient: LinearGradient(
+          begin: FractionalOffset.center,
+          end: FractionalOffset.bottomCenter,
+          colors: [
+            Colors.black.withAlpha(65),
+            Colors.black,
+          ],
+          stops: const [0.0, 1.0],
+        ),
+      ),
     ),
   ];
 }

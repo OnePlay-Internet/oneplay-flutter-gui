@@ -70,7 +70,9 @@ class _GameState extends State<Game> {
       child: RefreshIndicator(
         onRefresh: _reloadGameStatus,
         child: starting
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
             : ListView(
                 children: [
                   Stack(
@@ -520,8 +522,10 @@ class _GameState extends State<Game> {
     if (isShowSetting) {
       await showDialog(
         context: context,
-        builder: (_) => gameSettingPopup(_, gameSetting, _startSession),
         barrierDismissible: false,
+        builder: (BuildContext context) {
+          return gameSettingPopup(context, gameSetting, _startSession);
+        },
       );
     } else {
       _startSession();
