@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../popup/exit_dialog.dart';
 
@@ -12,6 +13,8 @@ Future<bool> exitDialog(context) async {
           Navigator.of(context).pop(false);
         },
         onYes: () {
+          MethodChannel channel = const MethodChannel('flutter-gui');
+          channel.invokeMethod("closeApp");
           Navigator.of(context).pop(true);
         },
       );
