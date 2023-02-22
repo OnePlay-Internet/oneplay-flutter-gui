@@ -17,7 +17,7 @@ import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import '../services/shared_pref_service.dart';
 import '../widgets/list_game_w_label/list_game_w_label.dart';
 import '../widgets/popup/game_alert_dialog.dart';
-import '../widgets/popup/steps_alert_dialog_2.dart';
+import '../widgets/popup/steps_alert_dialog.dart';
 
 class Feeds extends StatefulWidget {
   const Feeds({super.key});
@@ -42,7 +42,7 @@ class _FeedsState extends State<Feeds> {
     setState(() => starting = true);
     await restService.getHomeFeed().then((value) async {
       firstRow = value[0];
-      restRow = value.getRange(2, value.length).toList();
+      restRow = value.getRange(1, value.length).toList();
       if (mounted) setState(() => starting = false);
     });
   }
@@ -89,9 +89,9 @@ class _FeedsState extends State<Feeds> {
           builder: (_) {
             return AlertStepsPopUp(
               onTap: () {
-                SharedPrefService.storeUserId(
+                SharedPrefService.storeUserId([
                   AuthService().userIdToken!.userId,
-                );
+                ]);
 
                 SharedPrefService.storeIsAgree(true);
 

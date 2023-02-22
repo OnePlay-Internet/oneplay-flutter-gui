@@ -14,3 +14,5 @@ void main() async {
     ),
   );
 }
+
+int selectedIndex = 0;
