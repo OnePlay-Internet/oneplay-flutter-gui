@@ -10,6 +10,7 @@ import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 
 import '../../../main.dart';
 import '../../services/rest_service_2.dart';
+import '../popup/refer_dialog.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({
@@ -24,7 +25,6 @@ class _BottomNavState extends State<BottomNav> {
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
   Timer? timer;
-  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -48,6 +48,15 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      currentIndex: selectedIndex,
+      backgroundColor: blackColor4,
+      unselectedIconTheme: const IconThemeData(
+        color: textPrimaryColor,
+      ),
+      unselectedItemColor: textSecondaryColor,
+      showUnselectedLabels: true,
+      onTap: _onTap,
+      type: BottomNavigationBarType.fixed,
       items: [
         _item(icon: const Icon(Icons.home), label: 'Home'),
         // _item(icon: const Icon(Icons.search), label: "Search"),
@@ -98,15 +107,6 @@ class _BottomNavState extends State<BottomNav> {
           isImage: true,
         ),
       ],
-      currentIndex: selectedIndex,
-      backgroundColor: blackColor4,
-      unselectedIconTheme: const IconThemeData(
-        color: textPrimaryColor,
-      ),
-      unselectedItemColor: textSecondaryColor,
-      showUnselectedLabels: true,
-      onTap: _onTap,
-      type: BottomNavigationBarType.fixed,
     );
   }
 
@@ -138,7 +138,13 @@ class _BottomNavState extends State<BottomNav> {
         }
         break;
       case 3:
-        print('***** Refer *****');
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertReferPopUp();
+          },
+        );
         break;
       case 4:
         // Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);

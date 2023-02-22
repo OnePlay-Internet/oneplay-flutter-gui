@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
@@ -20,7 +18,7 @@ import '../services/shared_pref_service.dart';
 import '../widgets/exit_popup/exit_popup.dart';
 import '../widgets/popup/popup_success.dart';
 import '../widgets/Submit_Button/submit_button.dart';
-import '../widgets/popup/steps_alert_dialog_2.dart';
+import '../widgets/popup/steps_alert_dialog.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -31,94 +29,13 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool loading = false;
-  bool isChecked = false;
 
   final idCtrler = TextEditingController();
   final pwdCtrler = TextEditingController();
 
   String errorEmail = "";
   String errorPwd = "";
-  String? userId;
   List<String> userIdList = [];
-
-  login(String id, String password) async {
-    final RestService restService = Modular.get<RestService>();
-    final AuthService authService = Modular.get<AuthService>();
-
-    setState(() => loading = true);
-
-    try {
-      String token = await restService.login(id: id, password: password);
-      await authService.login(token);
-
-      if (userId != null) {
-        showDialog(
-          context: context,
-          builder: (_) => alertSuccess(
-            context: context,
-            title: 'Login Success',
-            description: 'You will be redirect to Feed Page',
-          ),
-          barrierDismissible: false,
-        );
-
-        Future.delayed(const Duration(milliseconds: 2000), () {
-          setState(() => loading = false);
-
-          SharedPrefService.storeIsAgree(true);
-
-          Modular.to.navigate('/feeds');
-        });
-      } else {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return AlertStepsPopUp(
-              onTap: () {
-                userIdList.add(AuthService().userIdToken!.userId);
-                final user_Id = jsonEncode(userIdList);
-
-                SharedPrefService.storeUserId(user_Id);
-
-                SharedPrefService.storeIsAgree(true);
-
-                Navigator.pop(_);
-
-                Modular.to.navigate('/feeds');
-              },
-            );
-          },
-        );
-      }
-    } on DioError catch (e) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            setState(() => loading = false);
-            Navigator.pop(_);
-          });
-          return GamepadPop(
-            context: _,
-            child: alertError(
-              context: context,
-              title: 'Login Error',
-              description: e.error['message'],
-            ),
-          );
-        },
-        barrierDismissible: false,
-      );
-    }
-  }
-
-  @override
-  void initState() {
-    SharedPrefService.storeIsAgree(false);
-    userId = SharedPrefService.getUserId();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,12 +47,24 @@ class _LoginState extends State<Login> {
         context: context,
         child: SafeArea(
             child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: size.height,
+          width: size.width,
           child: Form(
             child: SingleChildScrollView(
               child: Column(children: [
-                headTitle(),
+                Container(
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Log in to your account',
+                    style: TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.02,
+                      color: Colors.white,
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 40),
                 customTextField(
                   labelText: 'Email / Phone',
@@ -158,7 +87,16 @@ class _LoginState extends State<Login> {
                     children: [
                       InkWell(
                         onTap: () => Modular.to.pushNamed('/auth/forgotPass'),
-                        child: forgotPwd(),
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            fontFamily: mainFontFamily,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            letterSpacing: 0.02,
+                            color: textPrimaryColor,
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -173,6 +111,7 @@ class _LoginState extends State<Login> {
                     isLoading: loading,
                     onTap: () {
                       FocusManager.instance.primaryFocus?.unfocus();
+
                       if (!isEmail(idCtrler.text)) {
                         setState(() => errorEmail = "Invalid email address");
                         return;
@@ -205,32 +144,86 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Text forgotPwd() {
-    return const Text(
-      'Forgot Password?',
-      style: TextStyle(
-        fontFamily: mainFontFamily,
-        fontWeight: FontWeight.w500,
-        fontSize: 16,
-        letterSpacing: 0.02,
-        color: textPrimaryColor,
-      ),
-    );
+  @override
+  void initState() {
+    SharedPrefService.storeIsAgree(false);
+    super.initState();
   }
 
-  Container headTitle() {
-    return Container(
-      alignment: Alignment.center,
-      child: const Text(
-        'Log in to your account',
-        style: TextStyle(
-          fontFamily: mainFontFamily,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.02,
-          color: Colors.white,
-          fontSize: 30,
-        ),
-      ),
-    );
+  login(String id, String password) async {
+    final RestService restService = Modular.get<RestService>();
+    final AuthService authService = Modular.get<AuthService>();
+
+    setState(() => loading = true);
+
+    try {
+      String token = await restService.login(
+        id: id,
+        password: password,
+      );
+
+      await authService.login(token);
+
+      userIdList = SharedPrefService.getUserId() ?? [];
+
+      if (userIdList.contains(AuthService().userIdToken!.userId)) {
+        showDialog(
+          context: context,
+          builder: (_) => alertSuccess(
+            context: context,
+            title: 'Login Success',
+            description: 'You will be redirect to Feed Page',
+          ),
+          barrierDismissible: false,
+        );
+
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          setState(() => loading = false);
+
+          SharedPrefService.storeIsAgree(true);
+
+          Modular.to.navigate('/feeds');
+        });
+      } else {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return AlertStepsPopUp(
+              onTap: () {
+                userIdList.addAll([AuthService().userIdToken!.userId]);
+
+                SharedPrefService.storeUserId(userIdList);
+
+                SharedPrefService.storeIsAgree(true);
+
+                Navigator.pop(_);
+
+                Modular.to.navigate('/feeds');
+              },
+            );
+          },
+        );
+      }
+    } on DioError catch (e) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          Future.delayed(const Duration(milliseconds: 3000), () {
+            setState(() => loading = false);
+            Navigator.pop(_);
+          });
+          return GamepadPop(
+            context: _,
+            child: alertError(
+              context: context,
+              title: 'Login Error',
+              description: e.error['message'],
+            ),
+          );
+        },
+        barrierDismissible: false,
+      );
+    }
   }
 }
