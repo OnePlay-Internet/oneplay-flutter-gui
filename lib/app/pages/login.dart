@@ -36,6 +36,7 @@ class _LoginState extends State<Login> {
   final idCtrler = TextEditingController();
   final pwdCtrler = TextEditingController();
 
+  List<String> countryCode = [""];
   String errorEmail = "";
   String errorPwd = "";
   String? userId;
@@ -137,14 +138,18 @@ class _LoginState extends State<Login> {
               child: Column(children: [
                 headTitle(),
                 const SizedBox(height: 40),
-                customTextField(
+                CustomTextField(
                   labelText: 'Email / Phone',
                   hintText: 'Email Address',
                   textCtrler: idCtrler,
                   errorText: errorEmail,
+                  selectedItem: countryCode,
+                  items: PlayConstants.COUNTRY_CODES,
+                  dropboxVisibilityCondition: (String value) =>
+                      TextUtils.isPhoneNumber(value),
                 ),
                 const SizedBox(height: 40),
-                customTextField(
+                CustomTextField(
                   labelText: 'Password',
                   hintText: 'Password',
                   textCtrler: pwdCtrler,
@@ -173,19 +178,31 @@ class _LoginState extends State<Login> {
                     isLoading: loading,
                     onTap: () {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      if (!isEmail(idCtrler.text)) {
-                        setState(() => errorEmail = "Invalid email address");
+                      String loginString = idCtrler.text;
+                      String passwordString = pwdCtrler.text;
+
+                      if (loginString.isEmpty) {
+                        setState(() => errorEmail = "Enter your login");
                         return;
                       }
-                      if (idCtrler.text.isEmpty) {
-                        setState(() => errorEmail = "Enter your email");
+
+                      bool isPhone = TextUtils.isPhoneNumber(loginString);
+
+                      if (!(isPhone || isEmail(loginString))) {
+                        setState(() => errorEmail = "Invalid login");
                         return;
                       }
-                      if (pwdCtrler.text.isEmpty) {
+
+                      if (isPhone) {
+                        loginString = countryCode[0] + loginString;
+                      }
+
+                      if (passwordString.isEmpty) {
                         setState(() => errorPwd = "Enter your password");
                         return;
                       }
-                      login(idCtrler.text.trim(), pwdCtrler.text.trim());
+
+                      login(loginString.trim(), passwordString.trim());
                     },
                   ),
                 ),

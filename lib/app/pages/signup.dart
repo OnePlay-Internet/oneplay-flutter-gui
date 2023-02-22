@@ -187,7 +187,7 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  customTextField(
+                  CustomTextField(
                     labelText: 'Name',
                     hintText: 'User Name',
                     textCtrler: nameController,
@@ -196,7 +196,7 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  customTextField(
+                  CustomTextField(
                     labelText: 'Email',
                     hintText: 'Email Address',
                     textCtrler: emailController,
@@ -205,7 +205,7 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  customTextField(
+                  CustomTextField(
                     labelText: 'Phone',
                     hintText: 'Phone',
                     textCtrler: phoneController,
@@ -215,7 +215,7 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  customTextField(
+                  CustomTextField(
                     labelText: 'Password',
                     hintText: 'Password',
                     textCtrler: passController,

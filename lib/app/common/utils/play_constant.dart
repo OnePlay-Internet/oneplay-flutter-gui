@@ -51,6 +51,18 @@ class PlayConstants {
     },
   ];
 
+  static const COUNTRY_CODES = [
+    '+91',
+    '+850',
+    '+82',
+    '+84',
+    '+7',
+    '+1',
+    '+60',
+    '+98',
+    '+971',
+  ];
+
   static getIdleBitrate({required String resolution, int fps = 60}) {
     const b = {
       "1280x720": 10000,

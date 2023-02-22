@@ -75,7 +75,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 SizedBox(
                   height: size.height * 0.03,
                 ),
-                customTextField(
+                CustomTextField(
                     labelText: 'Email',
                     hintText: 'Email Address',
                     textCtrler: emailController,
@@ -97,7 +97,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     onTap: () {
                       FocusManager.instance.primaryFocus?.unfocus();
                       var email = emailController.text;
-    
+
                       if (email.isEmpty) {
                         setState(() => errorEmail = "Enter your email");
                         return;
@@ -107,7 +107,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       } else {
                         setState(() => errorEmail = "");
                       }
-    
+
                       _forgotPassword(email);
                     },
                   ),
