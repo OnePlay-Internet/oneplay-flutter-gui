@@ -35,3 +35,4 @@ const messangerPng = 'assets/png/icon_messanger.png';
 const telegramPng = 'assets/png/icon_telegram.png';
 const twiterPng = 'assets/png/icon_twiter.png';
 const whatsappPng = 'assets/png/icon_whatsapp.png';
+const feedbackPng = 'assets/png/icon_feedback.png';

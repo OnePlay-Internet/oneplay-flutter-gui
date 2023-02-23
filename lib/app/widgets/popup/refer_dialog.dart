@@ -2,11 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/common.dart';
 import '../../services/auth_service.dart';
 import 'terms_and_conditions_dialog.dart';
+
+enum SocialMedia {
+  facebook,
+  linkedin,
+  messanger,
+  telegram,
+  twiter,
+  whatsapp,
+  email,
+}
 
 class AlertReferPopUp extends StatefulWidget {
   const AlertReferPopUp({super.key});
@@ -17,9 +29,10 @@ class AlertReferPopUp extends StatefulWidget {
 
 class _AlertReferPopUpState extends State<AlertReferPopUp> {
   String facebookLink = 'https://www.facebook.com/sharer/sharer.php?u=';
-  String whatsappLink = 'https://web.whatsapp.com/send?text=';
-  String twitterLink = 'https://twitter.com/intent/tweet?url=';
-  String telegramLink = 'https://t.me/share/url?url=';
+  String messangerLink = 'https://www.facebook.com/sharer/sharer.php?u=';
+  String whatsappLink = 'https://wa.me/?text=';
+  String twitterLink = 'http://twitter.com/?status=';
+  String telegramLink = 'https://telegram.me/share/url?url=';
   String linkedinLink = 'https://www.linkedin.com/shareArticle?url=';
 
   String referURL =
@@ -90,6 +103,9 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
                     InkWell(
                       onTap: () {
                         Navigator.pop(context);
+
+                        Modular.to
+                            .pushNamedAndRemoveUntil('/feeds', (r) => false);
                       },
                       child: Align(
                         alignment: Alignment.centerRight,
@@ -151,15 +167,25 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
                             setState(() => iconIndex = icons1.indexOf(e));
 
                             if (iconIndex == 0) {
-                              _launchURL(facebookLink + referURL);
+                              Navigator.pop(context);
+
+                              share(SocialMedia.facebook);
                             } else if (iconIndex == 1) {
-                              _launchURL(linkedinLink + referURL);
+                              Navigator.pop(context);
+
+                              share(SocialMedia.linkedin);
                             } else if (iconIndex == 2) {
-                              _launchURL(facebookLink + referURL);
+                              Navigator.pop(context);
+
+                              share(SocialMedia.facebook);
                             } else if (iconIndex == 3) {
-                              _launchURL(telegramLink + referURL);
+                              Navigator.pop(context);
+
+                              share(SocialMedia.telegram);
                             } else if (iconIndex == 4) {
-                              _launchURL(twitterLink + referURL);
+                              Navigator.pop(context);
+
+                              share(SocialMedia.twiter);
                             }
                           },
                         ),
@@ -180,10 +206,16 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
                             setState(() => iconIndex = icons2.indexOf(e));
 
                             if (iconIndex == 0) {
-                              _launchURL(whatsappLink + referURL);
+                              Navigator.pop(context);
+
+                              share(SocialMedia.whatsapp);
                             } else if (iconIndex == 1) {
-                              _launchURL(linkedinLink + referURL);
+                              Navigator.pop(context);
+
+                              share(SocialMedia.email);
                             } else if (iconIndex == 2) {
+                              Navigator.pop(context);
+
                               await Clipboard.setData(
                                 ClipboardData(text: referURL),
                               );
@@ -205,6 +237,7 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
                             barrierDismissible: false,
                             builder: (BuildContext context) {
                               return const AlertTermsAndCondition();
+                              // return const AlertFeedbackDialog();
                             },
                           );
                         },
@@ -233,10 +266,29 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
     );
   }
 
-  _launchURL(String url) async {
+  Future share(SocialMedia socialPlatform) async {
+    String subject = 'OnePlay game!!';
+    String text = 'OnePlay game...';
+
+    final urlShare = Uri.encodeFull(referURL);
+
+    String emailLink = 'mailto:?subject=$subject&body=$text\n\n';
+
+    final urls = {
+      SocialMedia.facebook: facebookLink + urlShare,
+      SocialMedia.linkedin: linkedinLink + urlShare,
+      SocialMedia.messanger: messangerLink + urlShare,
+      SocialMedia.telegram: telegramLink + urlShare,
+      SocialMedia.twiter: twitterLink + urlShare,
+      SocialMedia.whatsapp: whatsappLink + urlShare,
+      SocialMedia.email: emailLink + urlShare,
+    };
+
+    final url = urls[socialPlatform]!;
     final uri = Uri.parse(url);
+
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
     }
