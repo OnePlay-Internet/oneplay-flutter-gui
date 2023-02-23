@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
@@ -12,9 +13,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/appbar/appbarWidget.dart';
 
-import '../../../main.dart';
 import '../../widgets/bottom_nav/bottom_nav.dart';
-import '../../widgets/exit_popup/exit_popup.dart';
 
 class AdminWidget extends StatefulWidget {
   const AdminWidget({super.key});
@@ -36,7 +35,12 @@ class _AdminWidgetState extends State<AdminWidget> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => exitDialog(context),
+      // onWillPop: () => exitDialog(context),
+      onWillPop: () async {
+        MethodChannel channel = const MethodChannel('flutter-gui');
+        channel.invokeMethod("closeApp");
+        return true;
+      },
       child: Scaffold(
         // key: scaffoldKey,
         backgroundColor: mainColor,

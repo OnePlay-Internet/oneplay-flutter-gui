@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
@@ -15,7 +16,6 @@ import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart
 import 'package:validators/validators.dart';
 
 import '../services/shared_pref_service.dart';
-import '../widgets/exit_popup/exit_popup.dart';
 import '../widgets/popup/popup_success.dart';
 import '../widgets/Submit_Button/submit_button.dart';
 import '../widgets/popup/steps_alert_dialog.dart';
@@ -42,7 +42,12 @@ class _LoginState extends State<Login> {
     Size size = MediaQuery.of(context).size;
 
     return WillPopScope(
-      onWillPop: () => exitDialog(context),
+      // onWillPop: () => exitDialog(context),
+      onWillPop: () async {
+        MethodChannel channel = const MethodChannel('flutter-gui');
+        channel.invokeMethod("closeApp");
+        return true;
+      },
       child: GamepadPop(
         context: context,
         child: SafeArea(

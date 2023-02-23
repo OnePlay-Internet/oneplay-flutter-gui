@@ -16,6 +16,7 @@ StatefulBuilder settingsTextField({
   bool expands = false,
   bool enabled = true,
   int? maxLines = 1,
+  Color? color,
   TextInputType textInputType = TextInputType.text,
 }) {
   Size size = MediaQuery.of(context).size;
@@ -60,9 +61,9 @@ StatefulBuilder settingsTextField({
             padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.04,
             ),
-            decoration: const BoxDecoration(
-              color: blackColor4,
-              borderRadius: BorderRadius.all(
+            decoration: BoxDecoration(
+              color: color ?? blackColor4,
+              borderRadius: const BorderRadius.all(
                 Radius.circular(10.0),
               ),
             ),
