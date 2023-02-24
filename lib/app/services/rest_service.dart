@@ -12,6 +12,7 @@ import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
 import '../models/device_history_model.dart';
+import '../models/feedback_model.dart';
 import '../models/ip_location_model.dart';
 import '../models/signup_model.dart';
 import '../models/subscription_model.dart';
@@ -323,5 +324,41 @@ class RestService {
   Future<bool> logoutFromDevice(String userKey) async {
     Response res = await _dio.delete("/accounts/sessions/$userKey");
     return res.data['success'];
+  }
+
+  Future<FeedbackModel> feedBack({
+    required String gameId,
+    required String userId,
+    required String sessionId,
+    required int rating,
+    required String suggestion,
+    required String comment,
+    required String question,
+    required String answer,
+    required String question2,
+    required String answer2,
+  }) async {
+    Response response = await _dio.post('/logging/feedback', data: {
+      "game_id": gameId,
+      "user_id": userId,
+      "session_id": sessionId,
+      "rating": rating,
+      "suggestion": suggestion,
+      "comment": comment,
+      "qna": [
+        {
+          "question": question,
+          "answer": answer,
+        },
+        {
+          "question": question2,
+          "answer": answer2,
+        },
+      ]
+    });
+
+    var data = FeedbackModel.fromJson(response.data);
+
+    return data;
   }
 }

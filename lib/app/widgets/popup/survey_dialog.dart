@@ -1,18 +1,28 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../common/common.dart';
 import '../../common/utils/questions.dart';
+import '../../services/rest_service.dart';
 import '../Submit_Button/submit_button.dart';
 import '../common_divider.dart';
 import '../textfieldsetting/custom_text_field_setting.dart';
+import 'popup_success.dart';
 
 class AlertSurveyDialog extends StatefulWidget {
   final String feedbackRating;
+  final String gameId;
+  final String userId;
+  final String sessionId;
 
   const AlertSurveyDialog({
     super.key,
     required this.feedbackRating,
+    required this.gameId,
+    required this.userId,
+    required this.sessionId,
   });
 
   @override
@@ -20,26 +30,67 @@ class AlertSurveyDialog extends StatefulWidget {
 }
 
 class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
-  String bio = '';
-  String errorBio = '';
+  final RestService _restService = Modular.get<RestService>();
 
-  List<String>? firstAnswer;
-  List<String>? secondAnswer;
+  String comment = '';
+  String errorComment = '';
+  bool isLoading = false;
+
+  List<String>? firstAnswerList;
+  List<String>? secondAnswerList;
+
+  String? firsAnswer;
+  String? secondAnswer;
 
   int index = 0;
+  int index2 = 0;
+  var firstQuestion, secondQuestion, rating;
+  @override
+  void initState() {
+    super.initState();
+    rating = int.parse(widget.feedbackRating);
+
+    firstQuestion = widget.feedbackRating == '1'
+        ? question1
+        : widget.feedbackRating == '2' || widget.feedbackRating == '2'
+            ? question1
+            : widget.feedbackRating == '3' || widget.feedbackRating == '3'
+                ? question3
+                : widget.feedbackRating == '4' || widget.feedbackRating == '4'
+                    ? question5
+                    : question7;
+
+    secondQuestion = widget.feedbackRating == '1'
+        ? question2
+        : widget.feedbackRating == '2' || widget.feedbackRating == '2'
+            ? question2
+            : widget.feedbackRating == '3' || widget.feedbackRating == '3'
+                ? question4
+                : widget.feedbackRating == '4' || widget.feedbackRating == '4'
+                    ? question6
+                    : question8;
+
+    firstAnswerList = widget.feedbackRating == '1'
+        ? firstAnswerList = answer1
+        : widget.feedbackRating == '2' || widget.feedbackRating == '2'
+            ? firstAnswerList = answer1
+            : answer2;
+
+    secondAnswerList =
+        widget.feedbackRating == '5' ? secondAnswerList = answer3 : answer2;
+
+    firsAnswer = firstAnswerList![0];
+    secondAnswer = secondAnswerList![0];
+
+    print('******* answer value $firsAnswer');
+    print('******* answer2 value $secondAnswer');
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    firstAnswer = widget.feedbackRating == '1'
-        ? firstAnswer = answer1
-        : widget.feedbackRating == '2' || widget.feedbackRating == '2'
-            ? firstAnswer = answer1
-            : answer2;
-
-    secondAnswer =
-        widget.feedbackRating == '5' ? secondAnswer = answer3 : answer2;
+    print("******* Size: $size");
 
     return AlertDialog(
       backgroundColor: mainColor,
@@ -112,18 +163,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          widget.feedbackRating == '1'
-                              ? question1
-                              : widget.feedbackRating == '2' ||
-                                      widget.feedbackRating == '2'
-                                  ? question1
-                                  : widget.feedbackRating == '3' ||
-                                          widget.feedbackRating == '3'
-                                      ? question3
-                                      : widget.feedbackRating == '4' ||
-                                              widget.feedbackRating == '4'
-                                          ? question5
-                                          : question7,
+                          firstQuestion,
                           style: const TextStyle(
                             fontFamily: mainFontFamily,
                             fontWeight: FontWeight.w500,
@@ -145,17 +185,23 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: answerRow1(
                           size: size,
-                          answer: firstAnswer!,
+                          answer: firstAnswerList!,
                           value: index,
                           onTap: (e) {
-                            setState(() => index = firstAnswer!.indexOf(e));
+                            setState(() => index = firstAnswerList!.indexOf(e));
 
                             if (index == 0) {
-                              print('***** Answer: Answer 1 *****');
+                              print(
+                                  '***** Answer: ${firstAnswerList![index]} *****');
+                              firsAnswer = firstAnswerList![index];
                             } else if (index == 1) {
-                              print('***** Answer: Answer 2 *****');
+                              print(
+                                  '***** Answer: ${firstAnswerList![index]} *****');
+                              firsAnswer = firstAnswerList![index];
                             } else if (index == 2) {
-                              print('***** Answer: Answer 3 *****');
+                              print(
+                                  '***** Answer: ${firstAnswerList![index]} *****');
+                              firsAnswer = firstAnswerList![index];
                             }
                           },
                         ),
@@ -171,18 +217,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          widget.feedbackRating == '1'
-                              ? question2
-                              : widget.feedbackRating == '2' ||
-                                      widget.feedbackRating == '2'
-                                  ? question2
-                                  : widget.feedbackRating == '3' ||
-                                          widget.feedbackRating == '3'
-                                      ? question4
-                                      : widget.feedbackRating == '4' ||
-                                              widget.feedbackRating == '4'
-                                          ? question6
-                                          : question8,
+                          secondQuestion,
                           style: const TextStyle(
                             fontFamily: mainFontFamily,
                             fontWeight: FontWeight.w500,
@@ -204,17 +239,24 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: answerRow2(
                           size: size,
-                          answer2: secondAnswer!,
-                          value: index,
-                          onTap: (e) {
-                            setState(() => index = secondAnswer!.indexOf(e));
+                          answer2: secondAnswerList!,
+                          value: index2,
+                          onTap2: (e) {
+                            setState(
+                                () => index2 = secondAnswerList!.indexOf(e));
 
-                            if (index == 0) {
-                              print('***** Answer: Answer 1 *****');
-                            } else if (index == 1) {
-                              print('***** Answer: Answer 2 *****');
-                            } else if (index == 2) {
-                              print('***** Answer: Answer 3 *****');
+                            if (index2 == 0) {
+                              secondAnswer = secondAnswerList![index2];
+                              print(
+                                  '***** Answer2: ${secondAnswerList![index2]} *****');
+                            } else if (index2 == 1) {
+                              secondAnswer = secondAnswerList![index2];
+                              print(
+                                  '***** Answer2: ${secondAnswerList![index2]} *****');
+                            } else if (index2 == 2) {
+                              secondAnswer = secondAnswerList![index2];
+                              print(
+                                  '***** Answer2: ${secondAnswerList![index2]} *****');
                             }
                           },
                         ),
@@ -232,12 +274,12 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                         height: size.height * 0.09,
                         textFieldTitle: 'Manual Answer',
                         hintText: 'Write a short answer',
-                        errorMessage: errorBio,
+                        errorMessage: errorComment,
                         expands: true,
                         maxLines: null,
-                        controller: TextEditingController(text: bio),
+                        controller: TextEditingController(text: comment),
                         onChanged: (value) {
-                          bio = value;
+                          comment = value;
                         },
                       ),
                     ),
@@ -272,10 +314,33 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                           SubmitButton(
                             width: size.width * 0.38,
                             buttonTitle: 'Submit',
+                            loadingTitle: 'Submiting...',
+                            isLoading: isLoading,
                             onTap: () {
-                              print(
-                                  '***** Feedback rating: ${widget.feedbackRating} *****');
-                              Navigator.pop(context);
+                              print(''' 
+                              Game id: ${widget.gameId},
+                              User id: ${widget.userId},
+                              Sesstion id: ${widget.sessionId},
+                              Rating: $rating,
+                              Commnet: $comment,
+                              Question: $firstQuestion,
+                              Answer: $firsAnswer,
+                              Question2: $secondQuestion,
+                              Answer2: $secondAnswer,
+                               ''');
+
+                              _feedBack(
+                                gameId: widget.gameId,
+                                userId: widget.userId,
+                                sessionId: widget.sessionId,
+                                rating: rating,
+                                suggestion: '',
+                                comment: comment,
+                                question: firstQuestion,
+                                answer: firsAnswer!,
+                                question2: secondQuestion,
+                                answer2: secondAnswer!,
+                              );
                             },
                           ),
                         ],
@@ -294,6 +359,76 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
     );
   }
 
+  _feedBack({
+    required String gameId,
+    required String userId,
+    required String sessionId,
+    required int rating,
+    required String suggestion,
+    required String comment,
+    required String question,
+    required String answer,
+    required String question2,
+    required String answer2,
+  }) async {
+    setState(() => isLoading = true);
+
+    try {
+      final res = await _restService.feedBack(
+        gameId: gameId,
+        userId: userId,
+        sessionId: sessionId,
+        rating: rating,
+        suggestion: suggestion,
+        comment: comment,
+        question: question,
+        answer: answer,
+        question2: question2,
+        answer2: answer2,
+      );
+      Navigator.of(context, rootNavigator: true).pop();
+
+      print('****** Response: ${res.feedbackData!.qna![0].question}');
+      // await showDialog(
+      //   context: context,
+      //   builder: (_) {
+      //     Future.delayed(const Duration(milliseconds: 2000), () {
+      //       setState(() => isLoading = false);
+      //       if (mounted) {
+      //         Navigator.of(context, rootNavigator: false).pop();
+      //       }
+      //     });
+
+      //     return alertSuccess(
+      //       context: context,
+      //       title: 'Feedback created',
+      //       description: 'Feedback created successfuly',
+      //     );
+      //   },
+      //   barrierDismissible: false,
+      // );
+    } on DioError catch (e) {
+      print('***** Exeption error: ${e.response?.data['message']} *****');
+
+      showDialog(
+        context: context,
+        builder: (_) {
+          Future.delayed(const Duration(milliseconds: 3000), () {
+            setState(() => isLoading = false);
+            Navigator.pop(_);
+          });
+
+          return alertError(
+            context: context,
+            title: 'Feedback failed',
+            description: 'Failed to created feedback',
+          );
+        },
+        barrierDismissible: false,
+      );
+    }
+  }
+
   List<Widget> answerRow1({
     required Size size,
     required List<String> answer,
@@ -302,13 +437,11 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
   }) {
     List<Widget> widgets = [];
     for (var element in answer) {
-      if (element.indexOf(element) > 0 &&
-          element.indexOf(element) < element.length) {
-        widgets.add(
-          const SizedBox(
-            width: 30,
-          ),
-        );
+      if (answer.indexOf(element) > 0 &&
+          answer.indexOf(element) < answer.length) {
+        widgets.add(const SizedBox(
+          width: 0,
+        ));
       }
       widgets.add(
         InkWell(
@@ -327,7 +460,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 width: 2,
-                color: element.indexOf(element) == value
+                color: answer.indexOf(element) == value
                     ? purpleColor1
                     : basicLineColor,
               ),
@@ -338,7 +471,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                 style: tinyStyle,
                 gradientType: GradientType.linear,
                 gradientDirection: GradientDirection.ltr,
-                colors: element.indexOf(element) == value
+                colors: answer.indexOf(element) == value
                     ? const [purpleColor2, purpleColor1]
                     : [textPrimaryColor, textPrimaryColor],
               ),
@@ -353,25 +486,26 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
   List<Widget> answerRow2({
     required Size size,
     required List<String> answer2,
-    required Function(String e) onTap,
+    required Function(String e) onTap2,
     required int value,
   }) {
     List<Widget> widgets = [];
     for (var element in answer2) {
-      if (element.indexOf(element) > 0 &&
-          element.indexOf(element) < element.length) {
+      if (answer2.indexOf(element) > 0 &&
+          answer2.indexOf(element) < answer2.length) {
         widgets.add(
           const SizedBox(
-            width: 30,
+            width: 0,
           ),
         );
       }
       widgets.add(
         InkWell(
-          onTap: () => onTap(element),
+          onTap: () => onTap2(element),
           child: Container(
             height: size.height * 0.065,
             width: size.width * 0.38,
+            margin: EdgeInsets.zero,
             padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.018,
             ),
@@ -379,7 +513,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 width: 2,
-                color: element.indexOf(element) == value
+                color: answer2.indexOf(element) == value
                     ? purpleColor1
                     : basicLineColor,
               ),
@@ -390,7 +524,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                 style: tinyStyle,
                 gradientType: GradientType.linear,
                 gradientDirection: GradientDirection.ltr,
-                colors: element.indexOf(element) == value
+                colors: answer2.indexOf(element) == value
                     ? const [purpleColor2, purpleColor1]
                     : [textPrimaryColor, textPrimaryColor],
               ),

@@ -132,24 +132,26 @@ class _SignUpState extends State<SignUp> {
       child: Container(
         width: size.width * 0.12,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            width: size.width * 0.004,
-            color: isSelected == index ? purpleColor1 : mainColor,
+          gradient: LinearGradient(
+            colors: isSelected == index
+                ? [pinkColor1, blueColor1]
+                : [mainColor, mainColor],
           ),
+          shape: BoxShape.circle,
         ),
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              width: size.width * 0.006,
+        child: Padding(
+          padding: const EdgeInsets.all(1.8),
+          child: Container(
+            padding: const EdgeInsets.all(2.0),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
               color: mainColor,
             ),
-          ),
-          child: Image.asset(
-            icon!,
-            width: size.width * 0.11,
-            fit: BoxFit.cover,
+            child: Image.asset(
+              icon!,
+              width: size.width * 0.11,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
@@ -283,6 +285,7 @@ class _SignUpState extends State<SignUp> {
                       isLoading: isLoading,
                       onTap: () {
                         FocusManager.instance.primaryFocus?.unfocus();
+
                         var firstName = nameController.text;
                         var lastName = nameController.text;
                         var email = emailController.text;

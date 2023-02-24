@@ -187,7 +187,7 @@ bySigningUpFooter() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'By singing up, you agreee to OnePlay’s',
+              'By singing up, you agree to OnePlay’s',
               style: TextStyle(
                 fontFamily: mainFontFamily,
                 fontSize: 14,
@@ -198,33 +198,6 @@ bySigningUpFooter() {
             ),
             Row(
               children: [
-                // GestureDetector(
-                //   onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
-                //   child: GradientText(
-                //     'Cookie Policy',
-                //     style: const TextStyle(
-                //       fontFamily: mainFontFamily,
-                //       fontSize: 16,
-                //       fontWeight: FontWeight.w500,
-                //       letterSpacing: 0.02,
-                //       decorationThickness: 1,
-                //       decoration: TextDecoration.underline,
-                //     ),
-                //     gradientType: GradientType.linear,
-                //     gradientDirection: GradientDirection.ltr,
-                //     colors: const [purpleColor2, purpleColor1],
-                //   ),
-                // ),
-                // const Text(
-                //   ' & ',
-                //   style: TextStyle(
-                //     fontFamily: mainFontFamily,
-                //     fontSize: 14,
-                //     fontWeight: FontWeight.w500,
-                //     letterSpacing: 0.02,
-                //     color: textSecondaryColor,
-                //   ),
-                // ),
                 GestureDetector(
                   onTap: () =>
                       _launchURL('https://www.oneplay.in/privacy.html'),
@@ -244,7 +217,7 @@ bySigningUpFooter() {
                   ),
                 ),
                 const Text(
-                  ' &',
+                  ' & ',
                   style: TextStyle(
                     fontFamily: mainFontFamily,
                     fontSize: 14,
@@ -253,12 +226,29 @@ bySigningUpFooter() {
                     color: textSecondaryColor,
                   ),
                 ),
+                GestureDetector(
+                  onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
+                  child: GradientText(
+                    'Terms and ',
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      decorationThickness: 1,
+                      decoration: TextDecoration.underline,
+                    ),
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: const [purpleColor2, purpleColor1],
+                  ),
+                ),
               ],
             ),
             GestureDetector(
               onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
               child: GradientText(
-                'Terms and Conditions',
+                'Conditions',
                 style: const TextStyle(
                   fontFamily: mainFontFamily,
                   fontSize: 16,

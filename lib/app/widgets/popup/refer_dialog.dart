@@ -7,7 +7,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/common.dart';
-import '../../services/auth_service.dart';
+import '../../common/utils/questions.dart';
 import 'terms_and_conditions_dialog.dart';
 
 enum SocialMedia {
@@ -28,17 +28,8 @@ class AlertReferPopUp extends StatefulWidget {
 }
 
 class _AlertReferPopUpState extends State<AlertReferPopUp> {
-  String facebookLink = 'https://www.facebook.com/sharer/sharer.php?u=';
-  String messangerLink = 'https://www.facebook.com/sharer/sharer.php?u=';
-  String whatsappLink = 'https://wa.me/?text=';
-  String twitterLink = 'http://twitter.com/?status=';
-  String telegramLink = 'https://telegram.me/share/url?url=';
-  String linkedinLink = 'https://www.linkedin.com/shareArticle?url=';
-
-  String referURL =
-      'https://www.oneplay.in/dashboard/register?ref=${AuthService().userIdToken!.userId}';
-
   int iconIndex = 0;
+  int iconIndex2 = 0;
 
   List<String> icons1 = [
     facebookPng,
@@ -201,20 +192,38 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: iconsRow2(
-                          iconPath: icons2,
+                          iconPath2: icons2,
+                          value: iconIndex2,
                           onTap: (e) async {
-                            setState(() => iconIndex = icons2.indexOf(e));
+                            setState(() => iconIndex2 = icons2.indexOf(e));
 
-                            if (iconIndex == 0) {
+                            if (iconIndex2 == 0) {
                               Navigator.pop(context);
 
                               share(SocialMedia.whatsapp);
-                            } else if (iconIndex == 1) {
+                            } else if (iconIndex2 == 1) {
                               Navigator.pop(context);
 
                               share(SocialMedia.email);
-                            } else if (iconIndex == 2) {
+                            } else if (iconIndex2 == 2) {
                               Navigator.pop(context);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: mainColor,
+                                  duration: Duration(seconds: 2),
+                                  content: Text(
+                                    'Copied on clipboard',
+                                    style: TextStyle(
+                                      fontFamily: mainFontFamily,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: 0.02,
+                                      color: textPrimaryColor,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              );
 
                               await Clipboard.setData(
                                 ClipboardData(text: referURL),
@@ -237,7 +246,6 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
                             barrierDismissible: false,
                             builder: (BuildContext context) {
                               return const AlertTermsAndCondition();
-                              // return const AlertFeedbackDialog();
                             },
                           );
                         },
@@ -267,12 +275,7 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
   }
 
   Future share(SocialMedia socialPlatform) async {
-    String subject = 'OnePlay game!!';
-    String text = 'OnePlay game...';
-
     final urlShare = Uri.encodeFull(referURL);
-
-    String emailLink = 'mailto:?subject=$subject&body=$text\n\n';
 
     final urls = {
       SocialMedia.facebook: facebookLink + urlShare,
@@ -300,11 +303,11 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
   }) {
     List<Widget> widgets = [];
     for (var element in iconPath) {
-      if (element.indexOf(element) > 0 &&
-          element.indexOf(element) < element.length) {
+      if (iconPath.indexOf(element) > 0 &&
+          iconPath.indexOf(element) < iconPath.length) {
         widgets.add(
           const SizedBox(
-            width: 30,
+            width: 0,
           ),
         );
       }
@@ -321,16 +324,17 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
   }
 
   List<Widget> iconsRow2({
-    required List<String> iconPath,
+    required List<String> iconPath2,
     required Function(String e) onTap,
+    required int value,
   }) {
     List<Widget> widgets = [];
-    for (var element in iconPath) {
-      if (element.indexOf(element) > 0 &&
-          element.indexOf(element) < element.length) {
+    for (var element in iconPath2) {
+      if (iconPath2.indexOf(element) > 0 &&
+          iconPath2.indexOf(element) < iconPath2.length) {
         widgets.add(
           const SizedBox(
-            width: 30,
+            width: 0,
           ),
         );
       }
