@@ -140,9 +140,9 @@ class _BottomNavState extends State<BottomNav> {
       case 3:
         showDialog(
           context: context,
-          barrierDismissible: false,
+          barrierDismissible: true,
           builder: (BuildContext context) {
-            return AlertReferPopUp();
+            return const AlertReferPopUp();
           },
         );
         break;
