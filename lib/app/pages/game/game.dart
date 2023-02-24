@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:mobx/mobx.dart';
-import 'package:oneplay_flutter_gui/app/common/utils/play_constant.dart';
 import 'package:oneplay_flutter_gui/app/models/client_token_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_setting.dart';
 import 'package:oneplay_flutter_gui/app/models/game_status_model.dart';
 import 'package:oneplay_flutter_gui/app/models/start_game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/video_model.dart';
-import 'package:oneplay_flutter_gui/app/pages/game/popup_game_setting.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/initialize_state.dart';
@@ -26,7 +23,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../common/common.dart';
 import '../../models/game_feed_model.dart';
 import '../../widgets/list_game_w_label/list_game_w_label.dart';
+import '../../widgets/popup/feedback_dialog.dart';
 import 'component.dart';
+import 'game_settings_dialog.dart';
 
 class Game extends StatefulWidget {
   final String id;
@@ -182,108 +181,137 @@ class _GameState extends State<Game> {
       height: 268,
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      child: Observer(builder: (_) {
-        String action = _getAction(gameService.gameStatus);
-        return Stack(fit: StackFit.expand, children: [
-          action == "Resume"
-              ? Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        FocusZoom(builder: (focus) {
-                          return InkWell(
-                            focusNode: focus,
-                            onTap: starting || game == null ? null : _startgame,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width - 100,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(90),
-                                  color: Colors.white),
-                              child: Center(
-                                  child: Text(
-                                action,
-                                style: const TextStyle(
-                                    color: basicLineColor,
-                                    fontFamily: mainFontFamily,
-                                    fontSize: 16,
-                                    letterSpacing: 0.02,
-                                    fontWeight: FontWeight.w500),
-                              )),
+      child: Observer(
+        builder: (_) {
+          String action = _getAction(gameService.gameStatus);
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              action == "Resume"
+                  ? Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            FocusZoom(
+                              builder: (focus) {
+                                return InkWell(
+                                  focusNode: focus,
+                                  onTap: starting || game == null
+                                      ? null
+                                      : _startgame,
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 100,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(90),
+                                      color: Colors.white,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        action,
+                                        style: const TextStyle(
+                                          color: basicLineColor,
+                                          fontFamily: mainFontFamily,
+                                          fontSize: 16,
+                                          letterSpacing: 0.02,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        }),
-                        const SizedBox(height: 20),
-                        FocusZoom(builder: (focus) {
-                          return InkWell(
-                            focusNode: focus,
-                            onTap: terminating
-                                ? null
-                                : () => _terminateSession(
-                                    gameService.gameStatus.sessionId!),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width - 100,
-                              height: 48,
-                              decoration: BoxDecoration(
+                            const SizedBox(height: 20),
+                            FocusZoom(
+                              builder: (focus) {
+                                return InkWell(
+                                  focusNode: focus,
+                                  onTap: terminating
+                                      ? null
+                                      : () => _terminateSession(
+                                            gameService.gameStatus.sessionId!,
+                                            gameService.gameStatus.gameId!,
+                                          ),
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 100,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(90),
+                                      gradient: const LinearGradient(
+                                        colors: [pinkColor2, purpleColor3],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        terminating
+                                            ? 'Terminating...'
+                                            : 'Terminate',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: mainFontFamily,
+                                          fontSize: 16,
+                                          letterSpacing: 0.02,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  : Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FocusZoom(
+                          builder: (focus) {
+                            return InkWell(
+                              focusNode: focus,
+                              onTap:
+                                  starting || game == null ? null : _startgame,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 100,
+                                height: 48,
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(90),
                                   gradient: const LinearGradient(
-                                    colors: [pinkColor2, purpleColor3],
+                                    colors: [pinkColor1, blueColor1],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
-                                  )),
-                              child: Center(
+                                  ),
+                                ),
+                                child: Center(
                                   child: Text(
-                                terminating ? 'Terminating...' : 'Terminate',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: mainFontFamily,
-                                    fontSize: 16,
-                                    letterSpacing: 0.02,
-                                    fontWeight: FontWeight.w500),
-                              )),
-                            ),
-                          );
-                        })
-                      ],
-                    ),
-                  ),
-                )
-              : Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FocusZoom(builder: (focus) {
-                      return InkWell(
-                        focusNode: focus,
-                        onTap: starting || game == null ? null : _startgame,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width - 100,
-                          height: 48,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(90),
-                              gradient: const LinearGradient(
-                                colors: [pinkColor1, blueColor1],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              )),
-                          child: Center(
-                              child: Text(
-                            action,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: mainFontFamily,
-                                fontSize: 16,
-                                letterSpacing: 0.02,
-                                fontWeight: FontWeight.w500),
-                          )),
+                                    action,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: mainFontFamily,
+                                      fontSize: 16,
+                                      letterSpacing: 0.02,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    }),
-                  ),
-                ),
-        ]);
-      }),
+                      ),
+                    ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -518,13 +546,34 @@ class _GameState extends State<Game> {
     );
   }
 
+  void _showFeedback({
+    required String gameId,
+    required String userId,
+    required String sessionId,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertFeedbackDialog(
+          gameId: gameId,
+          userId: userId,
+          sessionId: sessionId,
+        );
+      },
+    );
+  }
+
   void _startgame() async {
     if (isShowSetting) {
       await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return gameSettingPopup(context, gameSetting, _startSession);
+          return GameSettingsDialog(
+            gameSetting: gameSetting,
+            launchGame: _startSession,
+          );
         },
       );
     } else {
@@ -635,12 +684,22 @@ class _GameState extends State<Game> {
     );
   }
 
-  void _terminateSession(String sessionId) async {
+  void _terminateSession(String sessionId, String gameId) async {
     setState(() => terminating = true);
+
     try {
       await restService2.terminateSession(sessionId);
       await _reloadGameStatus();
+
       _showError(title: 'Success', message: 'Session Terminated');
+
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        _showFeedback(
+          gameId: gameId,
+          userId: AuthService().userIdToken!.userId,
+          sessionId: sessionId,
+        );
+      });
     } on DioError catch (e) {
       _showError(title: 'Opps..', message: e.error['message']);
     } finally {

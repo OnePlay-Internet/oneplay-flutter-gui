@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 
 import '../../common/common.dart';
@@ -6,7 +8,16 @@ import '../common_divider.dart';
 import 'survey_dialog.dart';
 
 class AlertFeedbackDialog extends StatefulWidget {
-  const AlertFeedbackDialog({super.key});
+  final String gameId;
+  final String userId;
+  final String sessionId;
+
+  const AlertFeedbackDialog({
+    super.key,
+    required this.gameId,
+    required this.userId,
+    required this.sessionId,
+  });
 
   @override
   State<AlertFeedbackDialog> createState() => _AlertFeedbackDialogState();
@@ -14,9 +25,8 @@ class AlertFeedbackDialog extends StatefulWidget {
 
 class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
   List<String> ratings = ['1', '2', '3', '4', '5'];
-  String selectedRating = '';
-  // int index = 0;
-  int isSelected = 0;
+  String selectedRating = '5';
+  int index = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -105,53 +115,32 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
               height: size.height * 0.03,
             ),
             Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.02,
+              padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.02,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: feedbackRow(
+                  size: size,
+                  feedback: ratings,
+                  value: index,
+                  onTap: (e) {
+                    setState(() => index = ratings.indexOf(e));
+                    if (index == 0) {
+                      selectedRating = '1';
+                    } else if (index == 1) {
+                      selectedRating = '2';
+                    } else if (index == 2) {
+                      selectedRating = '3';
+                    } else if (index == 3) {
+                      selectedRating = '4';
+                    } else if (index == 4) {
+                      selectedRating = '5';
+                    }
+                  },
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _icon(0, text: '1'),
-                    _icon(1, text: '2'),
-                    _icon(2, text: '3'),
-                    _icon(3, text: '4'),
-                    _icon(4, text: '5'),
-                  ],
-                )
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.start,
-                //   children: feedbackRow(
-                //     size: size,
-                //     feedback: ratings,
-                //     value: index,
-                //     onTap: (e) {
-                //       setState(() => index = ratings.indexOf(e));
-                //       if (index == 0) {
-                //         print('***** Rating: 1 *****');
-
-                //         selectedRating = '1';
-                //       } else if (index == 1) {
-                //         print('***** Rating: 2 *****');
-
-                //         selectedRating = '2';
-                //       } else if (index == 2) {
-                //         print('***** Rating: 3 *****');
-
-                //         selectedRating = '3';
-                //       } else if (index == 3) {
-                //         print('***** Rating: 4 *****');
-
-                //         selectedRating = '4';
-                //       } else if (index == 4) {
-                //         print('***** Rating: 5 *****');
-
-                //         selectedRating = '5';
-                //       }
-                //     },
-                //   ),
-                // ),
-                ),
+              ),
+            ),
             SizedBox(
               height: size.height * 0.01,
             ),
@@ -219,7 +208,6 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
                     colors: const [blackColor2, blackColor1],
                     onTap: () {
                       Navigator.pop(context);
-                      print('***** Selected rating: $selectedRating *****');
 
                       showDialog(
                         context: context,
@@ -227,6 +215,9 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
                         builder: (BuildContext context) {
                           return AlertSurveyDialog(
                             feedbackRating: selectedRating,
+                            gameId: widget.gameId,
+                            userId: widget.userId,
+                            sessionId: widget.sessionId,
                           );
                         },
                       );
@@ -241,46 +232,6 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
     );
   }
 
-  Widget _icon(int index, {String? text}) {
-    Size size = MediaQuery.of(context).size;
-
-    return InkResponse(
-      onTap: () {
-        selectedRating = ratings[index];
-
-        print("***** Index: $index, Gender: $selectedRating *****");
-
-        setState(() {
-          isSelected = index;
-        });
-      },
-      child: Container(
-        height: size.height * 0.062,
-        width: size.width * 0.17,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: LinearGradient(
-            colors: isSelected == index
-                ? [purpleColor2, purpleColor1]
-                : [blackColor2, blackColor1],
-          ),
-        ),
-        child: Center(
-          child: Text(
-            text!,
-            style: const TextStyle(
-              fontFamily: mainFontFamily,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.02,
-              color: textPrimaryColor,
-              fontSize: 18,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   List<Widget> feedbackRow({
     required Size size,
     required List<String> feedback,
@@ -289,11 +240,11 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
   }) {
     List<Widget> widgets = [];
     for (var element in feedback) {
-      if (element.indexOf(element) > 0 &&
-          element.indexOf(element) < element.length) {
+      if (feedback.indexOf(element) > 0 &&
+          feedback.indexOf(element) < feedback.length) {
         widgets.add(
           const SizedBox(
-            width: 30,
+            width: 0,
           ),
         );
       }
@@ -306,9 +257,9 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
-                colors: element.indexOf(element) == value
-                    ? [blackColor2, blackColor1]
-                    : [purpleColor2, purpleColor1],
+                colors: feedback.indexOf(element) == value
+                    ? [purpleColor2, purpleColor1]
+                    : [blackColor2, blackColor1],
               ),
             ),
             child: Center(

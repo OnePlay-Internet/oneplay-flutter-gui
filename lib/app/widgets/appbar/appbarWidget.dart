@@ -60,7 +60,7 @@ class AppBarWidget {
             onTap: searchTap,
             child: Container(
               padding: const EdgeInsets.all(8.0),
-              margin: const EdgeInsets.only(left: 10.0),
+              margin: const EdgeInsets.only(left: 15.0),
               decoration: BoxDecoration(
                 color: blackColor1,
                 borderRadius: BorderRadius.circular(50.0),
@@ -83,14 +83,15 @@ class AppBarWidget {
             child: Container(
               height: 48,
               width: 48,
-              margin: const EdgeInsets.only(right: 20.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: CachedNetworkImage(
-                  imageUrl:
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7KwDl1w4ReBuWUjLiEd6AQNSEHjnqF8VH7Aflhq179xxAEOyHw6pbgKJtCewBexVFshk&usqp=CAU',
-                ),
-              ),
+              margin: const EdgeInsets.only(right: 15.0),
+              child: Image.asset(userPng),
+              // ClipRRect(
+              //   borderRadius: BorderRadius.circular(100),
+              //   child: CachedNetworkImage(
+              //     imageUrl:
+              //         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7KwDl1w4ReBuWUjLiEd6AQNSEHjnqF8VH7Aflhq179xxAEOyHw6pbgKJtCewBexVFshk&usqp=CAU',
+              //   ),
+              // ),
             ),
           )
         ],
