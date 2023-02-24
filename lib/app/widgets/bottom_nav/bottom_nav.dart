@@ -111,11 +111,6 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void _onTap(int value) {
-    // cover case: in game detail go to feed
-    // show dialog refer 2nd attempt
-    if (value == selectedIndex && selectedIndex != 0 && value != 3) { 
-      return;
-    }
 
     setState(() {
       selectedIndex = value;
