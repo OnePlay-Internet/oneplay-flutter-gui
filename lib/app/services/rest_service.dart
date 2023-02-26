@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor.dart';
 import 'package:oneplay_flutter_gui/app/models/friend_model.dart';
@@ -243,7 +244,12 @@ class RestService {
   }
 
   Future<List<ShortGameModel>> getGamesByGenre(String genre) async {
-    final body = {'genres': genre, 'order_by': "trend_score:desc"};
+    final body = {
+      if (genre.isNotEmpty) 'genres': genre,
+      'order_by': "trend_score:desc"
+    };
+
+    debugPrint("body: $body");
 
     Response res = await _dio.post('/games/feed/custom', data: body);
 
@@ -261,6 +267,15 @@ class RestService {
     var data = (res.data as List<dynamic>)
         .map((e) => ShortGameModel.fromJson(e))
         .toList();
+    return data;
+  }
+
+  Future<List<String>> getTopGenres(int limit) async {
+    final params = {'limit': limit};
+
+    Response res = await _dio.get('/games/top_genres', queryParameters: params);
+
+    var data = (res.data as List<dynamic>).map((e) => e.toString()).toList();
     return data;
   }
 

@@ -8,7 +8,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 
-import '../../../main.dart';
 import '../../services/rest_service_2.dart';
 
 class BottomNav extends StatefulWidget {
@@ -125,7 +124,7 @@ class _BottomNavState extends State<BottomNav> {
         Modular.to.pushNamedAndRemoveUntil('/feeds', (r) => false);
         break;
       case 1:
-        print('***** Game *****');
+        Modular.to.pushNamed('/games');
         break;
       case 2:
         gameService;
