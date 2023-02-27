@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="bug fix, implement refer widget">
+    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="bug fixes and implement api on refer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/Components/profile_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/Components/profile_tab.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/services/rest_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/services/rest_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/survey_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/survey_dialog.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +131,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677162493709</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="bug fixes and implement api on refer">
+      <created>1677246633760</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1677246633760</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -174,6 +184,7 @@
     <MESSAGE value="settings, improvements" />
     <MESSAGE value="log fixes" />
     <MESSAGE value="bug fix, implement refer widget" />
-    <option name="LAST_COMMIT_MESSAGE" value="bug fix, implement refer widget" />
+    <MESSAGE value="bug fixes and implement api on refer" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fixes and implement api on refer" />
   </component>
 </project>

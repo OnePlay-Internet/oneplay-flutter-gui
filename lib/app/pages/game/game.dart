@@ -23,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../common/common.dart';
 import '../../models/game_feed_model.dart';
 import '../../widgets/list_game_w_label/list_game_w_label.dart';
+import '../../widgets/popup/error_dialog.dart';
 import '../../widgets/popup/feedback_dialog.dart';
 import 'component.dart';
 import 'game_settings_dialog.dart';
@@ -529,19 +530,30 @@ class _GameState extends State<Game> {
       context: context,
       builder: (context) => GamepadPop(
         context: context,
-        child: AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            FocusZoom(builder: (focus) {
-              return TextButton(
-                focusNode: focus,
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Ok'),
-              );
-            }),
-          ],
+        child: AlertErrorDialog(
+          isTryAgain: true,
+          errorCode: title,
+          error: message,
+          onTap1: () {
+            //
+          },
+          onTap2: () {
+            //
+          },
         ),
+        // AlertDialog(
+        //   title: Text(title),
+        //   content: Text(message),
+        //   actions: [
+        //     FocusZoom(builder: (focus) {
+        //       return TextButton(
+        //         focusNode: focus,
+        //         onPressed: () => Navigator.of(context).pop(),
+        //         child: const Text('Ok'),
+        //       );
+        //     }),
+        //   ],
+        // ),
       ),
     );
   }
@@ -600,8 +612,13 @@ class _GameState extends State<Game> {
         );
       }
     } on DioError catch (e) {
+      print('***** Exeption error: $e *****');
+
       _stopLoading();
-      _showError(title: 'Error', message: e.error['message']);
+      _showError(
+        title: e.response?.data?['code'].toString() ?? '503',
+        message: e.error['message'],
+      );
     }
   }
 

@@ -36,15 +36,19 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
   String errorComment = '';
   bool isLoading = false;
 
-  List<String>? firstAnswerList;
-  List<String>? secondAnswerList;
-
   String? firsAnswer;
   String? secondAnswer;
 
+  String? firstQuestion;
+  String? secondQuestion;
+  int? rating;
+
+  List<String>? firstAnswerList;
+  List<String>? secondAnswerList;
+
   int index = 0;
   int index2 = 0;
-  var firstQuestion, secondQuestion, rating;
+
   @override
   void initState() {
     super.initState();
@@ -81,16 +85,11 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
 
     firsAnswer = firstAnswerList![0];
     secondAnswer = secondAnswerList![0];
-
-    print('******* answer value $firsAnswer');
-    print('******* answer2 value $secondAnswer');
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    print("******* Size: $size");
 
     return AlertDialog(
       backgroundColor: mainColor,
@@ -163,7 +162,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          firstQuestion,
+                          firstQuestion!,
                           style: const TextStyle(
                             fontFamily: mainFontFamily,
                             fontWeight: FontWeight.w500,
@@ -191,16 +190,10 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                             setState(() => index = firstAnswerList!.indexOf(e));
 
                             if (index == 0) {
-                              print(
-                                  '***** Answer: ${firstAnswerList![index]} *****');
                               firsAnswer = firstAnswerList![index];
                             } else if (index == 1) {
-                              print(
-                                  '***** Answer: ${firstAnswerList![index]} *****');
                               firsAnswer = firstAnswerList![index];
                             } else if (index == 2) {
-                              print(
-                                  '***** Answer: ${firstAnswerList![index]} *****');
                               firsAnswer = firstAnswerList![index];
                             }
                           },
@@ -217,7 +210,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          secondQuestion,
+                          secondQuestion!,
                           style: const TextStyle(
                             fontFamily: mainFontFamily,
                             fontWeight: FontWeight.w500,
@@ -247,16 +240,10 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
 
                             if (index2 == 0) {
                               secondAnswer = secondAnswerList![index2];
-                              print(
-                                  '***** Answer2: ${secondAnswerList![index2]} *****');
                             } else if (index2 == 1) {
                               secondAnswer = secondAnswerList![index2];
-                              print(
-                                  '***** Answer2: ${secondAnswerList![index2]} *****');
                             } else if (index2 == 2) {
                               secondAnswer = secondAnswerList![index2];
-                              print(
-                                  '***** Answer2: ${secondAnswerList![index2]} *****');
                             }
                           },
                         ),
@@ -317,28 +304,16 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                             loadingTitle: 'Submiting...',
                             isLoading: isLoading,
                             onTap: () {
-                              print(''' 
-                              Game id: ${widget.gameId},
-                              User id: ${widget.userId},
-                              Sesstion id: ${widget.sessionId},
-                              Rating: $rating,
-                              Commnet: $comment,
-                              Question: $firstQuestion,
-                              Answer: $firsAnswer,
-                              Question2: $secondQuestion,
-                              Answer2: $secondAnswer,
-                               ''');
-
                               _feedBack(
                                 gameId: widget.gameId,
                                 userId: widget.userId,
                                 sessionId: widget.sessionId,
-                                rating: rating,
+                                rating: rating!,
                                 suggestion: '',
                                 comment: comment,
-                                question: firstQuestion,
+                                question: firstQuestion!,
                                 answer: firsAnswer!,
-                                question2: secondQuestion,
+                                question2: secondQuestion!,
                                 answer2: secondAnswer!,
                               );
                             },
@@ -359,6 +334,13 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
     );
   }
 
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   _feedBack({
     required String gameId,
     required String userId,
@@ -374,7 +356,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
     setState(() => isLoading = true);
 
     try {
-      final res = await _restService.feedBack(
+      await _restService.feedBack(
         gameId: gameId,
         userId: userId,
         sessionId: sessionId,
@@ -386,34 +368,31 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
         question2: question2,
         answer2: answer2,
       );
-      Navigator.of(context, rootNavigator: true).pop();
+      if (mounted) {
+        Navigator.pop(context);
 
-      print('****** Response: ${res.feedbackData!.qna![0].question}');
-      // await showDialog(
-      //   context: context,
-      //   builder: (_) {
-      //     Future.delayed(const Duration(milliseconds: 2000), () {
-      //       setState(() => isLoading = false);
-      //       if (mounted) {
-      //         Navigator.of(context, rootNavigator: false).pop();
-      //       }
-      //     });
+        showDialog(
+          context: context,
+          builder: (_) {
+            Future.delayed(const Duration(milliseconds: 2000), () {
+              setState(() => isLoading = false);
+              Navigator.pop(_);
+            });
 
-      //     return alertSuccess(
-      //       context: context,
-      //       title: 'Feedback created',
-      //       description: 'Feedback created successfuly',
-      //     );
-      //   },
-      //   barrierDismissible: false,
-      // );
+            return alertSuccess(
+              context: context,
+              title: 'Feedback created',
+              description: 'Feedback created successfuly',
+            );
+          },
+          barrierDismissible: false,
+        );
+      }
     } on DioError catch (e) {
-      print('***** Exeption error: ${e.response?.data['message']} *****');
-
       showDialog(
         context: context,
         builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
+          Future.delayed(const Duration(milliseconds: 2000), () {
             setState(() => isLoading = false);
             Navigator.pop(_);
           });

@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor.dart';
@@ -37,8 +39,28 @@ class RestService {
     return user;
   }
 
+  Future<UserModel> updateProfileImage({
+    required File imageFile,
+  }) async {
+    String fileName = imageFile.path.split('/').last;
+
+    FormData data = FormData.fromMap({
+      "profile_image": await MultipartFile.fromFile(
+        imageFile.path,
+        filename: fileName,
+      ),
+    });
+
+    Response userData = await _dio.put('/accounts/profile', data: data);
+
+    print('***** Update image: $userData *****');
+
+    UserModel user = UserModel.fromJson(userData.data);
+
+    return user;
+  }
+
   Future<UserModel> updateProfile({
-    FormData? profileImage,
     String? firstName,
     String? lastName,
     String? bio,
@@ -47,7 +69,6 @@ class RestService {
     String? age,
   }) async {
     Response userData = await _dio.put('/accounts/profile', data: {
-      'profile_image': profileImage,
       'first_name': firstName,
       'last_name': lastName,
       'bio': bio,

@@ -116,15 +116,6 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void _onTap(int value) {
-    if (previousIndex == value) {
-      previousIndex = selectedIndex;
-    }
-    if (value == selectedIndex) {
-      // unable Tap on selected in setting screen
-      if (value == 4) {
-        return;
-      }
-    }
     setState(() {
       selectedIndex = value;
       print('***** $selectedIndex *****');
