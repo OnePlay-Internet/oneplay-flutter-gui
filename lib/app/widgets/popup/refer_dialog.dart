@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:oneplay_flutter_gui/main.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -94,7 +95,8 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
                     InkWell(
                       onTap: () {
                         Navigator.pop(context);
-
+                        navigateIdx.value = 0;
+                        navigateIdx.notifyListeners();
                         Modular.to
                             .pushNamedAndRemoveUntil('/feeds', (r) => false);
                       },

@@ -36,6 +36,9 @@ class Settings extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
+        if (navigateIdx.value != selectedIndex) {
+          return false;
+        }
         navigateIdx.value = previousIndex;
         navigateIdx.notifyListeners();
         return true;
