@@ -12,6 +12,7 @@ import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/appbar/appbarWidget.dart';
+import 'package:oneplay_flutter_gui/main.dart';
 
 import '../../services/shared_pref_service.dart';
 import '../../widgets/bottom_nav/bottom_nav.dart';
@@ -67,6 +68,7 @@ class _AdminWidgetState extends State<AdminWidget> {
               Modular.to.pushNamed('/search');
             },
             profileTap: () {
+
               Modular.to.pushNamed('/setting');
             },
             profileImage: profilePhoto,

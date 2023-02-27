@@ -31,7 +31,12 @@ class _BottomNavState extends State<BottomNav> {
     _initGames();
     timer =
         Timer.periodic(const Duration(seconds: 10), (timer) => _initGames());
+    navigateIdx.addListener(() => updateCurrentIdx(navigateIdx.value));
     super.initState();
+  }
+
+  updateCurrentIdx(int idx) {
+    setState(() => selectedIndex = idx);
   }
 
   @override
