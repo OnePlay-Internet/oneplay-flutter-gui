@@ -188,6 +188,7 @@ bySigningUpFooter() {
           children: [
             const Text(
               'By singing up, you agree to OnePlay’s',
+              textScaleFactor: 1.03,
               style: TextStyle(
                 fontFamily: mainFontFamily,
                 fontSize: 14,

@@ -65,6 +65,7 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
+    print('****** id: ${widget.id} *******');
     return GamepadPop(
       context: context,
       child: RefreshIndicator(
@@ -99,7 +100,7 @@ class _GameState extends State<Game> {
                     height: 10,
                   ),
                   commonDividerWidget(),
-                  topVideoLiveStreamsWidget(context, videos),
+                  // topVideoLiveStreamsWidget(context, videos),
                   commonDividerWidget(),
                   const SizedBox(height: 30),
                   if (genreGames.isNotEmpty)

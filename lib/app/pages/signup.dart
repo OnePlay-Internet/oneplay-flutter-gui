@@ -70,25 +70,27 @@ class _SignUpState extends State<SignUp> {
       );
 
       if (signupModel.isSignupSuccessfull == true) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              setState(() => isLoading = false);
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (_) {
+              Future.delayed(const Duration(milliseconds: 2000), () {
+                setState(() => isLoading = false);
 
-              Navigator.pop(_);
+                Navigator.pop(_);
 
-              Modular.to.pushNamed('/auth/login');
-            });
+                Modular.to.pushNamed('/auth/login');
+              });
 
-            return alertSuccess(
-              context: context,
-              title: 'SignUp Success',
-              description: 'Please check your email to confirm your email id',
-            );
-          },
-          barrierDismissible: false,
-        );
+              return alertSuccess(
+                context: context,
+                title: 'SignUp Success',
+                description: 'Please check your email to confirm your email id',
+              );
+            },
+            barrierDismissible: false,
+          );
+        }
       }
     } on DioError catch (e) {
       print('***** Exeption : $e *****');
