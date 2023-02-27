@@ -31,7 +31,12 @@ class _BottomNavState extends State<BottomNav> {
     _initGames();
     timer =
         Timer.periodic(const Duration(seconds: 10), (timer) => _initGames());
+    navigateIdx.addListener(() => updateCurrentIdx(navigateIdx.value));
     super.initState();
+  }
+
+  updateCurrentIdx(int idx) {
+    setState(() => selectedIndex = idx);
   }
 
   @override
@@ -111,6 +116,9 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void _onTap(int value) {
+    if (previousIndex == value) {
+      previousIndex = selectedIndex;
+    }
     if (value == selectedIndex) {
       // unable Tap on selected in setting screen
       if (value == 4) {
