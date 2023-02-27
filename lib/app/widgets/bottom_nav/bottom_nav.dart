@@ -144,12 +144,7 @@ class _BottomNavState extends State<BottomNav> {
           barrierDismissible: true,
           builder: (BuildContext context) {
             return WillPopScope(
-                onWillPop: () async {
-                  navigateIdx.value = previousIndex;
-                  navigateIdx.notifyListeners();
-                  return true;
-                },
-                child: const AlertReferPopUp());
+                onWillPop: () async => false, child: const AlertReferPopUp());
           },
         );
         break;
