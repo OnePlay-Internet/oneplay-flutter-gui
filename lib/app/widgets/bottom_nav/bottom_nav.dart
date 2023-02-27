@@ -158,6 +158,8 @@ class _BottomNavState extends State<BottomNav> {
         Modular.to.pushNamed('/setting');
         break;
     }
+
+    navigateIdx.value = selectedIndex;
   }
 
   BottomNavigationBarItem _item({

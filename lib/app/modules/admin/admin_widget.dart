@@ -68,7 +68,13 @@ class _AdminWidgetState extends State<AdminWidget> {
               Modular.to.pushNamed('/search');
             },
             profileTap: () {
-
+              //  Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);
+              if (navigateIdx.value == 4) {
+                return;
+              }
+              navigateIdx.value = 4;
+              previousIndex = 0;
+              navigateIdx.notifyListeners();
               Modular.to.pushNamed('/setting');
             },
             profileImage: profilePhoto,
