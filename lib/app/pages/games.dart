@@ -40,6 +40,7 @@ class _GamesState extends State<Games> {
   ];
   GameFilter? currentFilter;
   bool starting = false;
+  bool updating = false;
 
   @override
   void initState() {
@@ -131,13 +132,13 @@ class _GamesState extends State<Games> {
                                                     color: Colors.white,
                                                   ))),
                                           onPressed: () {
-                                            setState(() => starting = true);
+                                            setState(() => updating = true);
                                             currentFilter = e;
                                             currentFilter!
                                                 .getGames()
                                                 .then((value) => setState(() {
                                                       games = value;
-                                                      starting = false;
+                                                      updating = false;
                                                     }));
                                           },
                                         ),
@@ -147,10 +148,12 @@ class _GamesState extends State<Games> {
                                       ]))
                                   .toList(),
                             )),
-                        getStoreContent(
-                            GameFeedModel(
-                                title: currentFilter!.title, games: games),
-                            context),
+                        updating
+                            ? const Center(child: CircularProgressIndicator())
+                            : getStoreContent(
+                                GameFeedModel(
+                                    title: currentFilter!.title, games: games),
+                                context),
                       ],
                     ),
                   ),
