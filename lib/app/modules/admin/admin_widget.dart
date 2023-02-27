@@ -12,6 +12,7 @@ import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/appbar/appbarWidget.dart';
+import 'package:oneplay_flutter_gui/main.dart';
 
 import '../../widgets/bottom_nav/bottom_nav.dart';
 
@@ -63,7 +64,12 @@ class _AdminWidgetState extends State<AdminWidget> {
             },
             profileTap: () {
               //  Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);
-
+              if (navigateIdx.value == 4) {
+                return;
+              }
+              navigateIdx.value = 4;
+              previousIndex = 0;
+              navigateIdx.notifyListeners();
               Modular.to.pushNamed('/setting');
             },
           ),

@@ -16,3 +16,5 @@ void main() async {
 }
 
 int selectedIndex = 0;
+int previousIndex = 0;
+ValueNotifier<int> navigateIdx = ValueNotifier<int>(0);
