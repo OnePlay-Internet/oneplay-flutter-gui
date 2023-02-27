@@ -109,23 +109,25 @@ class _GeneralTabState extends State<GeneralTab> {
     try {
       final res = await _restService.logoutFromDevice(userKey);
       if (res == true) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              Navigator.pop(_);
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (_) {
+              Future.delayed(const Duration(milliseconds: 2000), () {
+                Navigator.pop(_);
 
-              Modular.to.pushNamed('/auth/login');
-            });
+                Modular.to.pushNamed('/auth/login');
+              });
 
-            return alertSuccess(
-              context: context,
-              title: 'Logout Success',
-              description: 'Logout successfully!',
-            );
-          },
-          barrierDismissible: false,
-        );
+              return alertSuccess(
+                context: context,
+                title: 'Logout Success',
+                description: 'Logout successfully!',
+              );
+            },
+            barrierDismissible: false,
+          );
+        }
       }
     } on DioError catch (e) {
       print('***** Exeption error: $e *****');

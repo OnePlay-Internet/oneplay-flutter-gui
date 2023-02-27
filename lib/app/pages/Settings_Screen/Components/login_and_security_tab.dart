@@ -191,25 +191,27 @@ class _LoginAndSecurityTabState extends State<LoginAndSecurityTab> {
       await _restService.updateProfile(
         phone: phone,
       );
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 2000), () {
-            setState(() => isLoading = false);
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            Future.delayed(const Duration(milliseconds: 2000), () {
+              setState(() => isLoading = false);
 
-            Navigator.pop(_);
+              Navigator.pop(_);
 
-            _getUser();
-          });
+              _getUser();
+            });
 
-          return alertSuccess(
-            context: context,
-            title: 'Update Phone Success',
-            description: 'Update phone successfully!',
-          );
-        },
-        barrierDismissible: false,
-      );
+            return alertSuccess(
+              context: context,
+              title: 'Update Phone Success',
+              description: 'Update phone successfully!',
+            );
+          },
+          barrierDismissible: false,
+        );
+      }
     } on DioError catch (e) {
       print('***** Exeption error: $e *****');
 

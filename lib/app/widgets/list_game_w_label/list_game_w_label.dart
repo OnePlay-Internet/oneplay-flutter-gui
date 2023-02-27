@@ -55,7 +55,7 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                             BlendMode.srcOver),
                         child: CachedNetworkImage(
                           imageUrl: e.textBgImage.toString(),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                           height: MediaQuery.of(context).size.height * 1 / 7.4,
                           width: MediaQuery.of(context).size.width * 2.3 / 4.5,
                           placeholder: (context, url) {
@@ -79,8 +79,9 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                                   child: Text(
                                     e.title.toString(),
                                     style: const TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: mainFontFamily),
+                                      color: Colors.white,
+                                      fontFamily: mainFontFamily,
+                                    ),
                                     maxLines: 2,
                                   ),
                                 ),

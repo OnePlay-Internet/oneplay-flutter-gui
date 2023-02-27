@@ -16,6 +16,15 @@ class SharedPrefService {
     await _pref?.setString('sessionToken', token);
   }
 
+  static String? getProfileImage() {
+    _ensureInitialized();
+    return _pref?.getString('profileImage');
+  }
+
+  static Future storeProfileImage(String profileImage) async {
+    await _pref?.setString('profileImage', profileImage);
+  }
+
   static List<String>? getUserId() {
     _ensureInitialized();
     return _pref?.getStringList('user_id');

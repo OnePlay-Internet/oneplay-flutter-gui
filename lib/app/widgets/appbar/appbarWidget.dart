@@ -26,6 +26,8 @@ class AppBarWidget {
     //   Function()? openDrawer,
     Function()? searchTap,
     Function()? profileTap,
+    String? profileImage,
+    required Size size,
   }) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -78,20 +80,28 @@ class AppBarWidget {
               Image.asset(betatagPng, height: 18)
             ],
           ),
-          InkWell(
-            onTap: profileTap,
-            child: Container(
-              height: 48,
-              width: 48,
-              margin: const EdgeInsets.only(right: 15.0),
-              child: Image.asset(userPng),
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(100),
-              //   child: CachedNetworkImage(
-              //     imageUrl:
-              //         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7KwDl1w4ReBuWUjLiEd6AQNSEHjnqF8VH7Aflhq179xxAEOyHw6pbgKJtCewBexVFshk&usqp=CAU',
-              //   ),
-              // ),
+          Padding(
+            padding: const EdgeInsets.only(right: 15.0),
+            child: InkWell(
+              onTap: profileTap,
+              child: SizedBox(
+                height: size.height * 0.054,
+                width: size.width * 0.115,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    size.height * 0.1,
+                  ),
+                  child: profileImage != null
+                      ? Image.network(
+                          profileImage,
+                          fit: BoxFit.fill,
+                        )
+                      : Image.asset(
+                          userPng,
+                          fit: BoxFit.fill,
+                        ),
+                ),
+              ),
             ),
           )
         ],

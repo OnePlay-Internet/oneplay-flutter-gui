@@ -13,6 +13,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/appbar/appbarWidget.dart';
 
+import '../../services/shared_pref_service.dart';
 import '../../widgets/bottom_nav/bottom_nav.dart';
 
 class AdminWidget extends StatefulWidget {
@@ -30,10 +31,14 @@ class _AdminWidgetState extends State<AdminWidget> {
   RestService2 restService2 = Modular.get<RestService2>();
   Timer? timer;
 
+  final profilePhoto = SharedPrefService.getProfileImage();
+
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return WillPopScope(
       // onWillPop: () => exitDialog(context),
       onWillPop: () async {
@@ -54,18 +59,17 @@ class _AdminWidgetState extends State<AdminWidget> {
           preferredSize: const Size.fromHeight(60.0),
           child: AppBarWidget().menu(
             context,
+            size: size,
             // openDrawer: () {
             //   _scaffoldKey.currentState?.openDrawer();
             // },
             searchTap: () {
-              // Modular.to.pushNamedAndRemoveUntil('/search', (r) => false);
               Modular.to.pushNamed('/search');
             },
             profileTap: () {
-              //  Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);
-
               Modular.to.pushNamed('/setting');
             },
+            profileImage: profilePhoto,
           ),
         ),
         body: const RouterOutlet(),

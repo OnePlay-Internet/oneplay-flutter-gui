@@ -172,15 +172,17 @@ class _LoginState extends State<Login> {
       userIdList = SharedPrefService.getUserId() ?? [];
 
       if (userIdList.contains(AuthService().userIdToken!.userId)) {
-        showDialog(
-          context: context,
-          builder: (_) => alertSuccess(
+        if (mounted) {
+          showDialog(
             context: context,
-            title: 'Login Success',
-            description: 'You will be redirect to Feed Page',
-          ),
-          barrierDismissible: false,
-        );
+            builder: (_) => alertSuccess(
+              context: context,
+              title: 'Login Success',
+              description: 'You will be redirect to Feed Page',
+            ),
+            barrierDismissible: false,
+          );
+        }
 
         Future.delayed(const Duration(milliseconds: 2000), () {
           setState(() => loading = false);
@@ -190,25 +192,26 @@ class _LoginState extends State<Login> {
           Modular.to.navigate('/feeds');
         });
       } else {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return AlertStepsPopUp(
-              onTap: () {
-                userIdList.addAll([AuthService().userIdToken!.userId]);
+        if (mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertStepsPopUp(
+                onTap: () {
+                  userIdList.addAll([AuthService().userIdToken!.userId]);
 
-                SharedPrefService.storeUserId(userIdList);
+                  SharedPrefService.storeUserId(userIdList);
+                  SharedPrefService.storeIsAgree(true);
 
-                SharedPrefService.storeIsAgree(true);
+                  Navigator.pop(_);
 
-                Navigator.pop(_);
-
-                Modular.to.navigate('/feeds');
-              },
-            );
-          },
-        );
+                  Modular.to.navigate('/feeds');
+                },
+              );
+            },
+          );
+        }
       }
     } on DioError catch (e) {
       showDialog(

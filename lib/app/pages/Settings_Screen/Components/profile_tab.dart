@@ -11,6 +11,7 @@ import 'package:validators/validators.dart';
 import '../../../common/common.dart';
 import '../../../models/user_model.dart';
 import '../../../services/rest_service.dart';
+import '../../../services/shared_pref_service.dart';
 import '../../../widgets/popup/popup_success.dart';
 import '../../../widgets/Submit_Button/submit_button.dart';
 import '../../../widgets/textfieldsetting/custom_text_field_setting.dart';
@@ -27,7 +28,7 @@ class _ProfileTabState extends State<ProfileTab> {
   UserModel? userModel;
   bool isLoading = false;
 
-  String photo = '';
+  String? profilePicture;
   String userName = '';
   String firstName = '';
   String lastName = '';
@@ -47,7 +48,7 @@ class _ProfileTabState extends State<ProfileTab> {
       setState(() {
         imageFile = File(pickedFile.path);
 
-        print('***** File name: $imageFile *****');
+        print('***** File name: ${imageFile!.path} *****');
       });
     }
   }
@@ -105,12 +106,22 @@ class _ProfileTabState extends State<ProfileTab> {
                                         color: Colors.white.withOpacity(0.5),
                                         colorBlendMode: BlendMode.modulate,
                                       )
-                                    : Image.asset(
-                                        femalePng,
-                                        fit: BoxFit.cover,
-                                        color: Colors.white.withOpacity(0.5),
-                                        colorBlendMode: BlendMode.modulate,
-                                      ),
+                                    : profilePicture != null ||
+                                            profilePicture != null
+                                        ? Image.network(
+                                            profilePicture!,
+                                            fit: BoxFit.cover,
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                            colorBlendMode: BlendMode.modulate,
+                                          )
+                                        : Image.asset(
+                                            femalePng,
+                                            fit: BoxFit.cover,
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                            colorBlendMode: BlendMode.modulate,
+                                          ),
                               ),
                             ),
                           ),
@@ -245,7 +256,12 @@ class _ProfileTabState extends State<ProfileTab> {
                             setState(() => errorBio = "");
                           }
 
-                          _updateProfile();
+                          if (imageFile != null) {
+                            _updateProfileImage(imageFile!);
+                            _updateProfile();
+                          } else {
+                            _updateProfile();
+                          }
                         },
                       ),
                       SizedBox(
@@ -283,12 +299,13 @@ class _ProfileTabState extends State<ProfileTab> {
     setState(() => isLoading = true);
     try {
       final res = await _restService.getProfile();
+      SharedPrefService.storeProfileImage(res.photo.toString());
+      profilePicture = res.photo.toString();
 
       setState(() {
         userModel = res;
         isLoading = false;
 
-        photo = userModel!.photo.toString();
         userName =
             userModel!.username != null ? userModel!.username.toString() : '';
         firstName = userModel!.firstName.toString();
@@ -300,47 +317,49 @@ class _ProfileTabState extends State<ProfileTab> {
     }
   }
 
+  _updateProfileImage(File imageFile) async {
+    try {
+      await _restService.updateProfileImage(imageFile: imageFile);
+
+      print('***** Profile image updated successfuly! *****');
+    } on DioError catch (e) {
+      print('***** Profile image not updated! *****');
+      print('***** Exeption error: ${e.error} *****');
+    }
+  }
+
   _updateProfile() async {
     setState(() => isLoading = true);
 
-    // String fileName = imageFile!.path.split('/').last;
-
-    // String mimeType = mime(fileName)!;
-    // String mimee = mimeType.split('/')[0];
-    // String type = mimeType.split('/')[1];
-
-    // FormData formData = FormData.fromMap({
-    //   'profile_image': await MultipartFile.fromFile(imageFile!.path,
-    //       filename: fileName, contentType: MediaType(mimee, type))
-    // });
-
     try {
       await _restService.updateProfile(
-        // profileImage: imageFile,
         userName: userName,
         firstName: firstName,
         lastName: lastName,
         bio: bio,
       );
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 2000), () {
-            setState(() => isLoading = false);
 
-            Navigator.pop(_);
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            Future.delayed(const Duration(milliseconds: 2000), () {
+              setState(() => isLoading = false);
 
-            _getUser();
-          });
+              Navigator.pop(_);
 
-          return alertSuccess(
-            context: context,
-            title: 'Update Profile Success',
-            description: 'Update profile successfully!',
-          );
-        },
-        barrierDismissible: false,
-      );
+              _getUser();
+            });
+
+            return alertSuccess(
+              context: context,
+              title: 'Update Profile Success',
+              description: 'Update profile successfully!',
+            );
+          },
+          barrierDismissible: false,
+        );
+      }
     } on DioError catch (e) {
       print('***** Exeption error: $e *****');
 

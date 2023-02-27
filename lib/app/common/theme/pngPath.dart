@@ -37,3 +37,4 @@ const twiterPng = 'assets/png/icon_twiter.png';
 const whatsappPng = 'assets/png/icon_whatsapp.png';
 const feedbackPng = 'assets/png/icon_feedback.png';
 const userPng = 'assets/png/icon_user.png';
+const serverErrorPng = 'assets/png/icon_server_error.png';

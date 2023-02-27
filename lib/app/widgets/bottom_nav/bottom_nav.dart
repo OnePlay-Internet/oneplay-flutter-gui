@@ -111,7 +111,6 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void _onTap(int value) {
-
     setState(() {
       selectedIndex = value;
       print('***** $selectedIndex *****');
