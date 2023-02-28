@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/widgets/bottom_nav/bottom_nav.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:oneplay_flutter_gui/main.dart';
@@ -40,7 +41,12 @@ class Settings extends StatelessWidget {
           return false;
         }
         navigateIdx.value = 0;
+        previousIndex = 0;
         navigateIdx.notifyListeners();
+        Modular.to.pushNamedAndRemoveUntil(
+          '/feeds',
+          (p0) => false,
+        );
         return true;
       },
       child: GamepadPop(
