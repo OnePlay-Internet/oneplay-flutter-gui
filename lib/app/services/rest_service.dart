@@ -281,7 +281,7 @@ class RestService {
       if (developer != null) 'developer': developer,
       if (genres != null) 'genres': genres,
       if (publisher != null) 'publisher': publisher,
-      'order_by': "trend_score:desc"
+      'order_by': "release_date:desc"
     };
     final params = {if (limit != null) 'limit': limit};
 
@@ -418,5 +418,12 @@ class RestService {
     var data = FeedbackModel.fromJson(response.data);
 
     return data;
+  }
+
+  Future<void> postAReport(String message, dynamic response) async {
+    final res = await _dio.post('/logging/report', data: {
+      "message": message,
+      "response": response,
+    });
   }
 }

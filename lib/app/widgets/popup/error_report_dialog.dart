@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 
 import '../../common/common.dart';
-import '../Submit_Button/submit_button.dart';
+import '../submit_button/submit_button.dart';
 import '../common_divider.dart';
 import '../textfieldsetting/custom_text_field_setting.dart';
 
-class AlertErrorReportDialog extends StatelessWidget {
-  final Function()? onTap;
-  final TextEditingController? reportController;
-  final bool isLoading;
+class AlertErrorReportDialog extends StatefulWidget {
+  final Future Function(String message) onTap;
 
   const AlertErrorReportDialog({
     super.key,
-    this.onTap,
-    this.reportController,
-    this.isLoading = false,
+    required this.onTap,
   });
+
+  @override
+  State<AlertErrorReportDialog> createState() => _AlertErrorReportDialogState();
+}
+
+class _AlertErrorReportDialogState extends State<AlertErrorReportDialog> {
+  final TextEditingController reportController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +81,23 @@ class AlertErrorReportDialog extends StatelessWidget {
                 buttonTitle: 'Send',
                 loadingTitle: 'Sending...',
                 isLoading: isLoading,
-                onTap: onTap,
+                onTap: () {
+                  if (reportController.text != '') {
+                    reportError();
+                  }
+                },
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void reportError() {
+    setState(() => isLoading = true);
+    widget
+        .onTap(reportController.text)
+        .whenComplete(() => setState(() => isLoading = true));
   }
 }

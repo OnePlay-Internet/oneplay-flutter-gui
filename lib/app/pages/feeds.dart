@@ -47,27 +47,29 @@ class _FeedsState extends State<Feeds> {
     });
   }
 
-  _getLibrary() {
-    restService.getWishlistGames(authService.wishlist).then((value) {
-      if (mounted) setState(() => library = value);
-
-      _showGameDialog();
-    });
+  Future<List<ShortGameModel>> _getLibrary() async {
+    try {
+      final games = await restService.getWishlistGames(authService.wishlist);
+      if (games.isEmpty) {
+        _showGameDialog();
+      }
+      return games;
+    } catch (e) {
+      return [];
+    }
   }
 
   _showGameDialog() {
-    if (library.isEmpty) {
-      if (isDiolog == true) {
-      } else {
-        isDiolog = true;
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return const GameAlertDialog();
-          },
-        );
-      }
+    if (isDiolog == true) {
+    } else {
+      isDiolog = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return const GameAlertDialog();
+        },
+      );
     }
   }
 
@@ -126,13 +128,22 @@ class _FeedsState extends State<Feeds> {
                     children: [
                       bannerWidget(firstRow),
                       Observer(builder: (context) {
-                        _getLibrary();
-                        return library.isNotEmpty
-                            ? listGameWithLabel(
-                                GameFeedModel(
-                                    title: 'My Library', games: library),
-                                context)
-                            : Container();
+                        return FutureBuilder(
+                          future: _getLibrary(),
+                          builder: (_, snap) {
+                            return snap.hasData
+                                ? snap.data!.isNotEmpty
+                                    ? listGameWithLabel(
+                                        GameFeedModel(
+                                          title: 'My Library',
+                                          games: snap.data!,
+                                        ),
+                                        context,
+                                      )
+                                    : Container()
+                                : Container();
+                          },
+                        );
                       }),
                       ...restRow
                           .map((value) => listGameWithLabel(value, context))

@@ -39,7 +39,6 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  final controller = TextEditingController();
   RestService restService = Modular.get<RestService>();
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
@@ -327,7 +326,10 @@ class _GameState extends State<Game> {
       authService.addToWishlist(game?.oneplayId ?? "");
       _showSnackBar('Added to Library');
     } on DioError catch (e) {
-      _showError(title: 'Error', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+      );
     }
   }
 
@@ -339,7 +341,10 @@ class _GameState extends State<Game> {
       authService.removeFromWishlist(game?.oneplayId ?? "");
       _showSnackBar('Removed from Library');
     } on DioError catch (e) {
-      _showError(title: 'Error', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+      );
     }
   }
 
@@ -529,34 +534,29 @@ class _GameState extends State<Game> {
   }
 
   void _showError({
-    required String title,
     required String message,
+    int? errorCode,
     Function()? onTap,
+    dynamic response,
   }) {
     showDialog(
       context: context,
       builder: (context) => GamepadPop(
         context: context,
         child: AlertErrorDialog(
-          errorCode: title,
+          errorCode: errorCode,
           error: message,
           onTap1: onTap,
-          onTap2: () {
-            Navigator.pop(context);
-
-            showDialog(
-              context: context,
-              builder: (context) => GamepadPop(
-                context: context,
-                child: AlertErrorReportDialog(
-                  isLoading: starting,
-                  reportController: controller,
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            );
+          onTap2: (message) async {
+            try {
+              await restService.postAReport(message, response);
+              _showSnackBar('Thanks, we will look into the issue!');
+            } on DioError catch (e) {
+              _showError(
+                errorCode: e.response?.statusCode ?? 503,
+                message: e.error['message'],
+              );
+            }
           },
         ),
       ),
@@ -612,8 +612,8 @@ class _GameState extends State<Game> {
       } else {
         _stopLoading();
         _showError(
-          title: 'Opps...',
           message: res.msg != '' ? res.msg : 'Something went wrong',
+          onTap: () => _startSession(),
         );
       }
     } on DioError catch (e) {
@@ -621,11 +621,10 @@ class _GameState extends State<Game> {
 
       _stopLoading();
       _showError(
-        title: e.response?.data?['code'].toString() ?? '503',
         message: e.error['message'],
-        onTap: () {
-          print('object');
-        },
+        errorCode: e.response?.statusCode ?? 503,
+        onTap: () => _startSession(),
+        response: e.response?.data,
       );
     }
   }
@@ -633,7 +632,10 @@ class _GameState extends State<Game> {
   void _startGameWithClientToken(String sessionId, {int millis = 0}) async {
     if (millis > 60000) {
       _stopLoading();
-      _showError(title: 'Opps...', message: 'Something went wrong');
+      _showError(
+        message: 'Something went wrong',
+        onTap: () => _startSession(),
+      );
       return;
     }
 
@@ -661,7 +663,12 @@ class _GameState extends State<Game> {
       }
     } on DioError catch (e) {
       _stopLoading();
-      _showError(title: 'Error', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+        onTap: (() => _startSession()),
+        response: e.response?.data,
+      );
       return;
     }
   }
@@ -688,7 +695,11 @@ class _GameState extends State<Game> {
                   _startgame();
                 } on DioError catch (e) {
                   _stopLoading();
-                  _showError(title: 'Opps...', message: e.error['message']);
+                  _showError(
+                    message: e.error['message'],
+                    errorCode: e.response?.statusCode ?? 503,
+                    response: e.response?.data,
+                  );
                 }
               },
               child: const Text('Yes'),
@@ -716,7 +727,7 @@ class _GameState extends State<Game> {
       await restService2.terminateSession(sessionId);
       await _reloadGameStatus();
 
-      _showError(title: 'Success', message: 'Session Terminated');
+      _showSnackBar('Session Terminated');
 
       Future.delayed(const Duration(milliseconds: 2000), () {
         _showFeedback(
@@ -726,7 +737,11 @@ class _GameState extends State<Game> {
         );
       });
     } on DioError catch (e) {
-      _showError(title: 'Opps..', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+        response: e.response?.data,
+      );
     } finally {
       setState(() => terminating = false);
     }
