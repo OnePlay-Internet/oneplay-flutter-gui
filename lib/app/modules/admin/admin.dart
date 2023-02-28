@@ -12,6 +12,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 
 import '../../pages/Settings_Screen/settings.dart';
+import '../../pages/games.dart';
 
 class AdminModule extends Module {
   @override
@@ -32,6 +33,10 @@ class AdminModule extends Module {
             ChildRoute(
               '/feeds',
               child: (context, args) => const Feeds(),
+            ),
+            ChildRoute(
+              '/games',
+              child: (context, args) => const Games(),
             ),
             ChildRoute(
               '/game/:id',

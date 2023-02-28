@@ -264,10 +264,29 @@ class RestService {
     return data;
   }
 
-  Future<List<ShortGameModel>> getGamesByGenre(String genre) async {
-    final body = {'genres': genre, 'order_by': "trend_score:desc"};
+  Future<List<ShortGameModel>> getGames(
+      {String? releaseDate,
+      int? playTime,
+      bool? isFree,
+      String? stores,
+      String? developer,
+      String? genres,
+      String? publisher,
+      int? limit}) async {
+    final body = {
+      if (releaseDate != null) 'release_date': releaseDate,
+      if (playTime != null) 'play_time': playTime,
+      if (isFree != null) 'is_free': isFree,
+      if (stores != null) 'stores': stores,
+      if (developer != null) 'developer': developer,
+      if (genres != null) 'genres': genres,
+      if (publisher != null) 'publisher': publisher,
+      'order_by': "trend_score:desc"
+    };
+    final params = {if (limit != null) 'limit': limit};
 
-    Response res = await _dio.post('/games/feed/custom', data: body);
+    Response res = await _dio.post('/games/feed/custom',
+        data: body, queryParameters: params);
 
     var data = (res.data as List<dynamic>)
         .map((e) => ShortGameModel.fromJson(e))
@@ -275,14 +294,32 @@ class RestService {
     return data;
   }
 
-  Future<List<ShortGameModel>> getGamesByDeveloper(String developer) async {
-    final body = {'developer': developer, 'order_by': "trend_score:desc"};
+  Future<List<String>> getTopGenres(int limit) async {
+    final params = {'limit': limit};
 
-    Response res = await _dio.post('/games/feed/custom', data: body);
+    Response res = await _dio.get('/games/top_genres', queryParameters: params);
 
-    var data = (res.data as List<dynamic>)
-        .map((e) => ShortGameModel.fromJson(e))
-        .toList();
+    var data = (res.data as List<dynamic>).map((e) => e.toString()).toList();
+    return data;
+  }
+
+  Future<List<String>> getTopDevelopers(int limit) async {
+    final params = {'limit': limit};
+
+    Response res =
+        await _dio.get('/games/top_developers', queryParameters: params);
+
+    var data = (res.data as List<dynamic>).map((e) => e.toString()).toList();
+    return data;
+  }
+
+  Future<List<String>> getTopPublishers(int limit) async {
+    final params = {'limit': limit};
+
+    Response res =
+        await _dio.get('/games/top_publishers', queryParameters: params);
+
+    var data = (res.data as List<dynamic>).map((e) => e.toString()).toList();
     return data;
   }
 

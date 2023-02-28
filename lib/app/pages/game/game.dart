@@ -384,7 +384,7 @@ class _GameState extends State<Game> {
 
   void _getFromGenreBydId() async {
     game?.genreMappings.forEach((element) async {
-      var genreGames = await restService.getGamesByGenre(element);
+      var genreGames = await restService.getGames(genres: element);
       setState(() => this.genreGames =
           getShuffledGames([...this.genreGames, ...genreGames]));
     });
@@ -392,7 +392,7 @@ class _GameState extends State<Game> {
 
   void _getFromDeveloperBydId() async {
     game?.developer.forEach((element) async {
-      var devGames = await restService.getGamesByDeveloper(element);
+      var devGames = await restService.getGames(developer: element);
       setState(() =>
           this.devGames = getShuffledGames([...this.devGames, ...devGames]));
     });
