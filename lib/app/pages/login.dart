@@ -16,6 +16,8 @@ import 'package:oneplay_flutter_gui/app/widgets/textfield/custom_text_field.dart
 
 import 'package:validators/validators.dart';
 
+import '../../main.dart';
+import '../models/user_model.dart';
 import '../services/shared_pref_service.dart';
 import '../widgets/popup/popup_success.dart';
 import '../widgets/Submit_Button/submit_button.dart';
@@ -29,7 +31,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final RestService restService = Modular.get<RestService>();
+  final AuthService authService = Modular.get<AuthService>();
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  UserModel? userModel;
 
   bool loading = false;
 
@@ -132,7 +137,6 @@ class _LoginState extends State<Login> {
                         setState(() => errorPwd = "Enter your password");
                         return;
                       }
-                      analytics.logEvent(name: 'test');
 
                       login(idCtrler.text.trim(), pwdCtrler.text.trim());
                     },
@@ -157,13 +161,27 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     SharedPrefService.storeIsAgree(false);
+    imageURL.addListener(() => updateURL(imageURL.value));
     super.initState();
   }
 
-  login(String id, String password) async {
-    final RestService restService = Modular.get<RestService>();
-    final AuthService authService = Modular.get<AuthService>();
+  updateURL(String url) {
+    if (mounted) {
+      setState(() => profilePicURL = url);
+    }
+  }
 
+  _getUserProfile() async {
+    final res = await restService.getProfile();
+
+    imageURL.value = res.photo.toString();
+
+    setState(() {
+      userModel = res;
+    });
+  }
+
+  login(String id, String password) async {
     setState(() => loading = true);
 
     try {
@@ -173,6 +191,8 @@ class _LoginState extends State<Login> {
       );
 
       await authService.login(token);
+
+      _getUserProfile();
 
       userIdList = SharedPrefService.getUserId() ?? [];
 
@@ -191,6 +211,18 @@ class _LoginState extends State<Login> {
 
         Future.delayed(const Duration(milliseconds: 2000), () {
           setState(() => loading = false);
+
+          print('***** Login event: 1 *****');
+
+          analytics.logEvent(
+            name: 'log_in',
+            parameters: {
+              "user_id": userModel!.id.toString(),
+              "partner_id": userModel!.partnerId.toString(),
+            },
+          );
+
+          print('***** Login event: 2 *****');
 
           SharedPrefService.storeIsAgree(true);
 

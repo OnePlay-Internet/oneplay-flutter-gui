@@ -27,7 +27,6 @@ class AppBarWidget {
     //   Function()? openDrawer,
     Function()? searchTap,
     Function()? profileTap,
-    // String? profileImage,
     required Size size,
   }) {
     return Container(
