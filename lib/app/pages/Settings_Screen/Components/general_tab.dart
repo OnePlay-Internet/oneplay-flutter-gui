@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../main.dart';
 import '../../../common/common.dart';
 import '../../../models/device_history_model.dart';
 import '../../../services/auth_service.dart';
@@ -83,6 +84,9 @@ class _GeneralTabState extends State<GeneralTab> {
                         Navigator.pop(context);
                       },
                       onYes: () {
+                        navigateIdx.value = 0;
+                        navigateIdx.notifyListeners();
+
                         _logoutUser(AuthService().sessionKey());
                       },
                     );
@@ -113,7 +117,7 @@ class _GeneralTabState extends State<GeneralTab> {
           showDialog(
             context: context,
             builder: (_) {
-              Future.delayed(const Duration(milliseconds: 2000), () {
+              Future.delayed(const Duration(milliseconds: 3000), () {
                 Navigator.pop(_);
 
                 Modular.to.pushNamed('/auth/login');

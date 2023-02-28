@@ -8,7 +8,7 @@ import '../gradient_text_button/gradient_text_button.dart';
 StatefulBuilder settingsTextField({
   required BuildContext context,
   double? height,
-  required String textFieldTitle,
+  String? textFieldTitle,
   TextEditingController? controller,
   Function(String)? onChanged,
   String errorMessage = '',
@@ -37,16 +37,18 @@ StatefulBuilder settingsTextField({
                 margin: EdgeInsets.symmetric(
                   vertical: size.height * 0.02,
                 ),
-                child: Text(
-                  textFieldTitle,
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textPrimaryColor,
-                    fontSize: 14,
-                  ),
-                ),
+                child: textFieldTitle != null
+                    ? Text(
+                        textFieldTitle,
+                        style: const TextStyle(
+                          fontFamily: mainFontFamily,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.02,
+                          color: textPrimaryColor,
+                          fontSize: 14,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ),
               errorMessage != ''
                   ? GradientTextButton(

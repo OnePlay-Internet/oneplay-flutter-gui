@@ -6,7 +6,6 @@ import '../Submit_Button/submit_button.dart';
 class AlertErrorDialog extends StatelessWidget {
   final String errorCode;
   final String error;
-  final bool isTryAgain;
   final Function()? onTap1;
   final Function()? onTap2;
 
@@ -14,7 +13,6 @@ class AlertErrorDialog extends StatelessWidget {
     super.key,
     required this.errorCode,
     required this.error,
-    this.isTryAgain = false,
     this.onTap1,
     this.onTap2,
   });
@@ -79,10 +77,10 @@ class AlertErrorDialog extends StatelessWidget {
                   ),
                 ),
               ),
-              isTryAgain == false
+              onTap1 == null
                   ? Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: size.height * 0.04,
+                      padding: EdgeInsets.only(
+                        bottom: size.height * 0.04,
                       ),
                       child: SubmitButton(
                         buttonTitle: 'Ok',

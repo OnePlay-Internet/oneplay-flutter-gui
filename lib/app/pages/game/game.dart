@@ -24,6 +24,7 @@ import '../../common/common.dart';
 import '../../models/game_feed_model.dart';
 import '../../widgets/list_game_w_label/list_game_w_label.dart';
 import '../../widgets/popup/error_dialog.dart';
+import '../../widgets/popup/error_report_dialog.dart';
 import '../../widgets/popup/feedback_dialog.dart';
 import 'component.dart';
 import 'game_settings_dialog.dart';
@@ -38,6 +39,7 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  final controller = TextEditingController();
   RestService restService = Modular.get<RestService>();
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
@@ -526,35 +528,37 @@ class _GameState extends State<Game> {
     });
   }
 
-  void _showError({required String title, required String message}) {
+  void _showError({
+    required String title,
+    required String message,
+    Function()? onTap,
+  }) {
     showDialog(
       context: context,
       builder: (context) => GamepadPop(
         context: context,
         child: AlertErrorDialog(
-          isTryAgain: true,
           errorCode: title,
           error: message,
-          onTap1: () {
-            //
-          },
+          onTap1: onTap,
           onTap2: () {
-            //
+            Navigator.pop(context);
+
+            showDialog(
+              context: context,
+              builder: (context) => GamepadPop(
+                context: context,
+                child: AlertErrorReportDialog(
+                  isLoading: starting,
+                  reportController: controller,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            );
           },
         ),
-        // AlertDialog(
-        //   title: Text(title),
-        //   content: Text(message),
-        //   actions: [
-        //     FocusZoom(builder: (focus) {
-        //       return TextButton(
-        //         focusNode: focus,
-        //         onPressed: () => Navigator.of(context).pop(),
-        //         child: const Text('Ok'),
-        //       );
-        //     }),
-        //   ],
-        // ),
       ),
     );
   }
@@ -619,6 +623,9 @@ class _GameState extends State<Game> {
       _showError(
         title: e.response?.data?['code'].toString() ?? '503',
         message: e.error['message'],
+        onTap: () {
+          print('object');
+        },
       );
     }
   }

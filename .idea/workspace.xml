@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="error dialog implement">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/game/game.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/game/game.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/signup.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/signup.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/footer/authFooter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/footer/authFooter.dart" afterDir="false" />
-    </list>
+    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="remove live steam section" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -145,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677491321124</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="remove live steam section">
+      <created>1677499206275</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1677499206275</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -193,6 +195,7 @@
     <MESSAGE value="bug fix, implement refer widget" />
     <MESSAGE value="bug fixes and implement api on refer" />
     <MESSAGE value="error dialog implement" />
-    <option name="LAST_COMMIT_MESSAGE" value="error dialog implement" />
+    <MESSAGE value="remove live steam section" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove live steam section" />
   </component>
 </project>

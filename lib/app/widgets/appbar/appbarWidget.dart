@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/color.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/pngPath.dart';
+import 'package:oneplay_flutter_gui/main.dart';
 
 class AppBarWidget {
   Widget logoWidget(BuildContext context) {
@@ -26,7 +27,7 @@ class AppBarWidget {
     //   Function()? openDrawer,
     Function()? searchTap,
     Function()? profileTap,
-    String? profileImage,
+    // String? profileImage,
     required Size size,
   }) {
     return Container(
@@ -80,30 +81,35 @@ class AppBarWidget {
               Image.asset(betatagPng, height: 18)
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: InkWell(
-              onTap: profileTap,
-              child: SizedBox(
-                height: size.height * 0.054,
-                width: size.width * 0.115,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                    size.height * 0.1,
+          ValueListenableBuilder(
+            valueListenable: imageURL,
+            builder: (context, value, widget) {
+              return InkWell(
+                onTap: profileTap,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: SizedBox(
+                    height: size.height * 0.047,
+                    width: size.width * 0.10,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                        size.height * 0.1,
+                      ),
+                      child: imageURL.value != ''
+                          ? Image.network(
+                              imageURL.value,
+                              fit: BoxFit.fill,
+                            )
+                          : Image.asset(
+                              userPng,
+                              fit: BoxFit.fill,
+                            ),
+                    ),
                   ),
-                  child: profileImage != null
-                      ? Image.network(
-                          profileImage,
-                          fit: BoxFit.fill,
-                        )
-                      : Image.asset(
-                          userPng,
-                          fit: BoxFit.fill,
-                        ),
                 ),
-              ),
-            ),
-          )
+              );
+            },
+          ),
         ],
       ),
     );

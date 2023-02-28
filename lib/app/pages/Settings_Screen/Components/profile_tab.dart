@@ -8,6 +8,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:validators/validators.dart';
 
+import '../../../../main.dart';
 import '../../../common/common.dart';
 import '../../../models/user_model.dart';
 import '../../../services/rest_service.dart';
@@ -292,19 +293,24 @@ class _ProfileTabState extends State<ProfileTab> {
   @override
   initState() {
     _getUser();
+    imageURL.addListener(() => updateURL(imageURL.value));
     super.initState();
+  }
+
+  updateURL(String url) {
+    setState(() => profilePicURL = url);
   }
 
   _getUser() async {
     setState(() => isLoading = true);
     try {
       final res = await _restService.getProfile();
-      SharedPrefService.storeProfileImage(res.photo.toString());
-      profilePicture = res.photo.toString();
 
       setState(() {
         userModel = res;
         isLoading = false;
+        profilePicture = res.photo.toString();
+        SharedPrefService.storeProfileImage(profilePicture.toString());
 
         userName =
             userModel!.username != null ? userModel!.username.toString() : '';
@@ -319,7 +325,15 @@ class _ProfileTabState extends State<ProfileTab> {
 
   _updateProfileImage(File imageFile) async {
     try {
-      await _restService.updateProfileImage(imageFile: imageFile);
+      final response =
+          await _restService.updateProfileImage(imageFile: imageFile);
+
+      imageURL.value = response.photo.toString();
+
+      // imageURL.value = response.photo.toString();
+
+      print('+++++++++++Image: ${imageURL.value}');
+      SharedPrefService.storeProfileImage(response.photo.toString());
 
       print('***** Profile image updated successfuly! *****');
     } on DioError catch (e) {
