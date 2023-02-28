@@ -46,6 +46,13 @@ class _BottomNavState extends State<BottomNav> {
     super.dispose();
   }
 
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   void _initGames() async {
     gameService.loadStatus(await restService2.getGameStatus());
   }
@@ -119,14 +126,14 @@ class _BottomNavState extends State<BottomNav> {
     if (previousIndex == value) {
       previousIndex = selectedIndex;
     }
-    
+
     if (value == selectedIndex) {
       // unable Tap on selected in setting screen
       if (value == 4) {
         return;
       }
     }
-    
+
     setState(() {
       selectedIndex = value;
       print('***** $selectedIndex *****');
@@ -155,7 +162,9 @@ class _BottomNavState extends State<BottomNav> {
           barrierDismissible: true,
           builder: (BuildContext context) {
             return WillPopScope(
-                onWillPop: () async => false, child: const AlertReferPopUp());
+              onWillPop: () async => false,
+              child: const AlertReferPopUp(),
+            );
           },
         );
         break;

@@ -31,14 +31,17 @@ class _AdminWidgetState extends State<AdminWidget> {
   RestService restService = Modular.get<RestService>();
   RestService2 restService2 = Modular.get<RestService2>();
   Timer? timer;
-
-  final profilePhoto = SharedPrefService.getProfileImage();
+  String? profilePhoto;
 
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    // setState(() {
+    //   profilePhoto = imageURL;
+    //   print('******* Image url: $profilePhoto *******');
+    // });
 
     return WillPopScope(
       // onWillPop: () => exitDialog(context),
@@ -77,7 +80,7 @@ class _AdminWidgetState extends State<AdminWidget> {
               navigateIdx.notifyListeners();
               Modular.to.pushNamed('/setting');
             },
-            profileImage: profilePhoto,
+            // profileImage: imageURL,
           ),
         ),
         body: const RouterOutlet(),

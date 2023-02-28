@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +29,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   bool loading = false;
 
   final idCtrler = TextEditingController();
@@ -114,7 +117,7 @@ class _LoginState extends State<Login> {
                     buttonTitle: 'Log in',
                     loadingTitle: 'Logging you in...',
                     isLoading: loading,
-                    onTap: () {
+                    onTap: () async {
                       FocusManager.instance.primaryFocus?.unfocus();
 
                       if (!isEmail(idCtrler.text)) {
@@ -129,6 +132,8 @@ class _LoginState extends State<Login> {
                         setState(() => errorPwd = "Enter your password");
                         return;
                       }
+                      analytics.logEvent(name: 'test');
+
                       login(idCtrler.text.trim(), pwdCtrler.text.trim());
                     },
                   ),

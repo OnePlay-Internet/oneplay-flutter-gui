@@ -50,6 +50,8 @@ dependencies:
   url_launcher: ^6.1.9
   intl: ^0.18.0
   mime_type: ^1.0.0
+  firebase_core: ^2.7.0
+  firebase_analytics: ^10.1.4
 
 dev_dependencies:
   flutter_test:
