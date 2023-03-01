@@ -66,7 +66,6 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    print('****** id: ${widget.id} *******');
     return GamepadPop(
       context: context,
       child: RefreshIndicator(

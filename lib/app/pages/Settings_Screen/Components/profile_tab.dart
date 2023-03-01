@@ -12,7 +12,6 @@ import '../../../../main.dart';
 import '../../../common/common.dart';
 import '../../../models/user_model.dart';
 import '../../../services/rest_service.dart';
-import '../../../services/shared_pref_service.dart';
 import '../../../widgets/popup/popup_success.dart';
 import '../../../widgets/Submit_Button/submit_button.dart';
 import '../../../widgets/textfieldsetting/custom_text_field_setting.dart';
@@ -310,7 +309,6 @@ class _ProfileTabState extends State<ProfileTab> {
         userModel = res;
         isLoading = false;
         profilePicture = res.photo.toString();
-        SharedPrefService.storeProfileImage(profilePicture.toString());
 
         userName =
             userModel!.username != null ? userModel!.username.toString() : '';
@@ -329,11 +327,6 @@ class _ProfileTabState extends State<ProfileTab> {
           await _restService.updateProfileImage(imageFile: imageFile);
 
       imageURL.value = response.photo.toString();
-
-      // imageURL.value = response.photo.toString();
-
-      print('+++++++++++Image: ${imageURL.value}');
-      SharedPrefService.storeProfileImage(response.photo.toString());
 
       print('***** Profile image updated successfuly! *****');
     } on DioError catch (e) {
