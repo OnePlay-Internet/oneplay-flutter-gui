@@ -421,7 +421,7 @@ class RestService {
   }
 
   Future<void> postAReport(String message, dynamic response) async {
-    final res = await _dio.post('/logging/report', data: {
+    await _dio.post('/logging/report', data: {
       "message": message,
       "response": response,
     });

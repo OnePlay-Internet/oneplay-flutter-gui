@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:oneplay_flutter_gui/app/widgets/bottom_nav/bottom_nav.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:oneplay_flutter_gui/main.dart';
 

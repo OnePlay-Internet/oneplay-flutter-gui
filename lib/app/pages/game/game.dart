@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -24,7 +27,6 @@ import '../../common/common.dart';
 import '../../models/game_feed_model.dart';
 import '../../widgets/list_game_w_label/list_game_w_label.dart';
 import '../../widgets/popup/error_dialog.dart';
-import '../../widgets/popup/error_report_dialog.dart';
 import '../../widgets/popup/feedback_dialog.dart';
 import 'component.dart';
 import 'game_settings_dialog.dart';
@@ -39,6 +41,8 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   RestService restService = Modular.get<RestService>();
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
@@ -67,7 +71,6 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    print('****** id: ${widget.id} *******');
     return WillPopScope(
       onWillPop: () async => isOpenPopupSetting ? false : true,
       child: GamepadPop(
@@ -377,7 +380,65 @@ class _GameState extends State<Game> {
   void initState() {
     starting = true;
     init();
+    _gameDetailsLogEvent(
+      gameId: widget.id,
+      userId: AuthService().userIdToken!.userId,
+    );
+
     super.initState();
+  }
+
+  _gameDetailsLogEvent({
+    required String gameId,
+    required String userId,
+  }) {
+    analytics.logEvent(
+      name: gameDetailsEvent,
+      parameters: {
+        "game_id": gameId,
+        "user_id": userId,
+      },
+    );
+    print('***** Game id: $gameId, User id: $userId *****');
+  }
+
+  _gamePlayLogEvent({
+    required String resolution,
+    required int fps,
+    required double bitrate,
+    required String streamCodec,
+    required String audioType,
+    required bool vsyncEnabled,
+    required bool onscreenControls,
+  }) {
+    analytics.logEvent(
+      name: gamePlayEvent,
+      parameters: {
+        "resolution": resolution,
+        "fps": fps,
+        "bitrate": bitrate,
+        "stream_codec": streamCodec,
+        "audio_type": audioType,
+        "vsync_enabled": vsyncEnabled,
+        "onscreen_controls": onscreenControls,
+      },
+    );
+    print('***** Resolution: $resolution *****');
+  }
+
+  _terminateGameLogEvent({
+    required String gameId,
+    required String sessionId,
+    required String userId,
+  }) {
+    analytics.logEvent(
+      name: terminetGameEvent,
+      parameters: {
+        "game_id": gameId,
+        "session_id": sessionId,
+        "user_id": userId,
+      },
+    );
   }
 
   init() async {
@@ -393,7 +454,9 @@ class _GameState extends State<Game> {
       _getFromGenreBydId();
       _getFromDeveloperBydId();
     } on DioError catch (e) {
-      ErrorHandler.networkErrorHandler(e, context);
+      if (mounted) {
+        ErrorHandler.networkErrorHandler(e, context);
+      }
     }
   }
 
@@ -617,6 +680,16 @@ class _GameState extends State<Game> {
 
       if (res.data.apiAction == ApiAction.callSession) {
         _startGameWithClientToken(res.data.session?.id ?? '');
+
+        _gamePlayLogEvent(
+          resolution: gameSetting.resolution ?? '',
+          fps: gameSetting.fps ?? 0,
+          bitrate: gameSetting.bitrate ?? 0.0,
+          streamCodec: gameSetting.stream_codec ?? '',
+          audioType: gameSetting.audio_type ?? '',
+          vsyncEnabled: gameSetting.is_vsync_enabled ?? false,
+          onscreenControls: gameSetting.onscreen_controls ?? false,
+        );
       } else if (res.data.apiAction == ApiAction.callTerminate) {
         _terminateGame(res.data.session?.id ?? '');
       } else {
@@ -700,6 +773,11 @@ class _GameState extends State<Game> {
                 Navigator.of(context).pop();
                 try {
                   await restService2.terminateSession(sessionId);
+                  _terminateGameLogEvent(
+                    gameId: widget.id,
+                    sessionId: sessionId,
+                    userId: AuthService().userIdToken!.userId,
+                  );
                   _reloadGameStatus();
                   _stopLoading();
                   _startgame();
@@ -735,6 +813,11 @@ class _GameState extends State<Game> {
 
     try {
       await restService2.terminateSession(sessionId);
+      _terminateGameLogEvent(
+        gameId: gameId,
+        sessionId: sessionId,
+        userId: AuthService().userIdToken!.userId,
+      );
       await _reloadGameStatus();
 
       _showSnackBar('Session Terminated');

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';

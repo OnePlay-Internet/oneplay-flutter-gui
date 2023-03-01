@@ -7,5 +7,7 @@ export 'theme/textStyle.dart';
 export 'utils/text_utils.dart';
 export 'utils/play_constant.dart';
 export 'utils/error_handler.dart';
-export 'utils/questions.dart';
+export 'utils/questions_answer.dart';
+export 'utils/url_links.dart';
+export 'utils/google_analytics_log_events.dart';
 export 'config/config.dart';

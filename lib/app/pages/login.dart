@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -31,19 +31,22 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   final RestService restService = Modular.get<RestService>();
   final AuthService authService = Modular.get<AuthService>();
-  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  UserModel? userModel;
-
-  bool loading = false;
 
   final idCtrler = TextEditingController();
   final pwdCtrler = TextEditingController();
 
   String errorEmail = "";
   String errorPwd = "";
+
   List<String> userIdList = [];
+
+  UserModel? userModel;
+
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -181,6 +184,27 @@ class _LoginState extends State<Login> {
     });
   }
 
+  _loginLogEvent({
+    required String userId,
+    required String partnerId,
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String phone,
+  }) {
+    analytics.logEvent(
+      name: loginEvent,
+      parameters: {
+        "user_id": userId,
+        "partner_id": partnerId,
+        "first_name": firstName,
+        "last_name": lastName,
+        "email": email,
+        "phone": phone,
+      },
+    );
+  }
+
   login(String id, String password) async {
     setState(() => loading = true);
 
@@ -214,12 +238,13 @@ class _LoginState extends State<Login> {
 
           print('***** Login event: 1 *****');
 
-          analytics.logEvent(
-            name: 'log_in',
-            parameters: {
-              "user_id": userModel!.id.toString(),
-              "partner_id": userModel!.partnerId.toString(),
-            },
+          _loginLogEvent(
+            userId: userModel!.id.toString(),
+            partnerId: userModel!.partnerId.toString(),
+            firstName: userModel!.firstName.toString(),
+            lastName: userModel!.lastName.toString(),
+            email: userModel!.email.toString(),
+            phone: userModel!.phone.toString(),
           );
 
           print('***** Login event: 2 *****');
