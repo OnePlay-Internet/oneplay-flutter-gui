@@ -5,7 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="fix bug">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/common/common.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/common/common.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/common/utils/questions.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/Components/login_and_security_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/Components/login_and_security_tab.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/settings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/settings.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/feeds.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/feeds.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/game/game.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/game/game.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/pages/search.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/search.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/services/rest_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/services/rest_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/footer/authFooter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/footer/authFooter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/refer_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/refer_dialog.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/survey_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/survey_dialog.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/widget_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

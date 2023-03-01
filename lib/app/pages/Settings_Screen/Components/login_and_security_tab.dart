@@ -243,25 +243,27 @@ class _LoginAndSecurityTabState extends State<LoginAndSecurityTab> {
         updatePassword: password,
       );
 
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 2000), () {
-            setState(() => isLoading = false);
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            Future.delayed(const Duration(milliseconds: 2000), () {
+              setState(() => isLoading = false);
 
-            Navigator.pop(_);
+              Navigator.pop(_);
 
-            password = '';
-          });
+              password = '';
+            });
 
-          return alertSuccess(
-            context: context,
-            title: 'Update Password Success',
-            description: 'Update password successfully!',
-          );
-        },
-        barrierDismissible: false,
-      );
+            return alertSuccess(
+              context: context,
+              title: 'Update Password Success',
+              description: 'Update password successfully!',
+            );
+          },
+          barrierDismissible: false,
+        );
+      }
     } on DioError catch (e) {
       print('***** Exeption error: $e *****');
 

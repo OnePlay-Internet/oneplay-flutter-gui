@@ -1,10 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../common/common.dart';
-import '../../common/utils/questions.dart';
 import '../../services/rest_service.dart';
 import '../Submit_Button/submit_button.dart';
 import '../common_divider.dart';
@@ -389,6 +390,8 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
         );
       }
     } on DioError catch (e) {
+      print('***** Exeption error: $e *****');
+
       showDialog(
         context: context,
         builder: (_) {

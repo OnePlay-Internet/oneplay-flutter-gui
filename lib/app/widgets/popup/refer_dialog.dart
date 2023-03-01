@@ -8,7 +8,6 @@ import 'package:oneplay_flutter_gui/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/common.dart';
-import '../../common/utils/questions.dart';
 import 'terms_and_conditions_dialog.dart';
 
 enum SocialMedia {
