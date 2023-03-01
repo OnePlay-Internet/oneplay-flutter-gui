@@ -58,6 +58,7 @@ class _GameState extends State<Game> {
   bool isShowSetting = true;
   bool wishlistLoading = false;
   GameSetting gameSetting = GameSetting();
+  bool isOpenPopupSetting = false;
 
   @override
   void dispose() {
@@ -66,85 +67,89 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    return GamepadPop(
-      context: context,
-      child: RefreshIndicator(
-        onRefresh: _reloadGameStatus,
-        child: starting
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView(
-                children: [
-                  Stack(
-                    children: [
-                      ...bannerWidget(context, game!),
-                      Observer(builder: (_) {
-                        bool isInWishlist =
-                            authService.wishlist.contains(game?.oneplayId);
-                        return wishlistButton(
-                          isInWishlist ? Icons.remove : Icons.add_rounded,
-                          onTap: wishlistLoading
-                              ? null
-                              : () => _wishlistAction(isInWishlist),
-                        );
-                      }),
-                      statusActionBtn()
-                    ],
-                  ),
-                  checkShowSettingWidget(),
-                  commonDividerWidget(),
-                  FakeFocus(child: detailGameWidget(context, game)),
-                  FakeFocus(child: listTagWidget(context, game)),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  commonDividerWidget(),
-                  // topVideoLiveStreamsWidget(context, videos),
-                  commonDividerWidget(),
-                  const SizedBox(height: 30),
-                  if (genreGames.isNotEmpty)
-                    listGameWithLabel(
-                        GameFeedModel(title: 'From Genre', games: genreGames),
-                        context),
-                  if (devGames.isNotEmpty)
-                    listGameWithLabel(
-                        GameFeedModel(title: 'From Developer', games: devGames),
-                        context),
-
-                  // Center(child: Text('${game?.title}')),
-                  // const SizedBox(height: 32),
-                  // if (game?.bgImage != null)
-                  //   Column(
-                  //     children: [
-                  //       Image(image: NetworkImage(game?.bgImage ?? '')),
-                  //       const SizedBox(height: 32),
-                  //     ],
-                  //   ),
-                  // Observer(
-                  //   builder: (_) {
-                  //     String action = _getAction(gameService.gameStatus);
-                  //     return Column(
-                  //       children: [
-                  //         OutlinedButton(
-                  //           onPressed: starting || game == null ? null : _startgame,
-                  //           child: Text(action),
-                  //         ),
-                  //         if (action == 'Resume') const SizedBox(height: 32),
-                  //         if (action == 'Resume')
-                  //           OutlinedButton(
-                  //             onPressed: terminating
-                  //                 ? null
-                  //                 : () => _terminateSession(
-                  //                     gameService.gameStatus.sessionId!),
-                  //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
-                  //           ),
-                  //       ],
-                  //     );
-                  //   },
-                  // )
-                ],
-              ),
+    print('****** id: ${widget.id} *******');
+    return WillPopScope(
+      onWillPop: () async => isOpenPopupSetting ? false : true,
+      child: GamepadPop(
+        context: context,
+        child: RefreshIndicator(
+          onRefresh: _reloadGameStatus,
+          child: starting
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView(
+                  children: [
+                    Stack(
+                      children: [
+                        ...bannerWidget(context, game!),
+                        Observer(builder: (_) {
+                          bool isInWishlist =
+                              authService.wishlist.contains(game?.oneplayId);
+                          return wishlistButton(
+                            isInWishlist ? Icons.remove : Icons.add_rounded,
+                            onTap: wishlistLoading
+                                ? null
+                                : () => _wishlistAction(isInWishlist),
+                          );
+                        }),
+                        statusActionBtn()
+                      ],
+                    ),
+                    checkShowSettingWidget(),
+                    commonDividerWidget(),
+                    FakeFocus(child: detailGameWidget(context, game)),
+                    FakeFocus(child: listTagWidget(context, game)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    commonDividerWidget(),
+                    // topVideoLiveStreamsWidget(context, videos),
+                    commonDividerWidget(),
+                    const SizedBox(height: 30),
+                    if (genreGames.isNotEmpty)
+                      listGameWithLabel(
+                          GameFeedModel(title: 'From Genre', games: genreGames),
+                          context),
+                    if (devGames.isNotEmpty)
+                      listGameWithLabel(
+                          GameFeedModel(
+                              title: 'From Developer', games: devGames),
+                          context),
+                    // Center(child: Text('${game?.title}')),
+                    // const SizedBox(height: 32),
+                    // if (game?.bgImage != null)
+                    //   Column(
+                    //     children: [
+                    //       Image(image: NetworkImage(game?.bgImage ?? '')),
+                    //       const SizedBox(height: 32),
+                    //     ],
+                    //   ),
+                    // Observer(
+                    //   builder: (_) {
+                    //     String action = _getAction(gameService.gameStatus);
+                    //     return Column(
+                    //       children: [
+                    //         OutlinedButton(
+                    //           onPressed: starting || game == null ? null : _startgame,
+                    //           child: Text(action),
+                    //         ),
+                    //         if (action == 'Resume') const SizedBox(height: 32),
+                    //         if (action == 'Resume')
+                    //           OutlinedButton(
+                    //             onPressed: terminating
+                    //                 ? null
+                    //                 : () => _terminateSession(
+                    //                     gameService.gameStatus.sessionId!),
+                    //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
+                    //           ),
+                    //       ],
+                    //     );
+                    //   },
+                    // )
+                  ],
+                ),
+        ),
       ),
     );
   }
@@ -586,6 +591,7 @@ class _GameState extends State<Game> {
 
   void _startgame() async {
     if (isShowSetting) {
+      isOpenPopupSetting = true;
       await showDialog(
         context: context,
         barrierDismissible: false,
@@ -596,6 +602,7 @@ class _GameState extends State<Game> {
           );
         },
       );
+      setState(() => isOpenPopupSetting = false);
     } else {
       _startSession();
     }
