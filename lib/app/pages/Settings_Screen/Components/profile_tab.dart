@@ -297,7 +297,7 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   updateURL(String url) {
-    setState(() => profilePicURL = url);
+    if (mounted) setState(() => profilePicURL = url);
   }
 
   _getUser() async {
