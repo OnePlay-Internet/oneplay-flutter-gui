@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -14,6 +15,7 @@ import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
+import 'package:oneplay_flutter_gui/app/widgets/popup/server_error_dialog.dart';
 import '../services/shared_pref_service.dart';
 import '../widgets/list_game_w_label/list_game_w_label.dart';
 import '../widgets/popup/game_alert_dialog.dart';
@@ -40,11 +42,15 @@ class _FeedsState extends State<Feeds> {
 
   _getHomeFeed() async {
     setState(() => starting = true);
-    await restService.getHomeFeed().then((value) async {
-      firstRow = value[0];
-      restRow = value.getRange(1, value.length).toList();
-      if (mounted) setState(() => starting = false);
-    });
+    try {
+      await restService.getHomeFeed().then((value) async {
+        firstRow = value[0];
+        restRow = value.getRange(1, value.length).toList();
+        if (mounted) setState(() => starting = false);
+      });
+    } on DioError catch (e) {
+      ErrorHandler.networkErrorHandler(e, context);
+    }
   }
 
   Future<List<ShortGameModel>> _getLibrary() async {
