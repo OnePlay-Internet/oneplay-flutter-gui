@@ -379,14 +379,18 @@ class _GameState extends State<Game> {
   init() async {
     pref = await SharedPreferences.getInstance();
     _getCurrGameSetting();
-    var game = await restService.getGameDetails(widget.id);
+    try {
+      var game = await restService.getGameDetails(widget.id);
 
-    this.game = game;
-    setState(() => starting = false);
+      this.game = game;
+      setState(() => starting = false);
 
-    _getTopVideoById();
-    _getFromGenreBydId();
-    _getFromDeveloperBydId();
+      _getTopVideoById();
+      _getFromGenreBydId();
+      _getFromDeveloperBydId();
+    } on DioError catch (e) {
+      ErrorHandler.networkErrorHandler(e, context);
+    }
   }
 
   void _getFromGenreBydId() async {
