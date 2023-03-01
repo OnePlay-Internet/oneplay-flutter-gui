@@ -99,78 +99,84 @@ class _GamesState extends State<Games> {
       child: GamepadPop(
         context: context,
         child: Scaffold(
-            backgroundColor: mainColor,
-            body: starting
-                ? const Center(child: CircularProgressIndicator())
-                : SafeArea(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView(
-                        children: [
-                          SizedBox(
-                              height: 90,
-                              child: ListView(
-                                padding: const EdgeInsets.all(20),
-                                scrollDirection: Axis.horizontal,
-                                children: filters
-                                    .map((e) => Row(children: [
-                                          GradientBorderButton(
-                                            strokeWidth: 2,
-                                            radius: 25,
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                purpleColor2,
-                                                purpleColor1
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
-                                            ),
-                                            color: (e != currentFilter)
-                                                ? blackColor4
-                                                : null,
-                                            child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: Text(e.title,
-                                                    style: const TextStyle(
-                                                      fontFamily:
-                                                          mainFontFamily,
-                                                      fontSize: 20,
-                                                      letterSpacing: 0.02,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color: Colors.white,
-                                                    ))),
-                                            onPressed: () {
-                                              setState(() => updating = true);
-                                              currentFilter = e;
-                                              currentFilter!
-                                                  .getGames()
-                                                  .then((value) => setState(() {
-                                                        games = value;
-                                                        updating = false;
-                                                      }));
-                                            },
+          backgroundColor: mainColor,
+          body: starting
+              ? const Center(child: CircularProgressIndicator())
+              : SafeArea(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                          height: 84,
+                          child: ListView(
+                            padding: const EdgeInsets.all(20),
+                            scrollDirection: Axis.horizontal,
+                            children: filters
+                                .map(
+                                  (e) => Row(
+                                    children: [
+                                      GradientBorderButton(
+                                        strokeWidth: 2,
+                                        radius: 25,
+                                        gradient: const LinearGradient(
+                                          colors: [purpleColor2, purpleColor1],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
+                                        color: (e != currentFilter)
+                                            ? blackColor4
+                                            : null,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 20,
                                           ),
-                                          const SizedBox(
-                                            width: 20,
-                                          )
-                                        ]))
-                                    .toList(),
-                              )),
-                          updating
-                              ? const Center(child: CircularProgressIndicator())
-                              : getStoreContent(
-                                  GameFeedModel(
-                                      title: currentFilter!.title,
-                                      games: games),
-                                  context),
-                        ],
-                      ),
+                                          child: Text(
+                                            e.title,
+                                            style: const TextStyle(
+                                              fontFamily: mainFontFamily,
+                                              fontSize: 16,
+                                              letterSpacing: 0.02,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          setState(() => updating = true);
+                                          currentFilter = e;
+                                          currentFilter!.getGames().then(
+                                                (value) => setState(() {
+                                                  games = value;
+                                                  updating = false;
+                                                }),
+                                              );
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      )
+                                    ],
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                        updating
+                            ? const Center(child: CircularProgressIndicator())
+                            : getStoreContent(
+                                GameFeedModel(
+                                  title: currentFilter!.title,
+                                  games: games,
+                                ),
+                                context,
+                              ),
+                      ],
                     ),
-                  )),
+                  ),
+                ),
+        ),
       ),
     );
   }

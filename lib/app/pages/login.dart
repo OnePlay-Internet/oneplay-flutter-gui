@@ -236,8 +236,6 @@ class _LoginState extends State<Login> {
         Future.delayed(const Duration(milliseconds: 2000), () {
           setState(() => loading = false);
 
-          print('***** Login event: 1 *****');
-
           _loginLogEvent(
             userId: userModel!.id.toString(),
             partnerId: userModel!.partnerId.toString(),
