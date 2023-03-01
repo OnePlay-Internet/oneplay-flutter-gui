@@ -296,8 +296,15 @@ class _ProfileTabState extends State<ProfileTab> {
     super.initState();
   }
 
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   updateURL(String url) {
-    if (mounted) setState(() => profilePicURL = url);
+    setState(() => profilePicURL = url);
   }
 
   _getUser() async {

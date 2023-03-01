@@ -4,24 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="fix bug">
-      <change beforePath="$PROJECT_DIR$/lib/app/common/common.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/common/common.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/common/utils/questions.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/Components/login_and_security_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/Components/login_and_security_tab.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/settings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/settings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/feeds.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/feeds.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/game/game.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/game/game.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/login.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/search.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/search.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/services/rest_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/services/rest_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/appbar/appbarWidget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/footer/authFooter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/footer/authFooter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/refer_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/refer_dialog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/survey_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/survey_dialog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/widget_test.dart" afterDir="false" />
-    </list>
+    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="google analytics implement" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -185,7 +168,21 @@
       <option name="project" value="LOCAL" />
       <updated>1677587272205</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="google analytics implement">
+      <created>1677668295668</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1677668295668</updated>
+    </task>
+    <task id="LOCAL-00019" summary="google analytics implement">
+      <created>1677668303305</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1677668303305</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -237,6 +234,7 @@
     <MESSAGE value="Profile update, error dialog" />
     <MESSAGE value="fix error" />
     <MESSAGE value="fix bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bug" />
+    <MESSAGE value="google analytics implement" />
+    <option name="LAST_COMMIT_MESSAGE" value="google analytics implement" />
   </component>
 </project>

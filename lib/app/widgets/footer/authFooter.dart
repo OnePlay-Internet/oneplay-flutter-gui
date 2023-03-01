@@ -206,6 +206,7 @@ bySigningUpFooter() {
                       _launchURL('https://www.oneplay.in/privacy.html'),
                   child: GradientText(
                     'Privacy Policy',
+                    textScaleFactor: 0.85,
                     style: const TextStyle(
                       fontFamily: mainFontFamily,
                       fontSize: 16,
@@ -221,6 +222,7 @@ bySigningUpFooter() {
                 ),
                 const Text(
                   ' & ',
+                  textScaleFactor: 0.85,
                   style: TextStyle(
                     fontFamily: mainFontFamily,
                     fontSize: 14,
@@ -232,7 +234,8 @@ bySigningUpFooter() {
                 GestureDetector(
                   onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
                   child: GradientText(
-                    'Terms and ',
+                    'Terms and Conditions',
+                    textScaleFactor: 0.85,
                     style: const TextStyle(
                       fontFamily: mainFontFamily,
                       fontSize: 16,
@@ -247,23 +250,6 @@ bySigningUpFooter() {
                   ),
                 ),
               ],
-            ),
-            GestureDetector(
-              onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
-              child: GradientText(
-                'Conditions',
-                style: const TextStyle(
-                  fontFamily: mainFontFamily,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.02,
-                  decorationThickness: 1,
-                  decoration: TextDecoration.underline,
-                ),
-                gradientType: GradientType.linear,
-                gradientDirection: GradientDirection.ltr,
-                colors: const [purpleColor2, purpleColor1],
-              ),
             ),
           ],
         ),

@@ -105,6 +105,8 @@ class _AdminWidgetState extends State<AdminWidget> {
   void _initAuth() async {
     authService.loadUser(await restService.getProfile());
     authService.loadWishlist(await restService.getWishlist());
+    final res = await restService.getProfile();
+    imageURL.value = res.photo.toString();
   }
 
   void _initGames() async {
