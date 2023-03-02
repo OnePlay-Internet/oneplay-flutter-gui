@@ -609,9 +609,11 @@ class _GameState extends State<Game> {
     int? errorCode,
     Function()? onTap,
     dynamic response,
-  }) {
-    showDialog(
+  }) async {
+    isOpenPopupSetting = true;
+    await showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => GamepadPop(
         context: context,
         child: AlertErrorDialog(
@@ -632,14 +634,16 @@ class _GameState extends State<Game> {
         ),
       ),
     );
+    setState(() => isOpenPopupSetting = false);
   }
 
   void _showFeedback({
     required String gameId,
     required String userId,
     required String sessionId,
-  }) {
-    showDialog(
+  }) async {
+    isOpenPopupSetting = true;
+    await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
@@ -650,6 +654,7 @@ class _GameState extends State<Game> {
         );
       },
     );
+    setState(() => isOpenPopupSetting = false);
   }
 
   void _startgame() async {
@@ -822,7 +827,7 @@ class _GameState extends State<Game> {
 
       _showSnackBar('Session Terminated');
 
-      Future.delayed(const Duration(milliseconds: 2000), () {
+      Future.delayed(const Duration(milliseconds: 1000), () {
         _showFeedback(
           gameId: gameId,
           userId: AuthService().userIdToken!.userId,

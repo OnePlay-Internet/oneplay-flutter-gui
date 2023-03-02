@@ -5,7 +5,7 @@ import '../Submit_Button/submit_button.dart';
 import '../gamepad_pop/gamepad_pop.dart';
 import 'error_report_dialog.dart';
 
-class AlertErrorDialog extends StatelessWidget {
+class AlertErrorDialog extends StatefulWidget {
   final int? errorCode;
   final String error;
   final Function()? onTap1;
@@ -22,110 +22,146 @@ class AlertErrorDialog extends StatelessWidget {
   });
 
   @override
+  State<AlertErrorDialog> createState() => _AlertErrorDialogState();
+}
+
+class _AlertErrorDialogState extends State<AlertErrorDialog> {
+  bool isOpenPopupSetting = false;
+
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return AlertDialog(
-      backgroundColor: mainColor,
-      contentPadding: const EdgeInsets.all(0.0),
-      insetPadding: EdgeInsets.all(
-        size.width * 0.05,
-      ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
+    return WillPopScope(
+      onWillPop: () async => isOpenPopupSetting ? false : true,
+      child: AlertDialog(
+        backgroundColor: mainColor,
+        contentPadding: const EdgeInsets.all(0.0),
+        insetPadding: EdgeInsets.all(
+          size.width * 0.05,
         ),
-      ),
-      content: SizedBox(
-        width: size.width,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.05,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.05,
+        ),
+        content: SizedBox(
+          width: size.width,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.05,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: size.height * 0.03,
                 ),
-                child: Image.asset(
-                  errorPopupPng,
-                  height: 90,
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Image.asset(
+                      closePng,
+                    ),
+                  ),
                 ),
-              ),
-              Text(
-                errorCode != null ? 'Error Code: $errorCode' : 'Oops...',
-                style: const TextStyle(
-                  fontFamily: mainFontFamily,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.02,
-                  color: textPrimaryColor,
-                  fontSize: 18,
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: size.height * 0.05,
+                  ),
+                  child: Image.asset(
+                    errorPopupPng,
+                    height: 90,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.04,
-                ),
-                child: Text(
-                  'Error: $error',
-                  textAlign: TextAlign.center,
+                Text(
+                  widget.errorCode != null
+                      ? 'Error Code: ${widget.errorCode}'
+                      : 'Oops...',
                   style: const TextStyle(
                     fontFamily: mainFontFamily,
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.02,
-                    color: textSecondaryColor,
-                    fontSize: 14,
+                    color: textPrimaryColor,
+                    fontSize: 18,
                   ),
                 ),
-              ),
-              Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: size.height * 0.04),
-                    child: SubmitButton(
-                      buttonTitle: onTap1 == null ? 'Ok' : 'Try Again',
-                      width: size.width * 0.6,
-                      borderRadius: 25,
-                      onTap: () {
-                        Navigator.pop(context);
-                        onTap1!();
-                      },
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: size.height * 0.04,
+                  ),
+                  child: Text(
+                    'Error: ${widget.error}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: textSecondaryColor,
+                      fontSize: 14,
                     ),
                   ),
-                  if (onTap2 != null)
+                ),
+                Column(
+                  children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: size.height * 0.04,
-                      ),
+                      padding: EdgeInsets.only(bottom: size.height * 0.04),
                       child: SubmitButton(
-                        color: blackColor4,
-                        buttonTitle: 'Send Error Report',
+                        buttonTitle: widget.onTap1 == null ? 'Ok' : 'Try Again',
                         width: size.width * 0.6,
                         borderRadius: 25,
                         onTap: () {
                           Navigator.pop(context);
-
-                          showDialog(
-                            context: context,
-                            builder: (context) => GamepadPop(
-                              context: context,
-                              child: AlertErrorReportDialog(
-                                onTap: (String message) async {
-                                  await onTap2!(message);
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ),
-                          );
+                          widget.onTap1!();
                         },
                       ),
                     ),
-                ],
-              ),
-            ],
+                    if (widget.onTap2 != null)
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: size.height * 0.04,
+                        ),
+                        child: SubmitButton(
+                          color: blackColor4,
+                          buttonTitle: 'Send Error Report',
+                          width: size.width * 0.6,
+                          borderRadius: 25,
+                          onTap: () async {
+                            Navigator.pop(context);
+                            isOpenPopupSetting = true;
+
+                            await showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => GamepadPop(
+                                context: context,
+                                child: AlertErrorReportDialog(
+                                  onTap: (String message) async {
+                                    await widget.onTap2!(message);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                            );
+                            setState(() => isOpenPopupSetting = false);
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

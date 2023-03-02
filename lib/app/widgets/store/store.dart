@@ -20,10 +20,10 @@ Container titleLabelGames(GameFeedModel value) {
       value.title,
       style: const TextStyle(
         fontFamily: mainFontFamily,
-        fontSize: 18,
+        fontSize: 16,
         letterSpacing: 0.02,
         fontWeight: FontWeight.w500,
-        color: Colors.white,
+        color: textPrimaryColor,
       ),
     ),
   );
