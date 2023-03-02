@@ -178,33 +178,41 @@ class _FeedsState extends State<Feeds> {
   CarouselSlider bannerWidget(GameFeedModel data) {
     return CarouselSlider(
       options: CarouselOptions(
-          viewportFraction: 0.75,
-          height: MediaQuery.of(context).size.height * 1 / 4.2),
-      items: data.games.map((item) {
-        return item.textBgImage!.isNotEmpty
-            ? FocusZoom(builder: (focusNode) {
-                return InkWell(
-                  focusNode: focusNode,
-                  onTap: (() =>
-                      Modular.to.pushNamed('/game/${item.oneplayId}')),
-                  child: Container(
-                    height: 200,
-                    width: 300,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          imageUrl: item.textBgImage.toString(),
-                          height: 200,
-                          width: 300,
-                          fit: BoxFit.fitWidth,
-                        )),
-                  ),
-                );
-              })
-            : const SizedBox.shrink();
-      }).toList(),
+        viewportFraction: 0.80,
+        height: MediaQuery.of(context).size.height * 1 / 4.2,
+      ),
+      items: data.games.map(
+        (item) {
+          return item.textBgImage!.isNotEmpty
+              ? FocusZoom(
+                  builder: (focusNode) {
+                    return InkWell(
+                      focusNode: focusNode,
+                      onTap: (() =>
+                          Modular.to.pushNamed('/game/${item.oneplayId}')),
+                      child: Container(
+                        height: 200,
+                        width: 300,
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 10,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            imageUrl: item.textBgImage.toString(),
+                            height: 200,
+                            width: 300,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : const SizedBox.shrink();
+        },
+      ).toList(),
     );
   }
 }
