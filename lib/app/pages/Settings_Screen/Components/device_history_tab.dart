@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -120,16 +122,25 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
   }
 
   _onLoad() async {
-    setState(() => loading = true);
-
     try {
-      final res = await _restService.getDeviceHistory();
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => loading = true);
 
-      setState(() {
-        deviceHistory = res;
-      });
-    } finally {
-      setState(() => loading = false);
+          final res = await _restService.getDeviceHistory();
+
+          setState(() {
+            deviceHistory = res;
+          });
+        } finally {
+          setState(() => loading = false);
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
+      );
     }
   }
 
@@ -154,102 +165,141 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
 
   _logoutAllUser() async {
     try {
-      if (index < deviceHistory.length) {
-        var userKey = deviceHistory[index].key.toString();
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          if (index < deviceHistory.length) {
+            var userKey = deviceHistory[index].key.toString();
 
-        final res = await _restService.logoutFromDevice(userKey);
+            final res = await _restService.logoutFromDevice(userKey);
 
-        if (res == true) {
-          index++;
+            if (res == true) {
+              index++;
 
-          _logoutAllUser();
-        }
-      } else {
-        showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              Navigator.pop(_);
+              _logoutAllUser();
+            }
+          } else {
+            if (mounted) {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  Future.delayed(const Duration(milliseconds: 2000), () {
+                    Navigator.pop(_);
 
-              Modular.to.pushNamed('/auth/login');
-            });
+                    Modular.to.pushNamed('/auth/login');
+                  });
 
-            return alertSuccess(
+                  return alertSuccess(
+                    context: context,
+                    title: 'Logout Success',
+                    description: 'Logout successfully!',
+                  );
+                },
+                barrierDismissible: false,
+              );
+            }
+          }
+        } on DioError catch (e) {
+          print('***** Exeption error: $e *****');
+
+          if (mounted) {
+            showDialog(
               context: context,
-              title: 'Logout Success',
-              description: 'Logout successfully!',
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 3000), () {
+                  Navigator.pop(_);
+                });
+
+                return GamepadPop(
+                  context: _,
+                  child: alertError(
+                    context: context,
+                    title: 'Logout Error',
+                    description: e.error["message"],
+                  ),
+                );
+              },
+              barrierDismissible: false,
             );
-          },
-          barrierDismissible: false,
-        );
+          }
+        }
       }
-    } on DioError catch (e) {
-      print('***** Exeption error: $e *****');
-
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            Navigator.pop(_);
-          });
-
-          return GamepadPop(
-            context: _,
-            child: alertError(
-              context: context,
-              title: 'Logout Error',
-              description: e.error["message"],
-            ),
-          );
-        },
-        barrierDismissible: false,
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
       );
     }
   }
 
   _logoutUser(String userKey) async {
     try {
-      final res = await _restService.logoutFromDevice(userKey);
-      if (res == true) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              Navigator.pop(_);
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          final res = await _restService.logoutFromDevice(userKey);
+          if (res == true) {
+            if (mounted) {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  Future.delayed(const Duration(milliseconds: 2000), () {
+                    Navigator.pop(_);
 
-              _onLoad();
-            });
+                    _onLoad();
+                  });
 
-            return alertSuccess(
+                  return alertSuccess(
+                    context: context,
+                    title: 'Logout Success',
+                    description: 'Logout successfully!',
+                  );
+                },
+                barrierDismissible: false,
+              );
+            }
+          }
+        } on DioError catch (e) {
+          print('***** Exeption error: $e *****');
+
+          if (mounted) {
+            showDialog(
               context: context,
-              title: 'Logout Success',
-              description: 'Logout successfully!',
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 3000), () {
+                  Navigator.pop(_);
+                });
+
+                return GamepadPop(
+                  context: _,
+                  child: alertError(
+                    context: context,
+                    title: 'Logout Error',
+                    description: e.error["message"],
+                  ),
+                );
+              },
+              barrierDismissible: false,
             );
-          },
-          barrierDismissible: false,
-        );
+          }
+        }
       }
-    } on DioError catch (e) {
-      print('***** Exeption error: $e *****');
-
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            Navigator.pop(_);
-          });
-
-          return GamepadPop(
-            context: _,
-            child: alertError(
-              context: context,
-              title: 'Logout Error',
-              description: e.error["message"],
-            ),
-          );
-        },
-        barrierDismissible: false,
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
       );
     }
+  }
+
+  void showSnackBar(String text) {
+    final snackBar = ScaffoldMessenger.of(context);
+    snackBar.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(
+          label: 'Done',
+          onPressed: snackBar.hideCurrentSnackBar,
+        ),
+      ),
+    );
   }
 }

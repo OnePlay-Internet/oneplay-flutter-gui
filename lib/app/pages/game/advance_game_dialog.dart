@@ -138,6 +138,7 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
                 streamCodec,
                 (e) {
                   setState(() => streamCodecValue = streamCodec.indexOf(e));
+                  widget.gameSetting.stream_codec = e;
                 },
                 streamCodecValue,
               ),

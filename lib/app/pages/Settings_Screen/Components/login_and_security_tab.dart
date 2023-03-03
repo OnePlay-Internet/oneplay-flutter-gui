@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -7,6 +10,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../../../common/common.dart';
 import '../../../models/user_model.dart';
 import '../../../services/rest_service.dart';
+import '../../../services/shared_pref_service.dart';
 import '../../../widgets/popup/popup_success.dart';
 import '../../../widgets/Submit_Button/submit_button.dart';
 import '../../../widgets/textfieldsetting/custom_text_field_setting.dart';
@@ -165,125 +169,183 @@ class _LoginAndSecurityTabState extends State<LoginAndSecurityTab> {
   @override
   initState() {
     _getUser();
+    _getUserDetailFromSession();
     super.initState();
   }
 
-  _getUser() async {
-    setState(() => isLoading = true);
-    try {
-      final res = await _restService.getProfile();
+  _getUserDetailFromSession() {
+    var userData = SharedPrefService.getUserDetail();
 
-      setState(() {
-        userModel = res;
-        isLoading = false;
-        email = userModel!.email.toString();
-        phone = userModel!.phone.toString();
-      });
-    } finally {
-      setState(() => isLoading = false);
+    if (userData != null || userData != '') {
+      var userDataJsonDecode = jsonDecode(userData!);
+
+      userModel = UserModel.fromJson(userDataJsonDecode);
+
+      email = userModel!.email.toString();
+      phone = userModel!.phone.toString();
+    }
+  }
+
+  _getUser() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
+
+          final res = await _restService.getProfile();
+
+          setState(() {
+            userModel = res;
+            String userDetail = jsonEncode(userModel);
+            SharedPrefService.storeUserDetail(userDetail);
+
+            isLoading = false;
+          });
+        } finally {
+          setState(() => isLoading = false);
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
+      );
     }
   }
 
   _updatePhone() async {
-    setState(() => isLoading = true);
-
     try {
-      await _restService.updateProfile(
-        phone: phone,
-      );
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              setState(() => isLoading = false);
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
 
-              Navigator.pop(_);
-
-              _getUser();
-            });
-
-            return alertSuccess(
-              context: context,
-              title: 'Update Phone Success',
-              description: 'Update phone successfully!',
-            );
-          },
-          barrierDismissible: false,
-        );
-      }
-    } on DioError catch (e) {
-      print('***** Exeption error: $e *****');
-
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            Navigator.pop(_);
-
-            _getUser();
-          });
-
-          return alertError(
-            context: context,
-            title: 'Update Error',
-            description: e.error["message"],
+          await _restService.updateProfile(
+            phone: phone,
           );
-        },
-        barrierDismissible: false,
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 2000), () {
+                  setState(() => isLoading = false);
+
+                  Navigator.pop(_);
+
+                  _getUser();
+                });
+
+                return alertSuccess(
+                  context: context,
+                  title: 'Update Phone Success',
+                  description: 'Update phone successfully!',
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        } on DioError catch (e) {
+          print('***** Exeption error: $e *****');
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 3000), () {
+                  Navigator.pop(_);
+
+                  _getUser();
+                });
+
+                return alertError(
+                  context: context,
+                  title: 'Update Error',
+                  description: e.error["message"],
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
       );
     }
   }
 
   _updatePassword() async {
-    setState(() => isLoading = true);
-
     try {
-      await _restService.updatePassword(
-        updatePassword: password,
-      );
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
 
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              setState(() => isLoading = false);
-
-              Navigator.pop(_);
-
-              password = '';
-            });
-
-            return alertSuccess(
-              context: context,
-              title: 'Update Password Success',
-              description: 'Update password successfully!',
-            );
-          },
-          barrierDismissible: false,
-        );
-      }
-    } on DioError catch (e) {
-      print('***** Exeption error: $e *****');
-
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            Navigator.pop(_);
-
-            _getUser();
-          });
-
-          return alertError(
-            context: context,
-            title: 'Update Error',
-            description: e.error["message"],
+          await _restService.updatePassword(
+            updatePassword: password,
           );
-        },
-        barrierDismissible: false,
+
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 2000), () {
+                  setState(() => isLoading = false);
+
+                  Navigator.pop(_);
+
+                  password = '';
+                });
+
+                return alertSuccess(
+                  context: context,
+                  title: 'Update Password Success',
+                  description: 'Update password successfully!',
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        } on DioError catch (e) {
+          print('***** Exeption error: $e *****');
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 3000), () {
+                  Navigator.pop(_);
+
+                  _getUser();
+                });
+
+                return alertError(
+                  context: context,
+                  title: 'Update Error',
+                  description: e.error["message"],
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
       );
     }
+  }
+
+  void showSnackBar(String text) {
+    final snackBar = ScaffoldMessenger.of(context);
+    snackBar.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(
+          label: 'Done',
+          onPressed: snackBar.hideCurrentSnackBar,
+        ),
+      ),
+    );
   }
 }

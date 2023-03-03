@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -113,32 +115,63 @@ class _SubscriptionTabState extends State<SubscriptionTab> {
   }
 
   _getCurrentSubscription() async {
-    setState(() => isLoading = true);
-
     try {
-      final res = await _restService.getCurrentSubscription();
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
 
-      setState(() {
-        subscriptionList = res;
-        isLoading = false;
-      });
-    } finally {
-      setState(() => isLoading = false);
+          final res = await _restService.getCurrentSubscription();
+
+          setState(() {
+            subscriptionList = res;
+            isLoading = false;
+          });
+        } finally {
+          setState(() => isLoading = false);
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
+      );
     }
   }
 
   _getSubscriptionHistory() async {
-    setState(() => isLoading = true);
-
     try {
-      final res = await _restService.getSubscriptionHistory();
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
 
-      setState(() {
-        subscriptionList = res;
-        isLoading = false;
-      });
-    } finally {
-      setState(() => isLoading = false);
+          final res = await _restService.getSubscriptionHistory();
+
+          setState(() {
+            subscriptionList = res;
+            isLoading = false;
+          });
+        } finally {
+          setState(() => isLoading = false);
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
+      );
     }
+  }
+
+  void showSnackBar(String text) {
+    final snackBar = ScaffoldMessenger.of(context);
+    snackBar.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(
+          label: 'Done',
+          onPressed: snackBar.hideCurrentSnackBar,
+        ),
+      ),
+    );
   }
 }

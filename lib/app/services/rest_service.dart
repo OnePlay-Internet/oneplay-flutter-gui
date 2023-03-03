@@ -53,8 +53,6 @@ class RestService {
 
     Response userData = await _dio.put('/accounts/profile', data: data);
 
-    print('***** Update image: $userData *****');
-
     UserModel user = UserModel.fromJson(userData.data);
 
     return user;

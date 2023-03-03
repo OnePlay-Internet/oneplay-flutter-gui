@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, avoid_print
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
@@ -181,6 +183,9 @@ class _LoginState extends State<Login> {
 
     setState(() {
       userModel = res;
+      String userDetail = jsonEncode(userModel);
+
+      SharedPrefService.storeUserDetail(userDetail);
     });
   }
 

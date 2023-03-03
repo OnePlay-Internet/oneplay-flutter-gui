@@ -7,7 +7,9 @@ abstract class GameFilter {
   static RestService restService = Modular.get<RestService>();
   final String title;
 
-  const GameFilter({required this.title});
+  const GameFilter({
+    required this.title,
+  });
 
   Future<List<ShortGameModel>> getGames();
 }
@@ -24,18 +26,26 @@ class AllGamesFilter extends GameFilter {
 class ReleaseDateFilter extends GameFilter {
   final String releaseDate;
 
-  const ReleaseDateFilter({required super.title, required this.releaseDate});
+  const ReleaseDateFilter({
+    required super.title,
+    required this.releaseDate,
+  });
 
   @override
   Future<List<ShortGameModel>> getGames() {
-    return GameFilter.restService.getGames(releaseDate: releaseDate);
+    return GameFilter.restService.getGames(
+      releaseDate: releaseDate,
+    );
   }
 }
 
 class PlayTimeFilter extends GameFilter {
   final int playTime;
 
-  const PlayTimeFilter({required super.title, required this.playTime});
+  const PlayTimeFilter({
+    required super.title,
+    required this.playTime,
+  });
 
   @override
   Future<List<ShortGameModel>> getGames() {
@@ -55,7 +65,10 @@ class IsFreeFilter extends GameFilter {
 class StoresFilter extends GameFilter {
   final String stores;
 
-  const StoresFilter({required super.title, required this.stores});
+  const StoresFilter({
+    required super.title,
+    required this.stores,
+  });
 
   @override
   Future<List<ShortGameModel>> getGames() {
@@ -66,7 +79,10 @@ class StoresFilter extends GameFilter {
 class DeveloperFilter extends GameFilter {
   final String developer;
 
-  const DeveloperFilter({required super.title, required this.developer});
+  const DeveloperFilter({
+    required super.title,
+    required this.developer,
+  });
 
   @override
   Future<List<ShortGameModel>> getGames() {
@@ -77,7 +93,10 @@ class DeveloperFilter extends GameFilter {
 class GenresFilter extends GameFilter {
   final String genres;
 
-  const GenresFilter({required super.title, required this.genres});
+  const GenresFilter({
+    required super.title,
+    required this.genres,
+  });
 
   @override
   Future<List<ShortGameModel>> getGames() {
@@ -88,7 +107,10 @@ class GenresFilter extends GameFilter {
 class PublisherFilter extends GameFilter {
   final String publisher;
 
-  const PublisherFilter({required super.title, required this.publisher});
+  const PublisherFilter({
+    required super.title,
+    required this.publisher,
+  });
 
   @override
   Future<List<ShortGameModel>> getGames() {
