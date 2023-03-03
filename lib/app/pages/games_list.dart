@@ -54,7 +54,9 @@ class _GamesListState extends State<GamesList> {
                   return gameRow(games[index]);
                 } else {
                   _onLoad();
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
               }),
             ),

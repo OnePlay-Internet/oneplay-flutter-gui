@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -12,6 +13,7 @@ import '../../../../main.dart';
 import '../../../common/common.dart';
 import '../../../models/user_model.dart';
 import '../../../services/rest_service.dart';
+import '../../../services/shared_pref_service.dart';
 import '../../../widgets/popup/popup_success.dart';
 import '../../../widgets/Submit_Button/submit_button.dart';
 import '../../../widgets/textfieldsetting/custom_text_field_setting.dart';
@@ -107,14 +109,19 @@ class _ProfileTabState extends State<ProfileTab> {
                                         colorBlendMode: BlendMode.modulate,
                                       )
                                     : profilePicture != null ||
-                                            profilePicture != null
-                                        ? Image.network(
-                                            profilePicture!,
-                                            fit: BoxFit.cover,
-                                            color:
-                                                Colors.white.withOpacity(0.5),
-                                            colorBlendMode: BlendMode.modulate,
+                                            profilePicture != ''
+                                        ? FadeInImage.assetNetwork(
+                                            image: profilePicture!,
+                                            placeholder: femalePng,
+                                            fit: BoxFit.fill,
                                           )
+                                        // Image.network(
+                                        //     profilePicture!,
+                                        //     fit: BoxFit.cover,
+                                        //     color:
+                                        //         Colors.white.withOpacity(0.5),
+                                        //     colorBlendMode: BlendMode.modulate,
+                                        //   )
                                         : Image.asset(
                                             femalePng,
                                             fit: BoxFit.cover,
@@ -292,6 +299,7 @@ class _ProfileTabState extends State<ProfileTab> {
   @override
   initState() {
     _getUser();
+    _getUserDetailFromSession();
     imageURL.addListener(() => updateURL(imageURL.value));
     super.initState();
   }
@@ -307,93 +315,164 @@ class _ProfileTabState extends State<ProfileTab> {
     setState(() => profilePicURL = url);
   }
 
+  _getUserDetailFromSession() {
+    var userData = SharedPrefService.getUserDetail();
+
+    if (userData != null || userData != '') {
+      var userDataJsonDecode = jsonDecode(userData!);
+
+      userModel = UserModel.fromJson(userDataJsonDecode);
+      profilePicture =
+          userModel!.photo != null ? userModel!.photo.toString() : '';
+
+      userName =
+          userModel!.username != null ? userModel!.username.toString() : '';
+      firstName = userModel!.firstName.toString();
+      lastName = userModel!.lastName.toString();
+      bio = userModel!.bio != null ? userModel!.bio.toString() : '';
+    }
+  }
+
   _getUser() async {
-    setState(() => isLoading = true);
     try {
-      final res = await _restService.getProfile();
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
 
-      setState(() {
-        userModel = res;
-        isLoading = false;
-        profilePicture = res.photo.toString();
+          final res = await _restService.getProfile();
 
-        userName =
-            userModel!.username != null ? userModel!.username.toString() : '';
-        firstName = userModel!.firstName.toString();
-        lastName = userModel!.lastName.toString();
-        bio = userModel!.bio != null ? userModel!.bio.toString() : '';
-      });
-    } finally {
-      setState(() => isLoading = false);
+          setState(() {
+            userModel = res;
+            String userDetail = jsonEncode(userModel);
+            SharedPrefService.storeUserDetail(userDetail);
+
+            isLoading = false;
+          });
+        } finally {
+          setState(() => isLoading = false);
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
+      );
     }
   }
 
   _updateProfileImage(File imageFile) async {
     try {
-      final response =
-          await _restService.updateProfileImage(imageFile: imageFile);
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          final response =
+              await _restService.updateProfileImage(imageFile: imageFile);
 
-      imageURL.value = response.photo.toString();
+          imageURL.value = response.photo.toString();
+        } on DioError catch (e) {
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 3000), () {
+                  Navigator.pop(_);
 
-      print('***** Profile image updated successfuly! *****');
-    } on DioError catch (e) {
-      print('***** Profile image not updated! *****');
-      print('***** Exeption error: ${e.error} *****');
+                  _getUser();
+                });
+
+                return alertError(
+                  context: context,
+                  title: 'Update Profile Error',
+                  description: e.error["message"],
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
+      );
     }
   }
 
   _updateProfile() async {
-    setState(() => isLoading = true);
-
     try {
-      await _restService.updateProfile(
-        userName: userName,
-        firstName: firstName,
-        lastName: lastName,
-        bio: bio,
-      );
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
 
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              setState(() => isLoading = false);
-
-              Navigator.pop(_);
-
-              _getUser();
-            });
-
-            return alertSuccess(
-              context: context,
-              title: 'Update Profile Success',
-              description: 'Update profile successfully!',
-            );
-          },
-          barrierDismissible: false,
-        );
-      }
-    } on DioError catch (e) {
-      print('***** Exeption error: $e *****');
-
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            Navigator.pop(_);
-
-            _getUser();
-          });
-
-          return alertError(
-            context: context,
-            title: 'Update Error',
-            description: e.error["message"],
+          await _restService.updateProfile(
+            userName: userName,
+            firstName: firstName,
+            lastName: lastName,
+            bio: bio,
           );
-        },
-        barrierDismissible: false,
+
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 2000), () {
+                  setState(() => isLoading = false);
+
+                  Navigator.pop(_);
+
+                  _getUser();
+                });
+
+                return alertSuccess(
+                  context: context,
+                  title: 'Update Profile Success',
+                  description: 'Update profile successfully!',
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        } on DioError catch (e) {
+          print('***** Exeption error: $e *****');
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 3000), () {
+                  Navigator.pop(_);
+
+                  _getUser();
+                });
+
+                return alertError(
+                  context: context,
+                  title: 'Update Error',
+                  description: e.error["message"],
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
       );
     }
+  }
+
+  void showSnackBar(String text) {
+    final snackBar = ScaffoldMessenger.of(context);
+    snackBar.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(
+          label: 'Done',
+          onPressed: snackBar.hideCurrentSnackBar,
+        ),
+      ),
+    );
   }
 }

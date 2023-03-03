@@ -94,8 +94,9 @@ class AppBarWidget {
                         size.height * 0.1,
                       ),
                       child: imageURL.value != ''
-                          ? Image.network(
-                              imageURL.value,
+                          ? FadeInImage.assetNetwork(
+                              image: imageURL.value,
+                              placeholder: userPng,
                               fit: BoxFit.fill,
                             )
                           : Image.asset(

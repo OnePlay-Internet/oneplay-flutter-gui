@@ -8,7 +8,7 @@ import '../../common/common.dart';
 Widget listGameWithLabel(GameFeedModel value, BuildContext context) {
   return Container(
     height: MediaQuery.of(context).size.height * 1 / 5.5,
-    margin: const EdgeInsets.only(left: 20, bottom: 12),
+    margin: const EdgeInsets.only(left: 20, bottom: 10),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -37,7 +37,7 @@ Text titleLabelGames(GameFeedModel value) {
 
 SizedBox listGames(GameFeedModel value, BuildContext context) {
   return SizedBox(
-    height: MediaQuery.of(context).size.height * 1 / 7.8,
+    height: MediaQuery.of(context).size.height * 1 / 8.1,
     child: ListView(
       scrollDirection: Axis.horizontal,
       children: value.games
@@ -50,8 +50,7 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                   child: Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(right: 20),
-                    height: MediaQuery.of(context).size.height * 1 / 7.4,
-                    width: MediaQuery.of(context).size.width * 2.3 / 4.8,
+                    width: MediaQuery.of(context).size.width * 2.3 / 5.1,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: ColorFiltered(

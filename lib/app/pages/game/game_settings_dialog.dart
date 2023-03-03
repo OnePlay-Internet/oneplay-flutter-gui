@@ -141,9 +141,29 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
                   width: 2,
                 ),
               ),
-              child: dropdownMenu(
-                PlayConstants.MOBILE_RESOLUTIONS,
-                widget.gameSetting.resolution,
+              child: DropdownButton(
+                focusColor: Colors.blue,
+                isExpanded: true,
+                dropdownColor: blackColor4,
+                style: tinyStyle.copyWith(
+                  color: textPrimaryColor,
+                ),
+                underline: const SizedBox.shrink(),
+                value: widget.gameSetting.resolution,
+                items: PlayConstants.MOBILE_RESOLUTIONS
+                    .map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            e,
+                            style: tinyStyle.copyWith(
+                              color: textPrimaryColor,
+                            ),
+                          ),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() => widget.gameSetting.resolution = value!);
+                },
               ),
             ),
             Container(
@@ -213,9 +233,29 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
                           width: 2,
                         ),
                       ),
-                      child: dropdownMenu(
-                        PlayConstants.FPS,
-                        widget.gameSetting.fps,
+                      child: DropdownButton(
+                        focusColor: Colors.blue,
+                        isExpanded: true,
+                        dropdownColor: blackColor4,
+                        style: tinyStyle.copyWith(
+                          color: textPrimaryColor,
+                        ),
+                        underline: const SizedBox.shrink(),
+                        value: widget.gameSetting.fps,
+                        items: PlayConstants.FPS
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    "$e",
+                                    style: tinyStyle.copyWith(
+                                      color: textPrimaryColor,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() => widget.gameSetting.fps = value!);
+                        },
                       ),
                     ),
                   ),
@@ -306,6 +346,7 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
               .toList(),
           onChanged: (value) {
             setState(() => selectValue = value!);
+            print('***** Seletcted value: $selectValue *****');
           },
         );
       },

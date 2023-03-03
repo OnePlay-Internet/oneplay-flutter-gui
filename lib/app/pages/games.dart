@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
@@ -45,35 +46,43 @@ class _GamesState extends State<Games> {
 
   @override
   void initState() {
-    setState(() => starting = true);
-    currentFilter ??= filters[0];
-
-    restService.getTopDevelopers(3).then((list) {
-      for (String d in list) {
-        filters.add(DeveloperFilter(title: d, developer: d));
-      }
-    });
-    restService.getTopGenres(3).then((list) {
-      for (String g in list) {
-        filters.add(GenresFilter(title: g, genres: g));
-      }
-    });
-    restService.getTopPublishers(3).then((list) {
-      for (String p in list) {
-        filters.add(PublisherFilter(title: p, publisher: p));
-      }
-    });
-
-    currentFilter!.getGames().then((value) async {
-      if (mounted) {
-        games = value;
-        setState(() {
-          starting = false;
-        });
-      }
-    });
-
+    _getGameList();
     super.initState();
+  }
+
+  _getGameList() async {
+    try {
+      setState(() => starting = true);
+      currentFilter ??= filters[0];
+
+      await restService.getTopDevelopers(3).then((list) {
+        for (String d in list) {
+          filters.add(DeveloperFilter(title: d, developer: d));
+        }
+      });
+      await restService.getTopGenres(3).then((list) {
+        for (String g in list) {
+          filters.add(GenresFilter(title: g, genres: g));
+        }
+      });
+      await restService.getTopPublishers(3).then((list) {
+        for (String p in list) {
+          filters.add(PublisherFilter(title: p, publisher: p));
+        }
+      });
+
+      currentFilter!.getGames().then((value) async {
+        if (mounted) {
+          games = value;
+          setState(() {
+            starting = false;
+          });
+        }
+      });
+    } on DioError catch (e) {
+      setState(() => starting = false);
+      ErrorHandler.networkErrorHandler(e, context);
+    }
   }
 
   logout() async {
@@ -164,7 +173,9 @@ class _GamesState extends State<Games> {
                           ),
                         ),
                         updating
-                            ? const Center(child: CircularProgressIndicator())
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
                             : getStoreContent(
                                 GameFeedModel(
                                   title: currentFilter!.title,
