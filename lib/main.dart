@@ -4,10 +4,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/app.dart';
 import 'package:oneplay_flutter_gui/app/app_widget.dart';
 import 'package:oneplay_flutter_gui/app/services/shared_pref_service.dart';
+import 'package:oneplay_flutter_gui/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPrefService.init();
 
   runApp(
