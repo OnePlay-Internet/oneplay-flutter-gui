@@ -29,16 +29,32 @@ class _GamesState extends State<Games> {
   List<GameFilter> filters = [
     const AllGamesFilter(),
     const ReleaseDateFilter(
-        title: 'Best of 2021',
-        releaseDate: '2020-12-31T18:30:00.000Z#2021-12-31T18:30:00.000Z'),
+      title: 'Best of 2021',
+      releaseDate: '2020-12-31T18:30:00.000Z#2021-12-31T18:30:00.000Z',
+    ),
     const ReleaseDateFilter(
-        title: 'Best of 2020',
-        releaseDate: '2019-12-31T18:30:00.000Z#2020-12-31T18:30:00.000Z'),
-    const PlayTimeFilter(title: 'Top 20', playTime: 10),
-    const IsFreeFilter(title: 'Free games'),
-    const StoresFilter(title: 'Steam', stores: 'Steam'),
-    const StoresFilter(title: 'Epic Games', stores: 'Epic Games'),
-    const StoresFilter(title: 'Ubisoft', stores: 'Ubisoft'),
+      title: 'Best of 2020',
+      releaseDate: '2019-12-31T18:30:00.000Z#2020-12-31T18:30:00.000Z',
+    ),
+    const PlayTimeFilter(
+      title: 'Top 20',
+      playTime: 10,
+    ),
+    const IsFreeFilter(
+      title: 'Free games',
+    ),
+    const StoresFilter(
+      title: 'Steam',
+      stores: 'Steam',
+    ),
+    const StoresFilter(
+      title: 'Epic Games',
+      stores: 'Epic Games',
+    ),
+    const StoresFilter(
+      title: 'Ubisoft',
+      stores: 'Ubisoft',
+    ),
   ];
   GameFilter? currentFilter;
   bool starting = false;

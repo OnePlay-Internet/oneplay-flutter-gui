@@ -37,7 +37,7 @@ Text titleLabelGames(GameFeedModel value) {
 
 SizedBox listGames(GameFeedModel value, BuildContext context) {
   return SizedBox(
-    height: MediaQuery.of(context).size.height * 1 / 8.1,
+    height: MediaQuery.of(context).size.height * 1 / 7.8,
     child: ListView(
       scrollDirection: Axis.horizontal,
       children: value.games

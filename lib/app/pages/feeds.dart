@@ -89,21 +89,22 @@ class _FeedsState extends State<Feeds> {
 
     if (getIsAgree == false) {
       showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return AlertStepsPopUp(
-              onTap: () {
-                SharedPrefService.storeUserId([
-                  AuthService().userIdToken!.userId,
-                ]);
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertStepsPopUp(
+            onTap: () {
+              SharedPrefService.storeUserId([
+                AuthService().userIdToken!.userId,
+              ]);
 
-                SharedPrefService.storeIsAgree(true);
+              SharedPrefService.storeIsAgree(true);
 
-                Navigator.pop(_);
-              },
-            );
-          });
+              Navigator.pop(_);
+            },
+          );
+        },
+      );
     }
   }
 
