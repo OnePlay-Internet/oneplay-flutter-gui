@@ -68,4 +68,9 @@ class RestService2 {
 
     await _dio.post('/terminate_stream', data: data);
   }
+
+  Future<String> deleteSessionData() async {
+    Response res = await _dio.post("/delete_user_data");
+    return res.data['status'];
+  }
 }

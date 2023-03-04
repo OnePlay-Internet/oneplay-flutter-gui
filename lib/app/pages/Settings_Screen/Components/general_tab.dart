@@ -12,7 +12,9 @@ import '../../../common/common.dart';
 import '../../../models/device_history_model.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/rest_service.dart';
+import '../../../services/rest_service_2.dart';
 import '../../../widgets/gamepad_pop/gamepad_pop.dart';
+import '../../../widgets/popup/ask_dialog.dart';
 import '../../../widgets/popup/exit_dialog.dart';
 import '../../../widgets/popup/popup_success.dart';
 import 'general_tile.dart';
@@ -26,6 +28,7 @@ class GeneralTab extends StatefulWidget {
 
 class _GeneralTabState extends State<GeneralTab> {
   final RestService _restService = Modular.get<RestService>();
+  final RestService2 _restService2 = Modular.get<RestService2>();
   List<DeviceHistoryModel> deviceHistory = [];
   bool loading = false;
   String userKey = '';
@@ -71,6 +74,31 @@ class _GeneralTabState extends State<GeneralTab> {
               iconPath: policyPng,
               onTap: () {
                 _launchURL('https://www.oneplay.in/privacy.html');
+              },
+            ),
+            GeneralTile(
+              title: 'Policy',
+              iconPath: policyPng,
+              onChanged: (value) {},
+            ),
+            GeneralTile(
+              title: 'Session Data',
+              iconPath: policyPng,
+              onTap2: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertAskDialog(
+                      title: 'Are you sure?',
+                      onNo: () {
+                        Navigator.pop(context);
+                      },
+                      onYes: () {
+                        _deleteSessionData();
+                      },
+                    );
+                  },
+                );
               },
             ),
             GeneralTile(
@@ -179,6 +207,14 @@ class _GeneralTabState extends State<GeneralTab> {
         },
         barrierDismissible: false,
       );
+    }
+  }
+
+  _deleteSessionData() async {
+    try {
+      await _restService2.deleteSessionData();
+    } on DioError catch (e) {
+      print('***** Exeption error: $e *****');
     }
   }
 }

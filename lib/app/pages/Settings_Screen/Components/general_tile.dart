@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/common.dart';
@@ -6,12 +7,18 @@ class GeneralTile extends StatelessWidget {
   final String title;
   final String iconPath;
   final Function()? onTap;
+  final Function()? onTap2;
+  final bool isPrivacy;
+  final Function(bool)? onChanged;
 
   const GeneralTile({
     super.key,
     required this.title,
     required this.iconPath,
     this.onTap,
+    this.onTap2,
+    this.isPrivacy = true,
+    this.onChanged,
   });
 
   @override
@@ -47,14 +54,39 @@ class GeneralTile extends StatelessWidget {
               SizedBox(
                 width: size.width * 0.04,
               ),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontFamily: mainFontFamily,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.02,
-                  color: textPrimaryColor,
-                  fontSize: 14,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontFamily: mainFontFamily,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.02,
+                        color: textPrimaryColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                    onTap2 != null
+                        ? InkWell(
+                            onTap: onTap2,
+                            child: Image.asset(
+                              checkedPng,
+                            ),
+                          )
+                        : onChanged != null || onChanged != null
+                            ? Transform.scale(
+                                scale: 0.76,
+                                child: CupertinoSwitch(
+                                  value: isPrivacy,
+                                  thumbColor: textPrimaryColor,
+                                  activeColor: purpleColor1,
+                                  onChanged: onChanged,
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                  ],
                 ),
               ),
             ],
