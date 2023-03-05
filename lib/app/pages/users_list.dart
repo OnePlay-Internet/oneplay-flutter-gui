@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/models/user_model.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:oneplay_flutter_gui/app/widgets/user_row/user_row.dart';
 
 class UsersList extends StatefulWidget {
@@ -26,35 +27,38 @@ class _UsersListState extends State<UsersList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            widget.query.trim() == ''
-                ? 'All users'
-                : 'You searched for "${widget.query}"',
-            style: const TextStyle(
-              color: textSecondaryColor,
-              fontSize: 20,
+    return GamepadPop(
+      context: context,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              widget.query.trim() == ''
+                  ? 'All users'
+                  : 'You searched for "${widget.query}"',
+              style: const TextStyle(
+                color: textSecondaryColor,
+                fontSize: 20,
+              ),
             ),
           ),
-        ),
-        Flexible(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: hasMore ? users.length + 1 : users.length,
-            itemBuilder: ((context, index) {
-              if (index < users.length) {
-                return UserRow(user: users[index]);
-              } else {
-                _onLoad();
-                return const Center(child: CircularProgressIndicator());
-              }
-            }),
+          Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: hasMore ? users.length + 1 : users.length,
+              itemBuilder: ((context, index) {
+                if (index < users.length) {
+                  return UserRow(user: users[index]);
+                } else {
+                  _onLoad();
+                  return const Center(child: CircularProgressIndicator());
+                }
+              }),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

@@ -1,15 +1,19 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:validators/validators.dart';
 
+import '../../../../main.dart';
 import '../../../common/common.dart';
 import '../../../models/user_model.dart';
 import '../../../services/rest_service.dart';
+import '../../../services/shared_pref_service.dart';
 import '../../../widgets/popup/popup_success.dart';
 import '../../../widgets/Submit_Button/submit_button.dart';
 import '../../../widgets/textfieldsetting/custom_text_field_setting.dart';
@@ -26,12 +30,14 @@ class _ProfileTabState extends State<ProfileTab> {
   UserModel? userModel;
   bool isLoading = false;
 
-  String photo = '';
+  String? profilePicture;
   String userName = '';
-  String fullName = '';
+  String firstName = '';
+  String lastName = '';
   String bio = '';
   String errorUserName = '';
-  String errorFullName = '';
+  String errorFirstName = '';
+  String errorLastName = '';
   String errorBio = '';
 
   File? imageFile;
@@ -44,7 +50,7 @@ class _ProfileTabState extends State<ProfileTab> {
       setState(() {
         imageFile = File(pickedFile.path);
 
-        print('***** File name: $imageFile *****');
+        print('***** File name: ${imageFile!.path} *****');
       });
     }
   }
@@ -102,12 +108,27 @@ class _ProfileTabState extends State<ProfileTab> {
                                         color: Colors.white.withOpacity(0.5),
                                         colorBlendMode: BlendMode.modulate,
                                       )
-                                    : Image.asset(
-                                        femalePng,
-                                        fit: BoxFit.cover,
-                                        color: Colors.white.withOpacity(0.5),
-                                        colorBlendMode: BlendMode.modulate,
-                                      ),
+                                    : profilePicture != null ||
+                                            profilePicture != ''
+                                        ? FadeInImage.assetNetwork(
+                                            image: profilePicture!,
+                                            placeholder: femalePng,
+                                            fit: BoxFit.fill,
+                                          )
+                                        // Image.network(
+                                        //     profilePicture!,
+                                        //     fit: BoxFit.cover,
+                                        //     color:
+                                        //         Colors.white.withOpacity(0.5),
+                                        //     colorBlendMode: BlendMode.modulate,
+                                        //   )
+                                        : Image.asset(
+                                            femalePng,
+                                            fit: BoxFit.cover,
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                            colorBlendMode: BlendMode.modulate,
+                                          ),
                               ),
                             ),
                           ),
@@ -134,6 +155,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         textFieldTitle: 'Username',
                         hintText: 'Username',
                         errorMessage: errorUserName,
+                        textInputType: TextInputType.name,
                         controller: TextEditingController(text: userName),
                         onChanged: (value) {
                           userName = value;
@@ -144,12 +166,27 @@ class _ProfileTabState extends State<ProfileTab> {
                       ),
                       settingsTextField(
                         context: context,
-                        textFieldTitle: 'Full Name',
-                        hintText: 'Full Name',
-                        errorMessage: errorFullName,
-                        controller: TextEditingController(text: fullName),
+                        textFieldTitle: 'First Name',
+                        hintText: 'First Name',
+                        errorMessage: errorFirstName,
+                        textInputType: TextInputType.name,
+                        controller: TextEditingController(text: firstName),
                         onChanged: (value) {
-                          fullName = value;
+                          firstName = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      settingsTextField(
+                        context: context,
+                        textFieldTitle: 'Last Name',
+                        hintText: 'Last Name',
+                        errorMessage: errorLastName,
+                        textInputType: TextInputType.name,
+                        controller: TextEditingController(text: lastName),
+                        onChanged: (value) {
+                          lastName = value;
                         },
                       ),
                       SizedBox(
@@ -187,12 +224,36 @@ class _ProfileTabState extends State<ProfileTab> {
                             setState(() => errorUserName = "");
                           }
 
-                          if (fullName.isEmpty) {
+                          if (!isAlpha(firstName)) {
+                            setState(() => errorFirstName =
+                                "Please enter valid firstname");
+                            return;
+                          } else if (firstName.isEmpty) {
                             setState(
-                                () => errorFullName = "Enter your fullname");
+                                () => errorFirstName = "Enter your firstname");
+                            return;
+                          } else if (firstName.length > 15) {
+                            setState(() => errorFirstName =
+                                "Enter firstname under 15 characters");
                             return;
                           } else {
-                            setState(() => errorFullName = "");
+                            setState(() => errorFirstName = "");
+                          }
+
+                          if (!isAlpha(lastName)) {
+                            setState(() =>
+                                errorLastName = "Please enter valid lastname");
+                            return;
+                          } else if (lastName.isEmpty) {
+                            setState(
+                                () => errorLastName = "Enter your lastname");
+                            return;
+                          } else if (lastName.length > 15) {
+                            setState(() => errorLastName =
+                                "Enter lastname under 15 characters");
+                            return;
+                          } else {
+                            setState(() => errorLastName = "");
                           }
 
                           if (bio.isEmpty) {
@@ -202,7 +263,12 @@ class _ProfileTabState extends State<ProfileTab> {
                             setState(() => errorBio = "");
                           }
 
-                          _updateProfile();
+                          if (imageFile != null) {
+                            _updateProfileImage(imageFile!);
+                            _updateProfile();
+                          } else {
+                            _updateProfile();
+                          }
                         },
                       ),
                       SizedBox(
@@ -233,89 +299,180 @@ class _ProfileTabState extends State<ProfileTab> {
   @override
   initState() {
     _getUser();
+    _getUserDetailFromSession();
+    imageURL.addListener(() => updateURL(imageURL.value));
     super.initState();
   }
 
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  updateURL(String url) {
+    setState(() => profilePicURL = url);
+  }
+
+  _getUserDetailFromSession() {
+    var userData = SharedPrefService.getUserDetail();
+
+    if (userData != null || userData != '') {
+      var userDataJsonDecode = jsonDecode(userData!);
+
+      userModel = UserModel.fromJson(userDataJsonDecode);
+      profilePicture =
+          userModel!.photo != null ? userModel!.photo.toString() : '';
+
+      userName =
+          userModel!.username != null ? userModel!.username.toString() : '';
+      firstName = userModel!.firstName.toString();
+      lastName = userModel!.lastName.toString();
+      bio = userModel!.bio != null ? userModel!.bio.toString() : '';
+    }
+  }
+
   _getUser() async {
-    setState(() => isLoading = true);
     try {
-      final res = await _restService.getProfile();
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
 
-      setState(() {
-        userModel = res;
-        isLoading = false;
+          final res = await _restService.getProfile();
 
-        photo = userModel!.photo.toString();
-        userName =
-            userModel!.username != null ? userModel!.username.toString() : '';
-        fullName = '${userModel!.firstName} ${userModel!.lastName}';
-        bio = userModel!.bio != null ? userModel!.bio.toString() : '';
-      });
-    } finally {
-      setState(() => isLoading = false);
+          setState(() {
+            userModel = res;
+            String userDetail = jsonEncode(userModel);
+            SharedPrefService.storeUserDetail(userDetail);
+
+            isLoading = false;
+          });
+        } finally {
+          setState(() => isLoading = false);
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
+      );
+    }
+  }
+
+  _updateProfileImage(File imageFile) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          final response =
+              await _restService.updateProfileImage(imageFile: imageFile);
+
+          imageURL.value = response.photo.toString();
+        } on DioError catch (e) {
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 3000), () {
+                  Navigator.pop(_);
+
+                  _getUser();
+                });
+
+                return alertError(
+                  context: context,
+                  title: 'Update Profile Error',
+                  description: e.error["message"],
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
+      );
     }
   }
 
   _updateProfile() async {
-    setState(() => isLoading = true);
-
-    // String fileName = imageFile!.path.split('/').last;
-
-    // String mimeType = mime(fileName)!;
-    // String mimee = mimeType.split('/')[0];
-    // String type = mimeType.split('/')[1];
-
-    // FormData formData = FormData.fromMap({
-    //   'profile_image': await MultipartFile.fromFile(imageFile!.path,
-    //       filename: fileName, contentType: MediaType(mimee, type))
-    // });
-
     try {
-      await _restService.updateProfile(
-        // profileImage: imageFile,
-        userName: userName,
-        firstName: fullName,
-        bio: bio,
-      );
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 2000), () {
-            setState(() => isLoading = false);
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          setState(() => isLoading = true);
 
-            Navigator.pop(_);
-
-            _getUser();
-          });
-
-          return alertSuccess(
-            context: context,
-            title: 'Update Profile Success',
-            description: 'Update profile successfully!',
+          await _restService.updateProfile(
+            userName: userName,
+            firstName: firstName,
+            lastName: lastName,
+            bio: bio,
           );
-        },
-        barrierDismissible: false,
-      );
-    } on DioError catch (e) {
-      print('***** Exeption error: $e *****');
 
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            Navigator.pop(_);
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 2000), () {
+                  setState(() => isLoading = false);
 
-            _getUser();
-          });
+                  Navigator.pop(_);
 
-          return alertError(
-            context: context,
-            title: 'Update Error',
-            description: e.error["message"],
-          );
-        },
-        barrierDismissible: false,
+                  _getUser();
+                });
+
+                return alertSuccess(
+                  context: context,
+                  title: 'Update Profile Success',
+                  description: 'Update profile successfully!',
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        } on DioError catch (e) {
+          print('***** Exeption error: $e *****');
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                Future.delayed(const Duration(milliseconds: 3000), () {
+                  Navigator.pop(_);
+
+                  _getUser();
+                });
+
+                return alertError(
+                  context: context,
+                  title: 'Update Error',
+                  description: e.error["message"],
+                );
+              },
+              barrierDismissible: false,
+            );
+          }
+        }
+      }
+    } on SocketException catch (_) {
+      showSnackBar(
+        'Opps! Please check your internet.',
       );
     }
+  }
+
+  void showSnackBar(String text) {
+    final snackBar = ScaffoldMessenger.of(context);
+    snackBar.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(
+          label: 'Done',
+          onPressed: snackBar.hideCurrentSnackBar,
+        ),
+      ),
+    );
   }
 }

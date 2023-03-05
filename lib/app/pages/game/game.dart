@@ -1,17 +1,17 @@
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:mobx/mobx.dart';
-import 'package:oneplay_flutter_gui/app/common/utils/play_constant.dart';
 import 'package:oneplay_flutter_gui/app/models/client_token_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_setting.dart';
 import 'package:oneplay_flutter_gui/app/models/game_status_model.dart';
 import 'package:oneplay_flutter_gui/app/models/start_game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/video_model.dart';
-import 'package:oneplay_flutter_gui/app/pages/game/popup_game_setting.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/initialize_state.dart';
@@ -20,12 +20,16 @@ import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/common_divider.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/fake_focus.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/common.dart';
 import '../../models/game_feed_model.dart';
 import '../../widgets/list_game_w_label/list_game_w_label.dart';
+import '../../widgets/popup/error_dialog.dart';
+import '../../widgets/popup/feedback_dialog.dart';
 import 'component.dart';
+import 'game_settings_dialog.dart';
 
 class Game extends StatefulWidget {
   final String id;
@@ -37,6 +41,8 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   RestService restService = Modular.get<RestService>();
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
@@ -56,6 +62,7 @@ class _GameState extends State<Game> {
   bool isShowSetting = true;
   bool wishlistLoading = false;
   GameSetting gameSetting = GameSetting();
+  bool isOpenPopupSetting = false;
 
   @override
   void dispose() {
@@ -64,87 +71,95 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _reloadGameStatus,
-      child: starting
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              children: [
-                Stack(
+    return WillPopScope(
+      onWillPop: () async => isOpenPopupSetting ? false : true,
+      child: GamepadPop(
+        context: context,
+        child: RefreshIndicator(
+          onRefresh: _reloadGameStatus,
+          child: starting
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView(
                   children: [
-                    ...bannerWidget(context, game!),
-                    Observer(builder: (_) {
-                      bool isInWishlist =
-                          authService.wishlist.contains(game?.oneplayId);
-                      return wishlistButton(
-                        isInWishlist ? Icons.remove : Icons.add_rounded,
-                        onTap: wishlistLoading
-                            ? null
-                            : () => _wishlistAction(isInWishlist),
-                      );
-                    }),
-                    statusActionBtn()
+                    Stack(
+                      children: [
+                        ...bannerWidget(context, game!),
+                        Observer(builder: (_) {
+                          bool isInWishlist =
+                              authService.wishlist.contains(game?.oneplayId);
+                          return wishlistButton(
+                            isInWishlist ? Icons.remove : Icons.add_rounded,
+                            onTap: wishlistLoading
+                                ? null
+                                : () => _wishlistAction(isInWishlist),
+                          );
+                        }),
+                        statusActionBtn()
+                      ],
+                    ),
+                    checkShowSettingWidget(),
+                    commonDividerWidget(),
+                    FakeFocus(child: detailGameWidget(context, game)),
+                    FakeFocus(child: listTagWidget(context, game)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    commonDividerWidget(),
+                    // topVideoLiveStreamsWidget(context, videos),
+                    commonDividerWidget(),
+                    const SizedBox(height: 30),
+                    if (genreGames.isNotEmpty)
+                      listGameWithLabel(
+                          GameFeedModel(title: 'From Genre', games: genreGames),
+                          context),
+                    if (devGames.isNotEmpty)
+                      listGameWithLabel(
+                          GameFeedModel(
+                              title: 'From Developer', games: devGames),
+                          context),
+                    // Center(child: Text('${game?.title}')),
+                    // const SizedBox(height: 32),
+                    // if (game?.bgImage != null)
+                    //   Column(
+                    //     children: [
+                    //       Image(image: NetworkImage(game?.bgImage ?? '')),
+                    //       const SizedBox(height: 32),
+                    //     ],
+                    //   ),
+                    // Observer(
+                    //   builder: (_) {
+                    //     String action = _getAction(gameService.gameStatus);
+                    //     return Column(
+                    //       children: [
+                    //         OutlinedButton(
+                    //           onPressed: starting || game == null ? null : _startgame,
+                    //           child: Text(action),
+                    //         ),
+                    //         if (action == 'Resume') const SizedBox(height: 32),
+                    //         if (action == 'Resume')
+                    //           OutlinedButton(
+                    //             onPressed: terminating
+                    //                 ? null
+                    //                 : () => _terminateSession(
+                    //                     gameService.gameStatus.sessionId!),
+                    //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
+                    //           ),
+                    //       ],
+                    //     );
+                    //   },
+                    // )
                   ],
                 ),
-                checkShowSettingWidget(),
-                commonDividerWidget(),
-                FakeFocus(child: detailGameWidget(context, game)),
-                FakeFocus(child: listTagWidget(context, game)),
-                const SizedBox(
-                  height: 10,
-                ),
-                commonDividerWidget(),
-                topVideoLiveStreamsWidget(context, videos),
-                commonDividerWidget(),
-                const SizedBox(height: 30),
-                if (genreGames.isNotEmpty)
-                  listGameWithLabel(
-                      GameFeedModel(title: 'From Genre', games: genreGames),
-                      context),
-                if (devGames.isNotEmpty)
-                  listGameWithLabel(
-                      GameFeedModel(title: 'From Developer', games: devGames),
-                      context),
-
-                // Center(child: Text('${game?.title}')),
-                // const SizedBox(height: 32),
-                // if (game?.bgImage != null)
-                //   Column(
-                //     children: [
-                //       Image(image: NetworkImage(game?.bgImage ?? '')),
-                //       const SizedBox(height: 32),
-                //     ],
-                //   ),
-                // Observer(
-                //   builder: (_) {
-                //     String action = _getAction(gameService.gameStatus);
-                //     return Column(
-                //       children: [
-                //         OutlinedButton(
-                //           onPressed: starting || game == null ? null : _startgame,
-                //           child: Text(action),
-                //         ),
-                //         if (action == 'Resume') const SizedBox(height: 32),
-                //         if (action == 'Resume')
-                //           OutlinedButton(
-                //             onPressed: terminating
-                //                 ? null
-                //                 : () => _terminateSession(
-                //                     gameService.gameStatus.sessionId!),
-                //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
-                //           ),
-                //       ],
-                //     );
-                //   },
-                // )
-              ],
-            ),
+        ),
+      ),
     );
   }
 
   Container checkShowSettingWidget() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.only(top: 15, bottom: 15, right: 12),
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -173,103 +188,140 @@ class _GameState extends State<Game> {
 
   Widget statusActionBtn() {
     return Container(
-      height: 244,
+      height: 268,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.all(20),
-      child: Observer(builder: (_) {
-        String action = _getAction(gameService.gameStatus);
-        if (action == "Resume") {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Observer(
+        builder: (_) {
+          String action = _getAction(gameService.gameStatus);
+          return Stack(
+            fit: StackFit.expand,
             children: [
-              FocusZoom(builder: (focus) {
-                return InkWell(
-                  focusNode: focus,
-                  onTap: starting || game == null ? null : _startgame,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width - 100,
-                    height: 48,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(90),
-                        color: Colors.white),
-                    child: Center(
-                        child: Text(
-                      action,
-                      style: const TextStyle(
-                          color: basicLineColor,
-                          fontFamily: mainFontFamily,
-                          fontSize: 16,
-                          letterSpacing: 0.02,
-                          fontWeight: FontWeight.w500),
-                    )),
-                  ),
-                );
-              }),
-              const SizedBox(height: 20),
-              FocusZoom(builder: (focus) {
-                return InkWell(
-                  focusNode: focus,
-                  onTap: terminating
-                      ? null
-                      : () =>
-                          _terminateSession(gameService.gameStatus.sessionId!),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width - 100,
-                    height: 48,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(90),
-                        gradient: const LinearGradient(
-                          colors: [pinkColor2, purpleColor3],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )),
-                    child: Center(
-                        child: Text(
-                      terminating ? 'Terminating...' : 'Terminate',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: mainFontFamily,
-                          fontSize: 16,
-                          letterSpacing: 0.02,
-                          fontWeight: FontWeight.w500),
-                    )),
-                  ),
-                );
-              })
+              action == "Resume"
+                  ? Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            FocusZoom(
+                              builder: (focus) {
+                                return InkWell(
+                                  focusNode: focus,
+                                  onTap: starting || game == null
+                                      ? null
+                                      : _startgame,
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 100,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(90),
+                                      color: Colors.white,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        action,
+                                        style: const TextStyle(
+                                          color: basicLineColor,
+                                          fontFamily: mainFontFamily,
+                                          fontSize: 16,
+                                          letterSpacing: 0.02,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            FocusZoom(
+                              builder: (focus) {
+                                return InkWell(
+                                  focusNode: focus,
+                                  onTap: terminating
+                                      ? null
+                                      : () => _terminateSession(
+                                            gameService.gameStatus.sessionId!,
+                                            gameService.gameStatus.gameId!,
+                                          ),
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 100,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(90),
+                                      gradient: const LinearGradient(
+                                        colors: [pinkColor2, purpleColor3],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        terminating
+                                            ? 'Terminating...'
+                                            : 'Terminate',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: mainFontFamily,
+                                          fontSize: 16,
+                                          letterSpacing: 0.02,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  : Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FocusZoom(
+                          builder: (focus) {
+                            return InkWell(
+                              focusNode: focus,
+                              onTap:
+                                  starting || game == null ? null : _startgame,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 100,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(90),
+                                  gradient: const LinearGradient(
+                                    colors: [pinkColor1, blueColor1],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    action,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: mainFontFamily,
+                                      fontSize: 16,
+                                      letterSpacing: 0.02,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
             ],
           );
-        }
-        return Align(
-          alignment: const Alignment(0, 1.2),
-          child: FocusZoom(builder: (focus) {
-            return InkWell(
-              focusNode: focus,
-              onTap: starting || game == null ? null : _startgame,
-              child: Container(
-                width: MediaQuery.of(context).size.width - 100,
-                height: 48,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(90),
-                    gradient: const LinearGradient(
-                      colors: [pinkColor1, blueColor1],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                child: Center(
-                    child: Text(
-                  action,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontFamily: mainFontFamily,
-                      fontSize: 16,
-                      letterSpacing: 0.02,
-                      fontWeight: FontWeight.w500),
-                )),
-              ),
-            );
-          }),
-        );
-      }),
+        },
+      ),
     );
   }
 
@@ -281,7 +333,10 @@ class _GameState extends State<Game> {
       authService.addToWishlist(game?.oneplayId ?? "");
       _showSnackBar('Added to Library');
     } on DioError catch (e) {
-      _showError(title: 'Error', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+      );
     }
   }
 
@@ -293,7 +348,10 @@ class _GameState extends State<Game> {
       authService.removeFromWishlist(game?.oneplayId ?? "");
       _showSnackBar('Removed from Library');
     } on DioError catch (e) {
-      _showError(title: 'Error', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+      );
     }
   }
 
@@ -322,25 +380,89 @@ class _GameState extends State<Game> {
   void initState() {
     starting = true;
     init();
+    _gameDetailsLogEvent(
+      gameId: widget.id,
+      userId: AuthService().userIdToken!.userId,
+    );
+
     super.initState();
+  }
+
+  _gameDetailsLogEvent({
+    required String gameId,
+    required String userId,
+  }) {
+    analytics.logEvent(
+      name: gameDetailsEvent,
+      parameters: {
+        "game_id": gameId,
+        "user_id": userId,
+      },
+    );
+    print('***** Game id: $gameId, User id: $userId *****');
+  }
+
+  _gamePlayLogEvent({
+    required String resolution,
+    required int fps,
+    required double bitrate,
+    required String streamCodec,
+    required String audioType,
+    required bool vsyncEnabled,
+    required bool onscreenControls,
+  }) {
+    analytics.logEvent(
+      name: gamePlayEvent,
+      parameters: {
+        "resolution": resolution,
+        "fps": fps,
+        "bitrate": bitrate,
+        "stream_codec": streamCodec,
+        "audio_type": audioType,
+        "vsync_enabled": vsyncEnabled,
+        "onscreen_controls": onscreenControls,
+      },
+    );
+    print('***** Resolution: $resolution *****');
+  }
+
+  _terminateGameLogEvent({
+    required String gameId,
+    required String sessionId,
+    required String userId,
+  }) {
+    analytics.logEvent(
+      name: terminetGameEvent,
+      parameters: {
+        "game_id": gameId,
+        "session_id": sessionId,
+        "user_id": userId,
+      },
+    );
   }
 
   init() async {
     pref = await SharedPreferences.getInstance();
     _getCurrGameSetting();
-    var game = await restService.getGameDetails(widget.id);
+    try {
+      var game = await restService.getGameDetails(widget.id);
 
-    this.game = game;
-    setState(() => starting = false);
+      this.game = game;
+      setState(() => starting = false);
 
-    _getTopVideoById();
-    _getFromGenreBydId();
-    _getFromDeveloperBydId();
+      _getTopVideoById();
+      _getFromGenreBydId();
+      _getFromDeveloperBydId();
+    } on DioError catch (e) {
+      if (mounted) {
+        ErrorHandler.networkErrorHandler(e, context);
+      }
+    }
   }
 
   void _getFromGenreBydId() async {
     game?.genreMappings.forEach((element) async {
-      var genreGames = await restService.getGamesByGenre(element);
+      var genreGames = await restService.getGames(genres: element);
       setState(() => this.genreGames =
           getShuffledGames([...this.genreGames, ...genreGames]));
     });
@@ -348,7 +470,7 @@ class _GameState extends State<Game> {
 
   void _getFromDeveloperBydId() async {
     game?.developer.forEach((element) async {
-      var devGames = await restService.getGamesByDeveloper(element);
+      var devGames = await restService.getGames(developer: element);
       setState(() =>
           this.devGames = getShuffledGames([...this.devGames, ...devGames]));
     });
@@ -482,32 +604,73 @@ class _GameState extends State<Game> {
     });
   }
 
-  void _showError({required String title, required String message}) {
-    showDialog(
+  void _showError({
+    required String message,
+    int? errorCode,
+    Function()? onTap,
+    dynamic response,
+  }) async {
+    isOpenPopupSetting = true;
+    await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          FocusZoom(builder: (focus) {
-            return TextButton(
-              focusNode: focus,
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Ok'),
-            );
-          }),
-        ],
+      barrierDismissible: false,
+      builder: (context) => GamepadPop(
+        context: context,
+        child: AlertErrorDialog(
+          errorCode: errorCode,
+          error: message,
+          onTap1: onTap,
+          onTap2: (message) async {
+            try {
+              await restService.postAReport(message, response);
+              _showSnackBar('Thanks, we will look into the issue!');
+            } on DioError catch (e) {
+              _showError(
+                errorCode: e.response?.statusCode ?? 503,
+                message: e.error['message'],
+              );
+            }
+          },
+        ),
       ),
     );
+    setState(() => isOpenPopupSetting = false);
+  }
+
+  void _showFeedback({
+    required String gameId,
+    required String userId,
+    required String sessionId,
+  }) async {
+    isOpenPopupSetting = true;
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertFeedbackDialog(
+          gameId: gameId,
+          userId: userId,
+          sessionId: sessionId,
+        );
+      },
+    );
+    setState(() => isOpenPopupSetting = false);
   }
 
   void _startgame() async {
     if (isShowSetting) {
+      isOpenPopupSetting = true;
       await showDialog(
         context: context,
-        builder: (_) => gameSettingPopup(_, gameSetting, _startSession),
         barrierDismissible: false,
+        builder: (BuildContext context) {
+          return GameSettingsDialog(
+            gameSetting: gameSetting,
+            launchGame: _startSession,
+          );
+        },
       );
+      setState(() => isOpenPopupSetting = false);
     } else {
       _startSession();
     }
@@ -522,25 +685,45 @@ class _GameState extends State<Game> {
 
       if (res.data.apiAction == ApiAction.callSession) {
         _startGameWithClientToken(res.data.session?.id ?? '');
+
+        _gamePlayLogEvent(
+          resolution: gameSetting.resolution ?? '',
+          fps: gameSetting.fps ?? 0,
+          bitrate: gameSetting.bitrate ?? 0.0,
+          streamCodec: gameSetting.stream_codec ?? '',
+          audioType: gameSetting.audio_type ?? '',
+          vsyncEnabled: gameSetting.is_vsync_enabled ?? false,
+          onscreenControls: gameSetting.onscreen_controls ?? false,
+        );
       } else if (res.data.apiAction == ApiAction.callTerminate) {
         _terminateGame(res.data.session?.id ?? '');
       } else {
         _stopLoading();
         _showError(
-          title: 'Opps...',
           message: res.msg != '' ? res.msg : 'Something went wrong',
+          onTap: () => _startSession(),
         );
       }
     } on DioError catch (e) {
+      print('***** Exeption error: $e *****');
+
       _stopLoading();
-      _showError(title: 'Error', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+        onTap: () => _startSession(),
+        response: e.response?.data,
+      );
     }
   }
 
   void _startGameWithClientToken(String sessionId, {int millis = 0}) async {
     if (millis > 60000) {
       _stopLoading();
-      _showError(title: 'Opps...', message: 'Something went wrong');
+      _showError(
+        message: 'Something went wrong',
+        onTap: () => _startSession(),
+      );
       return;
     }
 
@@ -568,7 +751,12 @@ class _GameState extends State<Game> {
       }
     } on DioError catch (e) {
       _stopLoading();
-      _showError(title: 'Error', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+        onTap: (() => _startSession()),
+        response: e.response?.data,
+      );
       return;
     }
   }
@@ -584,17 +772,27 @@ class _GameState extends State<Game> {
         actions: [
           FocusZoom(builder: (focus) {
             return TextButton(
+              autofocus: true,
               focusNode: focus,
               onPressed: () async {
                 Navigator.of(context).pop();
                 try {
                   await restService2.terminateSession(sessionId);
+                  _terminateGameLogEvent(
+                    gameId: widget.id,
+                    sessionId: sessionId,
+                    userId: AuthService().userIdToken!.userId,
+                  );
                   _reloadGameStatus();
                   _stopLoading();
                   _startgame();
                 } on DioError catch (e) {
                   _stopLoading();
-                  _showError(title: 'Opps...', message: e.error['message']);
+                  _showError(
+                    message: e.error['message'],
+                    errorCode: e.response?.statusCode ?? 503,
+                    response: e.response?.data,
+                  );
                 }
               },
               child: const Text('Yes'),
@@ -615,14 +813,33 @@ class _GameState extends State<Game> {
     );
   }
 
-  void _terminateSession(String sessionId) async {
+  void _terminateSession(String sessionId, String gameId) async {
     setState(() => terminating = true);
+
     try {
       await restService2.terminateSession(sessionId);
+      _terminateGameLogEvent(
+        gameId: gameId,
+        sessionId: sessionId,
+        userId: AuthService().userIdToken!.userId,
+      );
       await _reloadGameStatus();
-      _showError(title: 'Success', message: 'Session Terminated');
+
+      _showSnackBar('Session Terminated');
+
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        _showFeedback(
+          gameId: gameId,
+          userId: AuthService().userIdToken!.userId,
+          sessionId: sessionId,
+        );
+      });
     } on DioError catch (e) {
-      _showError(title: 'Opps..', message: e.error['message']);
+      _showError(
+        message: e.error['message'],
+        errorCode: e.response?.statusCode ?? 503,
+        response: e.response?.data,
+      );
     } finally {
       setState(() => terminating = false);
     }

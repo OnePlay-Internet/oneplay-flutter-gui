@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="settings done" />
+    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="google analytics implement" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,7 +36,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../AICS_App_Master/AICS_Flutter_New-master" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -77,7 +77,112 @@
       <option name="project" value="LOCAL" />
       <updated>1676382217662</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="library,header-footer">
+      <created>1676557545128</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1676557545128</updated>
+    </task>
+    <task id="LOCAL-00006" summary="new steps dialog">
+      <created>1676633266240</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1676633266240</updated>
+    </task>
+    <task id="LOCAL-00007" summary="new steps dialog">
+      <created>1676634746759</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1676634746759</updated>
+    </task>
+    <task id="LOCAL-00008" summary="settings, improvements">
+      <created>1676901807196</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1676901807196</updated>
+    </task>
+    <task id="LOCAL-00009" summary="log fixes">
+      <created>1676985500349</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1676985500350</updated>
+    </task>
+    <task id="LOCAL-00010" summary="bug fix, implement refer widget">
+      <created>1677073657148</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1677073657148</updated>
+    </task>
+    <task id="LOCAL-00011" summary="bug fix, implement refer widget">
+      <created>1677162493709</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1677162493709</updated>
+    </task>
+    <task id="LOCAL-00012" summary="bug fixes and implement api on refer">
+      <created>1677246633760</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1677246633760</updated>
+    </task>
+    <task id="LOCAL-00013" summary="error dialog implement">
+      <created>1677491321124</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1677491321124</updated>
+    </task>
+    <task id="LOCAL-00014" summary="remove live steam section">
+      <created>1677499206275</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1677499206275</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Profile update, error dialog">
+      <created>1677585097472</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1677585097472</updated>
+    </task>
+    <task id="LOCAL-00016" summary="fix error">
+      <created>1677585266595</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1677585266595</updated>
+    </task>
+    <task id="LOCAL-00017" summary="fix bug">
+      <created>1677587272205</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1677587272205</updated>
+    </task>
+    <task id="LOCAL-00018" summary="google analytics implement">
+      <created>1677668295668</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1677668295668</updated>
+    </task>
+    <task id="LOCAL-00019" summary="google analytics implement">
+      <created>1677668303305</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1677668303305</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -92,6 +197,17 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/dev2" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
               <option name="COLUMN_ID_WIDTH">
                 <map>
                   <entry key="Table.Default.Author.ColumnIdWidth" value="76" />
@@ -107,6 +223,18 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="signup done" />
     <MESSAGE value="settings done" />
-    <option name="LAST_COMMIT_MESSAGE" value="settings done" />
+    <MESSAGE value="library,header-footer" />
+    <MESSAGE value="new steps dialog" />
+    <MESSAGE value="settings, improvements" />
+    <MESSAGE value="log fixes" />
+    <MESSAGE value="bug fix, implement refer widget" />
+    <MESSAGE value="bug fixes and implement api on refer" />
+    <MESSAGE value="error dialog implement" />
+    <MESSAGE value="remove live steam section" />
+    <MESSAGE value="Profile update, error dialog" />
+    <MESSAGE value="fix error" />
+    <MESSAGE value="fix bug" />
+    <MESSAGE value="google analytics implement" />
+    <option name="LAST_COMMIT_MESSAGE" value="google analytics implement" />
   </component>
 </project>

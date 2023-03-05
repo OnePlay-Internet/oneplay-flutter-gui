@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -9,9 +12,11 @@ import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
-
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
+import '../services/shared_pref_service.dart';
 import '../widgets/list_game_w_label/list_game_w_label.dart';
-import '../widgets/popup/popup_success.dart';
+import '../widgets/popup/game_alert_dialog.dart';
+import '../widgets/popup/steps_alert_dialog.dart';
 
 class Feeds extends StatefulWidget {
   const Feeds({super.key});
@@ -27,29 +32,80 @@ class _FeedsState extends State<Feeds> {
 
   late GameFeedModel firstRow;
   late List<GameFeedModel> restRow;
-  bool starting = false;
   List<ShortGameModel> library = [];
+  bool starting = false;
+  bool isDiolog = false;
+  bool? getIsAgree;
 
   _getHomeFeed() async {
     setState(() => starting = true);
-    await restService.getHomeFeed().then((value) async {
-      firstRow = value[0];
-      restRow = value.getRange(2, value.length).toList();
-      if (mounted) setState(() => starting = false);
-    });
+    try {
+      await restService.getHomeFeed().then((value) async {
+        firstRow = value[0];
+        restRow = value.getRange(1, value.length).toList();
+        if (mounted) setState(() => starting = false);
+      });
+    } on DioError catch (e) {
+      ErrorHandler.networkErrorHandler(e, context);
+    }
   }
 
-  _getLibrary() {
-    restService.getWishlistGames(authService.wishlist).then((value) {
-      if (mounted) setState(() => library = value);
-    });
+  Future<List<ShortGameModel>> _getLibrary() async {
+    try {
+      final games = await restService.getWishlistGames(authService.wishlist);
+      if (games.isEmpty) {
+        _showGameDialog();
+      }
+      return games;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  _showGameDialog() {
+    if (isDiolog == true) {
+    } else {
+      isDiolog = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return const GameAlertDialog();
+        },
+      );
+    }
   }
 
   @override
   void initState() {
     _getHomeFeed();
-    _getLibrary();
+    getIsAgree = SharedPrefService.getIsAgree();
+    Future.delayed(Duration.zero, () => _popAgreeDialog());
     super.initState();
+  }
+
+  _popAgreeDialog() {
+    print("***** isAgree: $getIsAgree *****");
+
+    if (getIsAgree == false) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertStepsPopUp(
+            onTap: () {
+              SharedPrefService.storeUserId([
+                AuthService().userIdToken!.userId,
+              ]);
+
+              SharedPrefService.storeIsAgree(true);
+
+              Navigator.pop(_);
+            },
+          );
+        },
+      );
+    }
   }
 
   logout() async {
@@ -62,33 +118,45 @@ class _FeedsState extends State<Feeds> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: mainColor,
-      body: starting
-          ? const Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: ListView(
-                  children: [
-                    bannerWidget(firstRow),
-                    Observer(builder: (context) {
-                      _getLibrary();
-                      return library.isNotEmpty
-                          ? listGameWithLabel(
-                              GameFeedModel(
-                                  title: 'My Library', games: library),
-                              context)
-                          : Container();
-                    }),
-                    ...restRow
-                        .map((value) => listGameWithLabel(value, context))
-                        .toList()
-                  ],
+    return GamepadPop(
+      context: context,
+      child: Scaffold(
+        backgroundColor: mainColor,
+        body: starting
+            ? const Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView(
+                    children: [
+                      bannerWidget(firstRow),
+                      Observer(builder: (context) {
+                        return FutureBuilder(
+                          future: _getLibrary(),
+                          builder: (_, snap) {
+                            return snap.hasData
+                                ? snap.data!.isNotEmpty
+                                    ? listGameWithLabel(
+                                        GameFeedModel(
+                                          title: 'My Library',
+                                          games: snap.data!,
+                                        ),
+                                        context,
+                                      )
+                                    : Container()
+                                : Container();
+                          },
+                        );
+                      }),
+                      ...restRow
+                          .map((value) => listGameWithLabel(value, context))
+                          .toList()
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
     // return Container(
     //   padding: const EdgeInsets.all(4),
@@ -111,33 +179,41 @@ class _FeedsState extends State<Feeds> {
   CarouselSlider bannerWidget(GameFeedModel data) {
     return CarouselSlider(
       options: CarouselOptions(
-        viewportFraction: 0.75,
+        viewportFraction: 0.80,
+        height: MediaQuery.of(context).size.height * 1 / 4.2,
       ),
-      items: data.games.map((item) {
-        return item.textBgImage!.isNotEmpty
-            ? FocusZoom(builder: (focusNode) {
-                return InkWell(
-                  focusNode: focusNode,
-                  onTap: (() =>
-                      Modular.to.pushNamed('/game/${item.oneplayId}')),
-                  child: Container(
-                    height: 200,
-                    width: 300,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          imageUrl: item.textBgImage.toString(),
-                          height: 200,
-                          width: 300,
-                          fit: BoxFit.fitHeight,
-                        )),
-                  ),
-                );
-              })
-            : const SizedBox.shrink();
-      }).toList(),
+      items: data.games.map(
+        (item) {
+          return item.textBgImage!.isNotEmpty
+              ? FocusZoom(
+                  builder: (focusNode) {
+                    return InkWell(
+                      focusNode: focusNode,
+                      onTap: (() =>
+                          Modular.to.pushNamed('/game/${item.oneplayId}')),
+                      child: Container(
+                        height: 200,
+                        width: 300,
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 10,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            imageUrl: item.textBgImage.toString(),
+                            height: 200,
+                            width: 300,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : const SizedBox.shrink();
+        },
+      ).toList(),
     );
   }
 }

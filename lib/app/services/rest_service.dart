@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/interceptors/auth_interceptor.dart';
@@ -12,6 +14,7 @@ import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 
 import '../models/device_history_model.dart';
+import '../models/feedback_model.dart';
 import '../models/ip_location_model.dart';
 import '../models/signup_model.dart';
 import '../models/subscription_model.dart';
@@ -36,8 +39,26 @@ class RestService {
     return user;
   }
 
+  Future<UserModel> updateProfileImage({
+    required File imageFile,
+  }) async {
+    String fileName = imageFile.path.split('/').last;
+
+    FormData data = FormData.fromMap({
+      "profile_image": await MultipartFile.fromFile(
+        imageFile.path,
+        filename: fileName,
+      ),
+    });
+
+    Response userData = await _dio.put('/accounts/profile', data: data);
+
+    UserModel user = UserModel.fromJson(userData.data);
+
+    return user;
+  }
+
   Future<UserModel> updateProfile({
-    FormData? profileImage,
     String? firstName,
     String? lastName,
     String? bio,
@@ -46,7 +67,6 @@ class RestService {
     String? age,
   }) async {
     Response userData = await _dio.put('/accounts/profile', data: {
-      'profile_image': profileImage,
       'first_name': firstName,
       'last_name': lastName,
       'bio': bio,
@@ -242,10 +262,29 @@ class RestService {
     return data;
   }
 
-  Future<List<ShortGameModel>> getGamesByGenre(String genre) async {
-    final body = {'genres': genre, 'order_by': "trend_score:desc"};
+  Future<List<ShortGameModel>> getGames(
+      {String? releaseDate,
+      int? playTime,
+      bool? isFree,
+      String? stores,
+      String? developer,
+      String? genres,
+      String? publisher,
+      int? limit}) async {
+    final body = {
+      if (releaseDate != null) 'release_date': releaseDate,
+      if (playTime != null) 'play_time': playTime,
+      if (isFree != null) 'is_free': isFree,
+      if (stores != null) 'stores': stores,
+      if (developer != null) 'developer': developer,
+      if (genres != null) 'genres': genres,
+      if (publisher != null) 'publisher': publisher,
+      'order_by': "release_date:desc"
+    };
+    final params = {if (limit != null) 'limit': limit};
 
-    Response res = await _dio.post('/games/feed/custom', data: body);
+    Response res = await _dio.post('/games/feed/custom',
+        data: body, queryParameters: params);
 
     var data = (res.data as List<dynamic>)
         .map((e) => ShortGameModel.fromJson(e))
@@ -253,14 +292,32 @@ class RestService {
     return data;
   }
 
-  Future<List<ShortGameModel>> getGamesByDeveloper(String developer) async {
-    final body = {'developer': developer, 'order_by': "trend_score:desc"};
+  Future<List<String>> getTopGenres(int limit) async {
+    final params = {'limit': limit};
 
-    Response res = await _dio.post('/games/feed/custom', data: body);
+    Response res = await _dio.get('/games/top_genres', queryParameters: params);
 
-    var data = (res.data as List<dynamic>)
-        .map((e) => ShortGameModel.fromJson(e))
-        .toList();
+    var data = (res.data as List<dynamic>).map((e) => e.toString()).toList();
+    return data;
+  }
+
+  Future<List<String>> getTopDevelopers(int limit) async {
+    final params = {'limit': limit};
+
+    Response res =
+        await _dio.get('/games/top_developers', queryParameters: params);
+
+    var data = (res.data as List<dynamic>).map((e) => e.toString()).toList();
+    return data;
+  }
+
+  Future<List<String>> getTopPublishers(int limit) async {
+    final params = {'limit': limit};
+
+    Response res =
+        await _dio.get('/games/top_publishers', queryParameters: params);
+
+    var data = (res.data as List<dynamic>).map((e) => e.toString()).toList();
     return data;
   }
 
@@ -323,5 +380,48 @@ class RestService {
   Future<bool> logoutFromDevice(String userKey) async {
     Response res = await _dio.delete("/accounts/sessions/$userKey");
     return res.data['success'];
+  }
+
+  Future<FeedbackModel> feedBack({
+    required String gameId,
+    required String userId,
+    required String sessionId,
+    required int rating,
+    required String suggestion,
+    required String comment,
+    required String question,
+    required String answer,
+    required String question2,
+    required String answer2,
+  }) async {
+    Response response = await _dio.post('/logging/feedback', data: {
+      "game_id": gameId,
+      "user_id": userId,
+      "session_id": sessionId,
+      "rating": rating,
+      "suggestion": suggestion,
+      "comment": comment,
+      "qna": [
+        {
+          "question": question,
+          "answer": answer,
+        },
+        {
+          "question": question2,
+          "answer": answer2,
+        },
+      ]
+    });
+
+    var data = FeedbackModel.fromJson(response.data);
+
+    return data;
+  }
+
+  Future<void> postAReport(String message, dynamic response) async {
+    await _dio.post('/logging/report', data: {
+      "message": message,
+      "response": response,
+    });
   }
 }

@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
@@ -11,6 +12,7 @@ import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/appbar/appbarWidget.dart';
+import 'package:oneplay_flutter_gui/main.dart';
 
 import '../../widgets/bottom_nav/bottom_nav.dart';
 
@@ -28,34 +30,59 @@ class _AdminWidgetState extends State<AdminWidget> {
   RestService restService = Modular.get<RestService>();
   RestService2 restService2 = Modular.get<RestService2>();
   Timer? timer;
+  String? profilePhoto;
 
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // key: _scaffoldKey,
-      backgroundColor: mainColor,
-      // drawer: Drawer(
-      //   backgroundColor: mainColor,
-      //   child: Column(
-      //     children: const [],
-      //   ),
-      // ),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: AppBarWidget().menu(
-          context,
-          // openDrawer: () {
-          //   _scaffoldKey.currentState?.openDrawer();
-          // },
-          // onTap: () {
-          //   print('***** User *****');
-          // },
+    Size size = MediaQuery.of(context).size;
+    // setState(() {
+    //   profilePhoto = imageURL;
+    //   print('******* Image url: $profilePhoto *******');
+    // });
+
+    return WillPopScope(
+      // onWillPop: () => exitDialog(context),
+      onWillPop: () async {
+        MethodChannel channel = const MethodChannel('flutter-gui');
+        channel.invokeMethod("closeApp");
+        return true;
+      },
+      child: Scaffold(
+        // key: scaffoldKey,
+        backgroundColor: mainColor,
+        // drawer: Drawer(
+        //   backgroundColor: mainColor,
+        //   child: Column(
+        //     children: const [],
+        //   ),
+        // ),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60.0),
+          child: AppBarWidget().menu(
+            context,
+            size: size,
+            // openDrawer: () {
+            //   _scaffoldKey.currentState?.openDrawer();
+            // },
+            searchTap: () {
+              Modular.to.pushNamed('/search');
+            },
+            profileTap: () {
+              if (navigateIdx.value == 4) {
+                return;
+              }
+              navigateIdx.value = 4;
+              previousIndex = 0;
+              navigateIdx.notifyListeners();
+              Modular.to.pushNamed('/setting');
+            },
+          ),
         ),
+        body: const RouterOutlet(),
+        bottomNavigationBar: const BottomNav(),
       ),
-      body: const RouterOutlet(),
-      bottomNavigationBar: const BottomNav(),
     );
   }
 
@@ -78,6 +105,8 @@ class _AdminWidgetState extends State<AdminWidget> {
   void _initAuth() async {
     authService.loadUser(await restService.getProfile());
     authService.loadWishlist(await restService.getWishlist());
+    final res = await restService.getProfile();
+    imageURL.value = res.photo.toString();
   }
 
   void _initGames() async {

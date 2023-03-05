@@ -16,6 +16,33 @@ class SharedPrefService {
     await _pref?.setString('sessionToken', token);
   }
 
+  static String? getUserDetail() {
+    _ensureInitialized();
+    return _pref?.getString('userDetail');
+  }
+
+  static Future storeUserDetail(String userDetail) async {
+    await _pref?.setString('userDetail', userDetail);
+  }
+
+  static List<String>? getUserId() {
+    _ensureInitialized();
+    return _pref?.getStringList('user_id');
+  }
+
+  static Future storeUserId(List<String> userId) async {
+    await _pref?.setStringList('user_id', userId);
+  }
+
+  static bool? getIsAgree() {
+    _ensureInitialized();
+    return _pref?.getBool('isAgree');
+  }
+
+  static Future storeIsAgree(bool isAgree) async {
+    await _pref?.setBool('isAgree', isAgree);
+  }
+
   static Future removeSessionToken() async {
     await _pref?.remove('sessionToken');
   }

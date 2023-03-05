@@ -7,12 +7,17 @@ import '../../common/common.dart';
 
 Widget listGameWithLabel(GameFeedModel value, BuildContext context) {
   return Container(
-    height: 167.59,
+    height: MediaQuery.of(context).size.height * 1 / 5.5,
     margin: const EdgeInsets.only(left: 20, bottom: 10),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [titleLabelGames(value), listGames(value, context)],
+      children: [
+        titleLabelGames(value),
+        const SizedBox(
+          height: 17,
+        ),
+        listGames(value, context),
+      ],
     ),
   );
 }
@@ -22,41 +27,43 @@ Text titleLabelGames(GameFeedModel value) {
     value.title,
     style: const TextStyle(
       fontFamily: mainFontFamily,
-      fontSize: 18,
+      fontSize: 15,
       letterSpacing: 0.02,
       fontWeight: FontWeight.w500,
-      color: Colors.white,
+      color: textPrimaryColor,
     ),
   );
 }
 
 SizedBox listGames(GameFeedModel value, BuildContext context) {
   return SizedBox(
-    height: 127.59,
+    height: MediaQuery.of(context).size.height * 1 / 7.8,
     child: ListView(
       scrollDirection: Axis.horizontal,
       children: value.games
-          .map((e) => FocusZoom(builder: (focusNode) {
+          .map(
+            (e) => FocusZoom(
+              builder: (focusNode) {
                 return InkWell(
                   focusNode: focusNode,
                   onTap: (() => Modular.to.pushNamed('/game/${e.oneplayId}')),
                   child: Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(right: 20),
-                    height: MediaQuery.of(context).size.height * 1 / 7,
-                    width: MediaQuery.of(context).size.width * 2.3 / 4.5,
+                    width: MediaQuery.of(context).size.width * 2.3 / 5.1,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: ColorFiltered(
                         colorFilter: ColorFilter.mode(
-                            e.status == "live"
-                                ? Colors.transparent
-                                : Colors.grey.withOpacity(0.5),
-                            BlendMode.srcOver),
+                          e.status == "live"
+                              ? Colors.transparent
+                              : Colors.grey.withOpacity(0.5),
+                          BlendMode.srcOver,
+                        ),
                         child: CachedNetworkImage(
                           imageUrl: e.textBgImage.toString(),
-                          fit: BoxFit.cover,
-                          height: MediaQuery.of(context).size.height * 1 / 7,
+                          fit: BoxFit.fill,
+                          height: MediaQuery.of(context).size.height * 1 / 7.4,
                           width: MediaQuery.of(context).size.width * 2.3 / 4.5,
                           placeholder: (context, url) {
                             return const Center(
@@ -79,8 +86,9 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                                   child: Text(
                                     e.title.toString(),
                                     style: const TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: mainFontFamily),
+                                      color: Colors.white,
+                                      fontFamily: mainFontFamily,
+                                    ),
                                     maxLines: 2,
                                   ),
                                 ),
@@ -92,7 +100,9 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                     ),
                   ),
                 );
-              }))
+              },
+            ),
+          )
           .toList(),
     ),
   );

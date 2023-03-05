@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:validators/validators.dart';
 
 import '../common/common.dart';
@@ -69,25 +70,27 @@ class _SignUpState extends State<SignUp> {
       );
 
       if (signupModel.isSignupSuccessfull == true) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              setState(() => isLoading = false);
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (_) {
+              Future.delayed(const Duration(milliseconds: 2000), () {
+                setState(() => isLoading = false);
 
-              Navigator.pop(_);
+                Navigator.pop(_);
 
-              Modular.to.pushNamed('/auth/login');
-            });
+                Modular.to.pushNamed('/auth/login');
+              });
 
-            return alertSuccess(
-              context: context,
-              title: 'SignUp Success',
-              description: 'Please check your email to confirm your email id',
-            );
-          },
-          barrierDismissible: false,
-        );
+              return alertSuccess(
+                context: context,
+                title: 'SignUp Success',
+                description: 'Please check your email to confirm your email id',
+              );
+            },
+            barrierDismissible: false,
+          );
+        }
       }
     } on DioError catch (e) {
       print('***** Exeption : $e *****');
@@ -101,10 +104,13 @@ class _SignUpState extends State<SignUp> {
             Navigator.pop(_);
           });
 
-          return alertError(
+          return GamepadPop(
             context: context,
-            title: 'SignUp Error',
-            description: e.error["message"],
+            child: alertError(
+              context: context,
+              title: 'SignUp Error',
+              description: e.error["message"],
+            ),
           );
         },
         barrierDismissible: false,
@@ -128,24 +134,26 @@ class _SignUpState extends State<SignUp> {
       child: Container(
         width: size.width * 0.12,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            width: size.width * 0.004,
-            color: isSelected == index ? purpleColor1 : mainColor,
+          gradient: LinearGradient(
+            colors: isSelected == index
+                ? [pinkColor1, blueColor1]
+                : [mainColor, mainColor],
           ),
+          shape: BoxShape.circle,
         ),
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              width: size.width * 0.006,
+        child: Padding(
+          padding: const EdgeInsets.all(1.8),
+          child: Container(
+            padding: const EdgeInsets.all(2.0),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
               color: mainColor,
             ),
-          ),
-          child: Image.asset(
-            icon!,
-            width: size.width * 0.11,
-            fit: BoxFit.cover,
+            child: Image.asset(
+              icon!,
+              width: size.width * 0.11,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
@@ -156,195 +164,200 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: SizedBox(
-        height: size.height,
-        width: size.width,
-        child: Form(
-          child: SingleChildScrollView(
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'Create an account',
-                    style: TextStyle(
-                      fontFamily: mainFontFamily,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.02,
-                      color: Colors.white,
-                      fontSize: 30,
+    return GamepadPop(
+      context: context,
+      child: SafeArea(
+        child: SizedBox(
+          height: size.height,
+          width: size.width,
+          child: Form(
+            child: SingleChildScrollView(
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Create an account',
+                      style: TextStyle(
+                        fontFamily: mainFontFamily,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.02,
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: size.height * 0.02,
-                ),
-                customTextField(
-                  labelText: 'Name',
-                  hintText: 'User Name',
-                  textCtrler: nameController,
-                  errorText: errorName,
-                ),
-                SizedBox(
-                  height: size.height * 0.02,
-                ),
-                customTextField(
-                  labelText: 'Email',
-                  hintText: 'Email Address',
-                  textCtrler: emailController,
-                  errorText: errorEmail,
-                ),
-                SizedBox(
-                  height: size.height * 0.02,
-                ),
-                customTextField(
-                  labelText: 'Phone',
-                  hintText: 'Phone',
-                  textCtrler: phoneController,
-                  errorText: errorPhone,
-                  textInputType: TextInputType.phone,
-                ),
-                SizedBox(
-                  height: size.height * 0.02,
-                ),
-                customTextField(
-                  labelText: 'Password',
-                  hintText: 'Password',
-                  textCtrler: passController,
-                  textInputType: TextInputType.visiblePassword,
-                  errorText: errorPassword,
-                ),
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.11,
+                  SizedBox(
+                    height: size.height * 0.02,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Gender',
-                        style: TextStyle(
-                          fontFamily: mainFontFamily,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.02,
-                          color: textPrimaryColor,
-                          fontSize: 14,
+                  customTextField(
+                    labelText: 'Name',
+                    hintText: 'User Name',
+                    textCtrler: nameController,
+                    errorText: errorName,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  customTextField(
+                    labelText: 'Email',
+                    hintText: 'Email Address',
+                    textCtrler: emailController,
+                    errorText: errorEmail,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  customTextField(
+                    labelText: 'Phone',
+                    hintText: 'Phone',
+                    textCtrler: phoneController,
+                    errorText: errorPhone,
+                    textInputType: TextInputType.phone,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  customTextField(
+                    labelText: 'Password',
+                    hintText: 'Password',
+                    textCtrler: passController,
+                    textInputType: TextInputType.visiblePassword,
+                    errorText: errorPassword,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.11,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Gender',
+                          style: TextStyle(
+                            fontFamily: mainFontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.02,
+                            color: textPrimaryColor,
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _icon(0, icon: malePng),
-                          _icon(1, icon: femalePng),
-                          _icon(2, icon: transgenderPng),
-                        ],
-                      )
-                    ],
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _icon(0, icon: malePng),
+                            _icon(1, icon: femalePng),
+                            _icon(2, icon: transgenderPng),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                ReferralTextfield(
-                  title1: 'Referral ID',
-                  title2: 'Referral Name',
-                  hintText: 'sample ID',
-                  controller: refferedController,
-                ),
-                SizedBox(
-                  height: size.height * 0.05,
-                ),
-                bySigningUpFooter(),
-                SizedBox(
-                  height: size.height * 0.05,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.105,
+                  SizedBox(
+                    height: size.height * 0.03,
                   ),
-                  child: SubmitButton(
-                    buttonTitle: 'Create Account',
-                    loadingTitle: 'Signing up...',
-                    isLoading: isLoading,
-                    onTap: () {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      var firstName = nameController.text;
-                      var lastName = nameController.text;
-                      var email = emailController.text;
-                      var phone = phoneController.text;
-                      var password = passController.text;
-                      var refferedId = refferedController.text;
-
-                      if (firstName.isEmpty) {
-                        setState(() => errorName = "Enter your name");
-                        return;
-                      } else {
-                        setState(() => errorName = "");
-                      }
-
-                      if (email.isEmpty) {
-                        setState(() => errorEmail = "Enter your email");
-                        return;
-                      } else if (!isEmail(email)) {
-                        setState(() => errorEmail = "Invalid email address");
-                        return;
-                      } else {
-                        setState(() => errorEmail = "");
-                      }
-
-                      if (phone.isEmpty) {
-                        setState(() => errorPhone = "Enter your phone no.");
-                        return;
-                      } else if (phone.length != 10) {
-                        setState(() => errorPhone = "Invalid phone no.");
-                        return;
-                      } else {
-                        setState(() => errorPhone = "");
-                      }
-
-                      if (password.isEmpty) {
-                        setState(() => errorPassword = "Enter your password");
-                        return;
-                      } else if (password.length < 8) {
-                        setState(() => errorPassword = "at least 8 characters");
-                        return;
-                      } else {
-                        setState(() => errorPassword = "");
-                      }
-
-                      signUp(
-                        email: email,
-                        firstName: firstName,
-                        lastName: lastName,
-                        phone: '+91$phone',
-                        gender: selectedGender,
-                        password: password,
-                        refferedId: refferedId,
-                      );
-                    },
+                  ReferralTextfield(
+                    title1: 'Referral ID',
+                    title2: 'Referral Name',
+                    hintText: 'sample ID',
+                    controller: refferedController,
                   ),
-                ),
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                haveAccount(
-                  title: 'Already have an account? ',
-                  btnTitle: 'Login',
-                  onTap: () => Modular.to.pushNamed('/auth/login'),
-                ),
-                commonDividerWidget(),
-                needHelpWidget(),
-                authFooterWidget()
-              ],
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
+                  bySigningUpFooter(),
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.105,
+                    ),
+                    child: SubmitButton(
+                      buttonTitle: 'Create Account',
+                      loadingTitle: 'Signing up...',
+                      isLoading: isLoading,
+                      onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+
+                        var firstName = nameController.text;
+                        var lastName = nameController.text;
+                        var email = emailController.text;
+                        var phone = phoneController.text;
+                        var password = passController.text;
+                        var refferedId = refferedController.text;
+
+                        if (firstName.isEmpty) {
+                          setState(() => errorName = "Enter your name");
+                          return;
+                        } else {
+                          setState(() => errorName = "");
+                        }
+
+                        if (email.isEmpty) {
+                          setState(() => errorEmail = "Enter your email");
+                          return;
+                        } else if (!isEmail(email)) {
+                          setState(() => errorEmail = "Invalid email address");
+                          return;
+                        } else {
+                          setState(() => errorEmail = "");
+                        }
+
+                        if (phone.isEmpty) {
+                          setState(() => errorPhone = "Enter your phone no.");
+                          return;
+                        } else if (phone.length != 10) {
+                          setState(() => errorPhone = "Invalid phone no.");
+                          return;
+                        } else {
+                          setState(() => errorPhone = "");
+                        }
+
+                        if (password.isEmpty) {
+                          setState(() => errorPassword = "Enter your password");
+                          return;
+                        } else if (password.length < 8) {
+                          setState(
+                              () => errorPassword = "at least 8 characters");
+                          return;
+                        } else {
+                          setState(() => errorPassword = "");
+                        }
+
+                        signUp(
+                          email: email,
+                          firstName: firstName,
+                          lastName: lastName,
+                          phone: '+91$phone',
+                          gender: selectedGender,
+                          password: password,
+                          refferedId: refferedId,
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  haveAccount(
+                    title: 'Already have an account? ',
+                    btnTitle: 'Login',
+                    onTap: () => Modular.to.pushNamed('/auth/login'),
+                  ),
+                  commonDividerWidget(),
+                  needHelpWidget(),
+                  authFooterWidget()
+                ],
+              ),
             ),
           ),
         ),

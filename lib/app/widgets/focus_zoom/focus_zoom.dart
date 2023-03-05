@@ -4,7 +4,11 @@ class FocusZoom extends StatefulWidget {
   final Widget Function(FocusNode) builder;
   final bool zoomEffect;
 
-  const FocusZoom({super.key, required this.builder, this.zoomEffect = true});
+  const FocusZoom({
+    super.key,
+    required this.builder,
+    this.zoomEffect = true,
+  });
 
   @override
   State<FocusZoom> createState() => _FocusZoomState();

@@ -1,7 +1,18 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+_launchURL(String url) async {
+  final uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 authFooterWidget() {
   return Column(
@@ -29,8 +40,7 @@ authFooterWidget() {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: () =>
-                launchUrl(Uri.parse('https://www.oneplay.in/privacy.html')),
+            onTap: () => _launchURL('https://www.oneplay.in/privacy.html'),
             child: GradientText(
               'Privacy Policy',
               style: const TextStyle(
@@ -53,12 +63,10 @@ authFooterWidget() {
               fontSize: 14,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.02,
-              decoration: TextDecoration.underline,
             ),
           ),
           GestureDetector(
-            onTap: () =>
-                launchUrl(Uri.parse('https://www.oneplay.in/tnc.html')),
+            onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
             child: GradientText(
               'Terms & Conditions',
               style: const TextStyle(
@@ -139,8 +147,7 @@ Padding needHelpWidget() {
               color: textSecondaryColor),
         ),
         GestureDetector(
-          onTap: () =>
-              launchUrl(Uri.parse('https://www.oneplay.in/contact.html')),
+          onTap: () => _launchURL('https://www.oneplay.in/contact.html'),
           child: GradientText(
             'Browse FAQ',
             style: const TextStyle(
@@ -182,7 +189,8 @@ bySigningUpFooter() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'By singing up, you agreee to OnePlay’s',
+              'By singing up, you agree to OnePlay’s',
+              textScaleFactor: 1.03,
               style: TextStyle(
                 fontFamily: mainFontFamily,
                 fontSize: 14,
@@ -193,22 +201,28 @@ bySigningUpFooter() {
             ),
             Row(
               children: [
-                GradientText(
-                  'Cookie Policy',
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    decorationThickness: 1,
-                    decoration: TextDecoration.underline,
+                GestureDetector(
+                  onTap: () =>
+                      _launchURL('https://www.oneplay.in/privacy.html'),
+                  child: GradientText(
+                    'Privacy Policy',
+                    textScaleFactor: 0.85,
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      decorationThickness: 1,
+                      decoration: TextDecoration.underline,
+                    ),
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: const [purpleColor2, purpleColor1],
                   ),
-                  gradientType: GradientType.linear,
-                  gradientDirection: GradientDirection.ltr,
-                  colors: const [purpleColor2, purpleColor1],
                 ),
                 const Text(
                   ' & ',
+                  textScaleFactor: 0.85,
                   style: TextStyle(
                     fontFamily: mainFontFamily,
                     fontSize: 14,
@@ -217,45 +231,25 @@ bySigningUpFooter() {
                     color: textSecondaryColor,
                   ),
                 ),
-                GradientText(
-                  'Privacy Policy',
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    decorationThickness: 1,
-                    decoration: TextDecoration.underline,
-                  ),
-                  gradientType: GradientType.linear,
-                  gradientDirection: GradientDirection.ltr,
-                  colors: const [purpleColor2, purpleColor1],
-                ),
-                const Text(
-                  ' &',
-                  style: TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textSecondaryColor,
+                GestureDetector(
+                  onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
+                  child: GradientText(
+                    'Terms and Conditions',
+                    textScaleFactor: 0.85,
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      decorationThickness: 1,
+                      decoration: TextDecoration.underline,
+                    ),
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: const [purpleColor2, purpleColor1],
                   ),
                 ),
               ],
-            ),
-            GradientText(
-              'Terms and Conditions',
-              style: const TextStyle(
-                fontFamily: mainFontFamily,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.02,
-                decorationThickness: 1,
-                decoration: TextDecoration.underline,
-              ),
-              gradientType: GradientType.linear,
-              gradientDirection: GradientDirection.ltr,
-              colors: const [purpleColor2, purpleColor1],
             ),
           ],
         ),

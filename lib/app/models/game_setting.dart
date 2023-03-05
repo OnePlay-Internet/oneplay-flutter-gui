@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 class GameSetting {
   String? gameId;
   String? resolution;
@@ -11,16 +13,17 @@ class GameSetting {
   String? stream_codec;
   String? video_decoder_selection;
 
-  GameSetting(
-      {this.resolution,
-      this.gameId,
-      this.is_vsync_enabled,
-      this.fps,
-      this.bitrate,
-      this.show_stats,
-      this.fullscreen,
-      this.onscreen_controls,
-      this.audio_type,
-      this.stream_codec,
-      this.video_decoder_selection});
+  GameSetting({
+    this.resolution,
+    this.gameId,
+    this.is_vsync_enabled,
+    this.fps,
+    this.bitrate,
+    this.show_stats,
+    this.fullscreen,
+    this.onscreen_controls,
+    this.audio_type,
+    this.stream_codec,
+    this.video_decoder_selection,
+  });
 }

@@ -4,6 +4,7 @@ import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/game_row/game_row.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 
 class GamesList extends StatefulWidget {
   final String query;
@@ -28,35 +29,40 @@ class _GamesListState extends State<GamesList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            widget.query.trim() == ''
-                ? 'All games'
-                : 'You searched for "${widget.query}"',
-            style: const TextStyle(
-              color: textSecondaryColor,
-              fontSize: 20,
+    return GamepadPop(
+      context: context,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              widget.query.trim() == ''
+                  ? 'All games'
+                  : 'You searched for "${widget.query}"',
+              style: const TextStyle(
+                color: textSecondaryColor,
+                fontSize: 20,
+              ),
             ),
           ),
-        ),
-        Flexible(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: hasMore ? games.length + 1 : games.length,
-            itemBuilder: ((context, index) {
-              if (index < games.length) {
-                return gameRow(games[index]);
-              } else {
-                _onLoad();
-                return const Center(child: CircularProgressIndicator());
-              }
-            }),
+          Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: hasMore ? games.length + 1 : games.length,
+              itemBuilder: ((context, index) {
+                if (index < games.length) {
+                  return gameRow(games[index]);
+                } else {
+                  _onLoad();
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

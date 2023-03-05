@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
@@ -7,6 +5,7 @@ import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/user_model.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/widgets/game_row/game_row.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:oneplay_flutter_gui/app/widgets/user_row/user_row.dart';
 
 class Search extends StatefulWidget {
@@ -27,80 +26,83 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 24.0,
-              ),
-              child: TextField(
-                controller: _controller,
-                key: widget.key,
-                cursorColor: whiteColor1,
-                textInputAction: TextInputAction.search,
-                onSubmitted: (value) => _search(),
-                style: const TextStyle(
-                  color: textPrimaryColor,
-                  fontSize: 16,
+    return GamepadPop(
+      context: context,
+      child: SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 24.0,
                 ),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
-                    ),
-                  ),
-                  fillColor: basicLineColor,
-                  filled: true,
-                  hintText: "Search for game or friends",
-                  hintStyle: const TextStyle(
+                child: TextField(
+                  controller: _controller,
+                  key: widget.key,
+                  cursorColor: whiteColor1,
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: (value) => _search(),
+                  style: const TextStyle(
                     color: textPrimaryColor,
                     fontSize: 16,
                   ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      _search();
-                    },
-                    icon: const Icon(Icons.search, color: textPrimaryColor),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
+                      ),
+                    ),
+                    fillColor: basicLineColor,
+                    filled: true,
+                    hintText: "Search for game or friends",
+                    hintStyle: const TextStyle(
+                      color: textPrimaryColor,
+                      fontSize: 16,
+                    ),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        _search();
+                      },
+                      icon: const Icon(Icons.search, color: textPrimaryColor),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (games.isNotEmpty) _titleText('Games'),
-                    ...games.map((e) => gameRow(e)),
-                    if (games.isNotEmpty)
-                      _seeAllBtn(
-                        context,
-                        onTap: () => Modular.to
-                            .pushNamed('/search/games?q=${_controller.text}'),
-                        text: "See more games",
-                      ),
-                    if (users.isNotEmpty) _titleText('People'),
-                    ...users.map((e) => UserRow(user: e)),
-                    if (users.isNotEmpty)
-                      _seeAllBtn(
-                        context,
-                        onTap: () => Modular.to
-                            .pushNamed('/search/users?q=${_controller.text}'),
-                        text: "See more people",
-                      ),
-                  ],
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (games.isNotEmpty) _titleText('Games'),
+                      ...games.map((e) => gameRow(e)),
+                      if (games.isNotEmpty)
+                        _seeAllBtn(
+                          context,
+                          onTap: () => Modular.to
+                              .pushNamed('/search/games?q=${_controller.text}'),
+                          text: "See more games",
+                        ),
+                      if (users.isNotEmpty) _titleText('People'),
+                      ...users.map((e) => UserRow(user: e)),
+                      if (users.isNotEmpty)
+                        _seeAllBtn(
+                          context,
+                          onTap: () => Modular.to
+                              .pushNamed('/search/users?q=${_controller.text}'),
+                          text: "See more people",
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -193,7 +195,6 @@ class _SearchState extends State<Search> {
           setState(() => users = value);
         }),
       ]);
-    } on DioError catch (e) {
     } finally {
       setState(() => loading = false);
     }

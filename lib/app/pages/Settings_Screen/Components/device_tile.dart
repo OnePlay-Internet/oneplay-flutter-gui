@@ -3,12 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
-import 'package:oneplay_flutter_gui/app/widgets/popup/popup_success.dart';
 
 import '../../../common/common.dart';
 import '../../../models/device_history_model.dart';
 import '../../../models/ip_location_model.dart';
-import '../../../models/session.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/rest_service.dart';
 import '../../../widgets/gradient_text_button/gradient_text_button.dart';
@@ -124,30 +122,6 @@ class _DeviceTileState extends State<DeviceTile> {
                           ? GradientTextButton(
                               title: '$activeNow',
                               colors: const [blueColor3, blueColor2],
-                              // onTap: () {
-                              //   showDialog(
-                              //     context: context,
-                              //     barrierDismissible: false,
-                              //     builder: (_) {
-                              //       return alertGamePopUp(
-                              //         context: context,
-                              //         isChecked: isChecked,
-                              //         onChanged: (value) {
-                              //           print(
-                              //               '***** Checked: $isChecked *****');
-                              //           setState(() {
-                              //             isChecked = value!;
-                              //             print(
-                              //                 '***** Checked 1: $isChecked *****');
-                              //           });
-                              //         },
-                              //         onTap: () {
-                              //           Navigator.pop(_);
-                              //         },
-                              //       );
-                              //     },
-                              //   );
-                              // },
                             )
                           : Text(
                               '$cityName, \n$countryName',
