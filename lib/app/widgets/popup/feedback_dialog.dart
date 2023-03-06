@@ -24,7 +24,7 @@ class AlertFeedbackDialog extends StatefulWidget {
 }
 
 class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
-  List<String> ratings = ['0', '1', '2', '3', '4', '5'];
+  List<String> ratings = ['1', '2', '3', '4', '5'];
   String selectedRating = '5';
   int index = 4;
 
@@ -98,7 +98,7 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
                 horizontal: size.width * 0.05,
               ),
               child: const Align(
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
                 child: Text(
                   '*Did you enjoy using Oneplay?',
                   style: TextStyle(
@@ -126,24 +126,23 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
                   value: index,
                   onTap: (e) {
                     setState(() => index = ratings.indexOf(e));
-                    selectedRating = index.toString();
-                    // if (index == 0) {
-                    //   selectedRating = '1';
-                    // } else if (index == 1) {
-                    //   selectedRating = '2';
-                    // } else if (index == 2) {
-                    //   selectedRating = '3';
-                    // } else if (index == 3) {
-                    //   selectedRating = '4';
-                    // } else if (index == 4) {
-                    //   selectedRating = '5';
-                    // }
+                    if (index == 0) {
+                      selectedRating = '1';
+                    } else if (index == 1) {
+                      selectedRating = '2';
+                    } else if (index == 2) {
+                      selectedRating = '3';
+                    } else if (index == 3) {
+                      selectedRating = '4';
+                    } else if (index == 4) {
+                      selectedRating = '5';
+                    }
                   },
                 ),
               ),
             ),
             SizedBox(
-              height: size.height * 0.03,
+              height: size.height * 0.01,
             ),
             Padding(
               padding: EdgeInsets.symmetric(
@@ -209,6 +208,7 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
                     colors: const [blackColor2, blackColor1],
                     onTap: () {
                       Navigator.pop(context);
+
                       showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -249,31 +249,28 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
         );
       }
       widgets.add(
-        Flexible(
-          flex: feedback.length,
-          fit: FlexFit.loose,
-          child: GestureDetector(
-            onTap: () => onTap(element),
-            child: Container(
-              height: size.height * 0.062,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: feedback.indexOf(element) == value
-                      ? [purpleColor2, purpleColor1]
-                      : [blackColor2, blackColor1],
-                ),
+        InkWell(
+          onTap: () => onTap(element),
+          child: Container(
+            height: size.height * 0.062,
+            width: size.width * 0.17,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: feedback.indexOf(element) == value
+                    ? [purpleColor2, purpleColor1]
+                    : [blackColor2, blackColor1],
               ),
-              child: Center(
-                child: Text(
-                  element,
-                  style: const TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textPrimaryColor,
-                    fontSize: 18,
-                  ),
+            ),
+            child: Center(
+              child: Text(
+                element,
+                style: const TextStyle(
+                  fontFamily: mainFontFamily,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.02,
+                  color: textPrimaryColor,
+                  fontSize: 18,
                 ),
               ),
             ),
