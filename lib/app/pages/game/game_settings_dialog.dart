@@ -123,7 +123,7 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
               ),
             ),
             SizedBox(
-              height: size.height * 0.03,
+              height: size.height * 0.012,
             ),
             Container(
               height: size.height * 0.065,
@@ -169,7 +169,7 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
             Container(
               margin: EdgeInsets.symmetric(
                 horizontal: size.width * 0.05,
-                vertical: size.height * 0.04,
+                vertical: size.height * 0.03,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -246,7 +246,7 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
                             .map((e) => DropdownMenuItem(
                                   value: e,
                                   child: Text(
-                                    "$e",
+                                    "$e ${PlayConstants.fps}",
                                     style: tinyStyle.copyWith(
                                       color: textPrimaryColor,
                                     ),

@@ -277,49 +277,47 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                       ),
                       child: commonDividerWidget(),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.05,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              'Skip Survey',
-                              style: TextStyle(
-                                fontFamily: mainFontFamily,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0.02,
-                                color: textPrimaryColor,
-                                fontSize: 12,
-                              ),
-                            ),
+                    SubmitButton(
+                      buttonTitle: 'Submit',
+                      loadingTitle: 'Submiting...',
+                      isLoading: isLoading,
+                      height: size.height * 0.056,
+                      width: size.width * 0.52,
+                      borderRadius: 25,
+                      onTap: () {
+                        _feedBack(
+                          gameId: widget.gameId,
+                          userId: widget.userId,
+                          sessionId: widget.sessionId,
+                          rating: rating!,
+                          suggestion: '',
+                          comment: comment,
+                          question: firstQuestion!,
+                          answer: firsAnswer!,
+                          question2: secondQuestion!,
+                          answer2: secondAnswer!,
+                        );
+                      },
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: size.height * 0.03,
+                          horizontal: size.width * 0.08,
+                        ),
+                        child: const Text(
+                          'Skip Survey',
+                          style: TextStyle(
+                            fontFamily: mainFontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.02,
+                            color: textSecondaryColor,
+                            fontSize: 14,
                           ),
-                          SubmitButton(
-                            width: size.width * 0.38,
-                            buttonTitle: 'Submit',
-                            loadingTitle: 'Submiting...',
-                            isLoading: isLoading,
-                            onTap: () {
-                              _feedBack(
-                                gameId: widget.gameId,
-                                userId: widget.userId,
-                                sessionId: widget.sessionId,
-                                rating: rating!,
-                                suggestion: '',
-                                comment: comment,
-                                question: firstQuestion!,
-                                answer: firsAnswer!,
-                                question2: secondQuestion!,
-                                answer2: secondAnswer!,
-                              );
-                            },
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
@@ -327,7 +325,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
               ),
             ),
             SizedBox(
-              height: size.height * 0.04,
+              height: size.height * 0.01,
             ),
           ],
         ),

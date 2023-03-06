@@ -114,6 +114,13 @@ class _ProfileTabState extends State<ProfileTab> {
                                             image: profilePicture!,
                                             placeholder: femalePng,
                                             fit: BoxFit.fill,
+                                            imageErrorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Image.asset(
+                                                femalePng,
+                                                fit: BoxFit.fill,
+                                              );
+                                            },
                                           )
                                         // Image.network(
                                         //     profilePicture!,

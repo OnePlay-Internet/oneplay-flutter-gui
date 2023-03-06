@@ -18,7 +18,9 @@ class RestService2 {
             connectTimeout: 30000,
             receiveTimeout: 30000,
           ),
-        )..interceptors.add(AuthInterceptor2(authService));
+        )..interceptors.add(
+            AuthInterceptor2(authService),
+          );
 
   Future<GameStatusModel> getGameStatus() async {
     Response res = await _dio.post('/get_any_active_session_status');
@@ -67,5 +69,10 @@ class RestService2 {
     FormData data = FormData.fromMap({'session_id': sessionId});
 
     await _dio.post('/terminate_stream', data: data);
+  }
+
+  Future<String> deleteSessionData() async {
+    Response res = await _dio.post("/delete_user_data");
+    return res.data['status'];
   }
 }

@@ -24,7 +24,5 @@ int previousIndex = 0;
 
 String profilePicURL = '';
 
-bool isConnected = false;
-
 ValueNotifier<int> navigateIdx = ValueNotifier<int>(0);
 ValueNotifier<String> imageURL = ValueNotifier<String>('');

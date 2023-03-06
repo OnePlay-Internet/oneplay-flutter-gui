@@ -9,7 +9,7 @@ class AlertErrorDialog extends StatefulWidget {
   final int? errorCode;
   final String error;
   final Function()? onTap1;
-  final Future Function(String message)? onTap2;
+  final Future Function()? onTap2;
   final bool starting;
 
   const AlertErrorDialog({
@@ -116,7 +116,10 @@ class _AlertErrorDialogState extends State<AlertErrorDialog> {
                 Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: size.height * 0.04),
+                      padding: EdgeInsets.only(
+                        bottom:
+                            widget.onTap2 != null ? 0.0 : size.height * 0.04,
+                      ),
                       child: SubmitButton(
                         buttonTitle: widget.onTap1 == null ? 'Ok' : 'Try Again',
                         width: size.width * 0.6,
@@ -133,29 +136,30 @@ class _AlertErrorDialogState extends State<AlertErrorDialog> {
                           vertical: size.height * 0.04,
                         ),
                         child: SubmitButton(
-                          color: blackColor4,
                           buttonTitle: 'Send Error Report',
                           width: size.width * 0.6,
+                          color: blackColor4,
                           borderRadius: 25,
-                          onTap: () async {
-                            Navigator.pop(context);
-                            isOpenPopupSetting = true;
+                          onTap: widget.onTap2,
+                          // () async {
+                          //   Navigator.pop(context);
+                          //   isOpenPopupSetting = true;
 
-                            await showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => GamepadPop(
-                                context: context,
-                                child: AlertErrorReportDialog(
-                                  onTap: (String message) async {
-                                    await widget.onTap2!(message);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                            );
-                            setState(() => isOpenPopupSetting = false);
-                          },
+                          //   await showDialog(
+                          //     context: context,
+                          //     barrierDismissible: false,
+                          //     builder: (context) => GamepadPop(
+                          //       context: context,
+                          //       child: AlertErrorReportDialog(
+                          //         onTap: (String message) async {
+                          //           await widget.onTap2!(message);
+                          //           Navigator.pop(context);
+                          //         },
+                          //       ),
+                          //     ),
+                          //   );
+                          //   setState(() => isOpenPopupSetting = false);
+                          // },
                         ),
                       ),
                   ],

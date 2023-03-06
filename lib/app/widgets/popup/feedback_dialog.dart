@@ -45,7 +45,6 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
       ),
       content: SizedBox(
         width: size.width,
-        height: size.height * 0.71,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -180,50 +179,48 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
               ),
               child: commonDividerWidget(),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.05,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      'Skip Survey',
-                      style: TextStyle(
-                        fontFamily: mainFontFamily,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.02,
-                        color: textPrimaryColor,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  SubmitButton(
-                    width: size.width * 0.38,
-                    buttonTitle: 'Next',
-                    colors: const [blackColor2, blackColor1],
-                    onTap: () {
-                      Navigator.pop(context);
+            SubmitButton(
+              buttonTitle: 'Next',
+              height: size.height * 0.056,
+              width: size.width * 0.52,
+              borderRadius: 25,
+              colors: const [blackColor2, blackColor1],
+              onTap: () {
+                Navigator.pop(context);
 
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertSurveyDialog(
-                            feedbackRating: selectedRating,
-                            gameId: widget.gameId,
-                            userId: widget.userId,
-                            sessionId: widget.sessionId,
-                          );
-                        },
-                      );
-                    },
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertSurveyDialog(
+                      feedbackRating: selectedRating,
+                      gameId: widget.gameId,
+                      userId: widget.userId,
+                      sessionId: widget.sessionId,
+                    );
+                  },
+                );
+              },
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: size.height * 0.03,
+                  horizontal: size.width * 0.08,
+                ),
+                child: const Text(
+                  'Skip Survey',
+                  style: TextStyle(
+                    fontFamily: mainFontFamily,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.02,
+                    color: textSecondaryColor,
+                    fontSize: 14,
                   ),
-                ],
+                ),
               ),
             ),
           ],
