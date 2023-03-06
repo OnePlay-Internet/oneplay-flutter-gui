@@ -16,6 +16,7 @@ import '../../../services/rest_service_2.dart';
 import '../../../widgets/gamepad_pop/gamepad_pop.dart';
 import '../../../widgets/popup/ask_dialog.dart';
 import '../../../widgets/popup/exit_dialog.dart';
+import '../../../widgets/popup/feedback_dialog.dart';
 import '../../../widgets/popup/popup_success.dart';
 import 'general_tile.dart';
 
@@ -30,6 +31,8 @@ class _GeneralTabState extends State<GeneralTab> {
   final RestService _restService = Modular.get<RestService>();
   final RestService2 _restService2 = Modular.get<RestService2>();
   List<DeviceHistoryModel> deviceHistory = [];
+  bool isOpenDialog = false;
+  bool isPrivacy = true;
   bool loading = false;
   String userKey = '';
 
@@ -37,97 +40,177 @@ class _GeneralTabState extends State<GeneralTab> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: size.width * 0.045,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            GeneralTile(
-              title: 'Frequently Asked Questions',
-              iconPath: freqPng,
-              onTap: () {
-                _launchURL('https://www.oneplay.in/contact.html');
-              },
-            ),
-            GeneralTile(
-              title: 'Support',
-              iconPath: supportPng,
-              onTap: () {
-                _launchURL('https://www.oneplay.in/contact.html');
-              },
-            ),
-            GeneralTile(
-              title: 'Terms & Conditions',
-              iconPath: tncPng,
-              onTap: () {
-                _launchURL('https://www.oneplay.in/tnc.html');
-              },
-            ),
-            GeneralTile(
-              title: 'Privacy Policy',
-              iconPath: policyPng,
-              onTap: () {
-                _launchURL('https://www.oneplay.in/privacy.html');
-              },
-            ),
-            GeneralTile(
-              title: 'Policy',
-              iconPath: policyPng,
-              onChanged: (value) {},
-            ),
-            GeneralTile(
-              title: 'Session Data',
-              iconPath: policyPng,
-              onTap2: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertAskDialog(
-                      title: 'Are you sure?',
-                      onNo: () {
-                        Navigator.pop(context);
-                      },
-                      onYes: () {
-                        _deleteSessionData();
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-            GeneralTile(
-              title: 'Log out',
-              iconPath: logoutPng,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return ExitDialog(
-                      title: 'Do you want to logout?',
-                      onNo: () {
-                        Navigator.pop(context);
-                      },
-                      onYes: () {
-                        navigateIdx.value = 0;
-                        navigateIdx.notifyListeners();
+    return WillPopScope(
+      onWillPop: () async {
+        if (isOpenDialog == true) {
+          print('***** Back: false, Open poup: $isOpenDialog *****');
+          return false;
+        } else {
+          print('***** Back: true, Open poup: $isOpenDialog *****');
+          return true;
+        }
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.045,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              GeneralTile(
+                title: 'Frequently Asked Questions',
+                iconPath: freqPng,
+                onTap: () {
+                  _launchURL('https://www.oneplay.in/contact.html');
+                },
+              ),
+              GeneralTile(
+                title: 'Support',
+                iconPath: supportPng,
+                onTap: () {
+                  _launchURL('https://www.oneplay.in/contact.html');
+                },
+              ),
+              GeneralTile(
+                title: 'Terms & Conditions',
+                iconPath: tncPng,
+                onTap: () {
+                  _launchURL('https://www.oneplay.in/tnc.html');
+                },
+              ),
+              GeneralTile(
+                title: 'Privacy Policy',
+                iconPath: policyPng,
+                onTap: () {
+                  _launchURL('https://www.oneplay.in/privacy.html');
+                },
+              ),
+              GeneralTile(
+                title: 'Privacy',
+                iconPath: privacyPng,
+                isPrivacy: isPrivacy,
+                onChanged: (value) {
+                  setState(() {
+                    isPrivacy = value;
+                    _setSearchPrivacy(isPrivacy);
+                  });
+                },
+              ),
+              GeneralTile(
+                title: 'Session Data',
+                iconPath: pieChartPng,
+                onTap2: () {
+                  isOpenDialog = true;
 
-                        _logoutUser(AuthService().sessionKey());
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+                  print('******* $isOpenDialog');
+
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertAskDialog(
+                        title: 'Are you sure?',
+                        subTitle:
+                            'Do you want to delete all your session \ndata?',
+                        onTapNo: () {
+                          Navigator.pop(context);
+                        },
+                        onTapYes: () {
+                          Navigator.pop(context);
+                          _deleteSessionData();
+                        },
+                      );
+                    },
+                  );
+                  setState(() => isOpenDialog = false);
+                },
+              ),
+              GeneralTile(
+                title: 'Log out',
+                iconPath: logoutPng,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ExitDialog(
+                        title: 'Do you want to logout?',
+                        onNo: () {
+                          Navigator.pop(context);
+                        },
+                        onYes: () {
+                          navigateIdx.value = 0;
+                          navigateIdx.notifyListeners();
+
+                          _logoutUser(AuthService().sessionKey());
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  _setSearchPrivacy(bool privacy) async {
+    try {
+      await _restService.setSearchPrivacy(isPrivacy: privacy);
+      if (mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return AlertAskDialog(
+              title: 'Success',
+              subTitle: privacy == true
+                  ? 'Successfully turned on search privacy.'
+                  : 'Successfully turned off search privacy.',
+              onTapYes: () {
+                Navigator.pop(_);
+              },
+            );
+          },
+        );
+      }
+    } on DioError catch (e) {
+      if (mounted) {
+        ErrorHandler.networkErrorHandler(e, context);
+      }
+    }
+  }
+
+  _deleteSessionData() async {
+    try {
+      final response = await _restService2.deleteSessionData();
+      if (response == 'success') {
+        if (mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertAskDialog(
+                title: 'Success',
+                subTitle: 'Successfully deleted sessions',
+                onTapYes: () {
+                  Navigator.pop(_);
+                },
+              );
+            },
+          );
+        }
+      }
+    } on DioError catch (e) {
+      if (mounted) {
+        ErrorHandler.networkErrorHandler(e, context);
+      }
+    }
   }
 
   _launchURL(String url) async {
@@ -147,19 +230,6 @@ class _GeneralTabState extends State<GeneralTab> {
         'Opps! Please check your internet.',
       );
     }
-  }
-
-  void showSnackBar(String text) {
-    final snackBar = ScaffoldMessenger.of(context);
-    snackBar.showSnackBar(
-      SnackBar(
-        content: Text(text),
-        action: SnackBarAction(
-          label: 'Done',
-          onPressed: snackBar.hideCurrentSnackBar,
-        ),
-      ),
-    );
   }
 
   _logoutUser(String userKey) async {
@@ -210,11 +280,16 @@ class _GeneralTabState extends State<GeneralTab> {
     }
   }
 
-  _deleteSessionData() async {
-    try {
-      await _restService2.deleteSessionData();
-    } on DioError catch (e) {
-      print('***** Exeption error: $e *****');
-    }
+  void showSnackBar(String text) {
+    final snackBar = ScaffoldMessenger.of(context);
+    snackBar.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(
+          label: 'Done',
+          onPressed: snackBar.hideCurrentSnackBar,
+        ),
+      ),
+    );
   }
 }

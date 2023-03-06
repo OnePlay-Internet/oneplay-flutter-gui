@@ -29,7 +29,9 @@ class RestService {
             connectTimeout: 30000,
             receiveTimeout: 30000,
           ),
-        )..interceptors.add(AuthInterceptor(authService));
+        )..interceptors.add(
+            AuthInterceptor(authService),
+          );
 
   Future<UserModel> getProfile() async {
     Response userData = await _dio.get('/accounts/profile');
@@ -418,10 +420,18 @@ class RestService {
     return data;
   }
 
-  Future<void> postAReport(String message, dynamic response) async {
+  Future<void> postAReport(String? message, dynamic response) async {
     await _dio.post('/logging/report', data: {
       "message": message,
       "response": response,
     });
+  }
+
+  Future<bool> setSearchPrivacy({required bool isPrivacy}) async {
+    Response response = await _dio.put('/accounts/set_search_privacy', data: {
+      "search_privacy": isPrivacy,
+    });
+
+    return response.data['success'];
   }
 }

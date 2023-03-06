@@ -5,14 +5,16 @@ import '../Submit_Button/submit_button.dart';
 
 class AlertAskDialog extends StatelessWidget {
   final String title;
-  final Function()? onYes;
-  final Function()? onNo;
+  final String subTitle;
+  final Function()? onTapYes;
+  final Function()? onTapNo;
 
   const AlertAskDialog({
     super.key,
     required this.title,
-    this.onYes,
-    this.onNo,
+    required this.subTitle,
+    this.onTapYes,
+    this.onTapNo,
   });
 
   @override
@@ -39,10 +41,15 @@ class AlertAskDialog extends StatelessWidget {
             SizedBox(
               height: size.height * 0.06,
             ),
-            Image.asset(
-              errorPopupPng,
-              height: 90,
-            ),
+            onTapNo != null
+                ? Image.asset(
+                    errorPopupPng,
+                    height: 90,
+                  )
+                : Image.asset(
+                    successPopupPng,
+                    height: 90,
+                  ),
             Padding(
               padding: EdgeInsets.only(
                 top: size.height * 0.05,
@@ -62,10 +69,10 @@ class AlertAskDialog extends StatelessWidget {
               padding: EdgeInsets.only(
                 top: size.height * 0.03,
               ),
-              child: const Text(
-                'Do you want to delete all your session \ndata?',
+              child: Text(
+                subTitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: mainFontFamily,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.02,
@@ -77,31 +84,32 @@ class AlertAskDialog extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(
                 top: size.height * 0.03,
+                bottom: onTapNo != null ? 0.0 : size.height * 0.05,
+                left: size.width * 0.05,
+                right: size.width * 0.05,
               ),
               child: SubmitButton(
-                buttonTitle: 'Yes',
-                height: size.height * 0.056,
-                width: size.width * 0.52,
-                borderRadius: 25,
+                buttonTitle: onTapNo != null ? 'Yes' : 'Ok',
                 fontSize: 15,
-                onTap: onYes,
+                onTap: onTapYes,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: size.height * 0.03,
-                bottom: size.height * 0.05,
-              ),
-              child: SubmitButton(
-                buttonTitle: 'No',
-                color: blackColor4,
-                height: size.height * 0.056,
-                width: size.width * 0.52,
-                borderRadius: 25,
-                fontSize: 15,
-                onTap: onNo,
-              ),
-            ),
+            onTapNo != null
+                ? Padding(
+                    padding: EdgeInsets.only(
+                      top: size.height * 0.03,
+                      bottom: size.height * 0.05,
+                      left: size.width * 0.05,
+                      right: size.width * 0.05,
+                    ),
+                    child: SubmitButton(
+                      buttonTitle: 'No',
+                      color: blackColor4,
+                      fontSize: 15,
+                      onTap: onTapNo,
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ],
         ),
       ),

@@ -18,7 +18,9 @@ class RestService2 {
             connectTimeout: 30000,
             receiveTimeout: 30000,
           ),
-        )..interceptors.add(AuthInterceptor2(authService));
+        )..interceptors.add(
+            AuthInterceptor2(authService),
+          );
 
   Future<GameStatusModel> getGameStatus() async {
     Response res = await _dio.post('/get_any_active_session_status');

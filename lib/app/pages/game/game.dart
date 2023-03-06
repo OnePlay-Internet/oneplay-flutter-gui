@@ -620,10 +620,13 @@ class _GameState extends State<Game> {
           errorCode: errorCode,
           error: message,
           onTap1: onTap,
-          onTap2: (message) async {
+          onTap2: () async {
             try {
               await restService.postAReport(message, response);
-              _showSnackBar('Thanks, we will look into the issue!');
+              if (mounted) {
+                Navigator.pop(context);
+                _showSnackBar('Thanks, we will look into the issue!');
+              }
             } on DioError catch (e) {
               _showError(
                 errorCode: e.response?.statusCode ?? 503,

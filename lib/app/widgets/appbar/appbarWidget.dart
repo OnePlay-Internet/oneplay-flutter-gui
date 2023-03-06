@@ -98,6 +98,12 @@ class AppBarWidget {
                               image: imageURL.value,
                               placeholder: userPng,
                               fit: BoxFit.fill,
+                              imageErrorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  userPng,
+                                  fit: BoxFit.fill,
+                                );
+                              },
                             )
                           : Image.asset(
                               userPng,

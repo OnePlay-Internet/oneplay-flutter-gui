@@ -47,6 +47,28 @@ class Settings extends StatelessWidget {
           (p0) => false,
         );
         return true;
+
+        //
+        // if (isOpenDialog.value == true) {
+        //   print('***** Back: false, Open poup: ${isOpenDialog.value} *****');
+        //   return false;
+        // } else {
+        //   print('***** Back: true, Open poup: ${isOpenDialog.value} *****');
+        //   return true;
+        // }
+        // else {
+        //   if (navigateIdx.value != 4) {
+        //     return false;
+        //   }
+        //   navigateIdx.value = 0;
+        //   previousIndex = 0;
+        //   navigateIdx.notifyListeners();
+        //   Modular.to.pushNamedAndRemoveUntil(
+        //     '/feeds',
+        //     (p0) => false,
+        //   );
+        //   return true;
+        // }
       },
       child: GamepadPop(
         context: context,

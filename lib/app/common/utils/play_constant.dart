@@ -38,6 +38,8 @@ class PlayConstants {
 
   static const FPS = [30, 60];
 
+  static const String fps = 'FPS';
+
   static const DEFAULT_FPS = 60;
 
   static const VSYNC = [

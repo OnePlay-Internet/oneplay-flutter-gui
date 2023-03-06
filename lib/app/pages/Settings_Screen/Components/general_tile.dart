@@ -34,8 +34,8 @@ class GeneralTile extends StatelessWidget {
         child: Container(
           height: size.height * 0.06,
           width: size.width,
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.04,
+          padding: EdgeInsets.only(
+            left: size.width * 0.04,
           ),
           decoration: const BoxDecoration(
             color: blackColor4,
@@ -71,18 +71,28 @@ class GeneralTile extends StatelessWidget {
                     onTap2 != null
                         ? InkWell(
                             onTap: onTap2,
-                            child: Image.asset(
-                              checkedPng,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                right: size.width * 0.04,
+                              ),
+                              child: Image.asset(
+                                deletePng,
+                              ),
                             ),
                           )
                         : onChanged != null || onChanged != null
-                            ? Transform.scale(
-                                scale: 0.76,
-                                child: CupertinoSwitch(
-                                  value: isPrivacy,
-                                  thumbColor: textPrimaryColor,
-                                  activeColor: purpleColor1,
-                                  onChanged: onChanged,
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                  right: size.width * 0.01,
+                                ),
+                                child: Transform.scale(
+                                  scale: 0.76,
+                                  child: CupertinoSwitch(
+                                    value: isPrivacy,
+                                    thumbColor: textPrimaryColor,
+                                    activeColor: purpleColor1,
+                                    onChanged: onChanged,
+                                  ),
                                 ),
                               )
                             : const SizedBox.shrink(),

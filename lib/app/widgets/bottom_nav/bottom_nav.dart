@@ -161,15 +161,11 @@ class _BottomNavState extends State<BottomNav> {
           context: context,
           barrierDismissible: true,
           builder: (BuildContext context) {
-            return WillPopScope(
-              onWillPop: () async => false,
-              child: const AlertReferPopUp(),
-            );
+            return const AlertReferPopUp();
           },
         );
         break;
       case 4:
-        // Modular.to.pushNamedAndRemoveUntil('/setting', (r) => false);
         Modular.to.pushNamed('/setting');
         break;
     }
