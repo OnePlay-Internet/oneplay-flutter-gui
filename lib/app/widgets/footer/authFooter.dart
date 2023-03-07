@@ -105,11 +105,12 @@ Padding haveAccount({
         Text(
           title,
           style: const TextStyle(
-              fontFamily: mainFontFamily,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.02,
-              color: textSecondaryColor),
+            fontFamily: mainFontFamily,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.02,
+            color: textSecondaryColor,
+          ),
         ),
         InkWell(
           onTap: onTap,
@@ -168,92 +169,87 @@ Padding needHelpWidget() {
   );
 }
 
-bySigningUpFooter() {
-  return Container(
-    margin: const EdgeInsets.symmetric(
-      horizontal: 40,
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Image.asset(
-          checkPng,
-          width: 20,
-          fit: BoxFit.cover,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'By singing up, you agree to OnePlay’s',
-              textScaleFactor: 1.03,
-              style: TextStyle(
-                fontFamily: mainFontFamily,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.02,
-                color: textSecondaryColor,
-              ),
+bySigningUpFooter({int? isPortrait}) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Image.asset(
+        checkPng,
+        width: isPortrait == 5 ? 20 : 22,
+        fit: BoxFit.cover,
+      ),
+      const SizedBox(
+        width: 10,
+      ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'By singing up, you agree to OnePlay’s',
+            textScaleFactor: 1.03,
+            style: TextStyle(
+              fontFamily: mainFontFamily,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.02,
+              color: textSecondaryColor,
             ),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () =>
-                      _launchURL('https://www.oneplay.in/privacy.html'),
-                  child: GradientText(
-                    'Privacy Policy',
-                    textScaleFactor: 0.85,
-                    style: const TextStyle(
-                      fontFamily: mainFontFamily,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0.02,
-                      decorationThickness: 1,
-                      decoration: TextDecoration.underline,
-                    ),
-                    gradientType: GradientType.linear,
-                    gradientDirection: GradientDirection.ltr,
-                    colors: const [purpleColor2, purpleColor1],
-                  ),
-                ),
-                const Text(
-                  ' & ',
+          ),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () => _launchURL('https://www.oneplay.in/privacy.html'),
+                child: GradientText(
+                  'Privacy Policy',
                   textScaleFactor: 0.85,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: mainFontFamily,
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.02,
-                    color: textSecondaryColor,
+                    decorationThickness: 1,
+                    decoration: TextDecoration.underline,
                   ),
+                  gradientType: GradientType.linear,
+                  gradientDirection: GradientDirection.ltr,
+                  colors: const [purpleColor2, purpleColor1],
                 ),
-                GestureDetector(
-                  onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
-                  child: GradientText(
-                    'Terms and Conditions',
-                    textScaleFactor: 0.85,
-                    style: const TextStyle(
-                      fontFamily: mainFontFamily,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0.02,
-                      decorationThickness: 1,
-                      decoration: TextDecoration.underline,
-                    ),
-                    gradientType: GradientType.linear,
-                    gradientDirection: GradientDirection.ltr,
-                    colors: const [purpleColor2, purpleColor1],
+              ),
+              const Text(
+                ' & ',
+                textScaleFactor: 0.85,
+                style: TextStyle(
+                  fontFamily: mainFontFamily,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.02,
+                  color: textSecondaryColor,
+                ),
+              ),
+              GestureDetector(
+                onTap: () => _launchURL('https://www.oneplay.in/tnc.html'),
+                child: GradientText(
+                  'Terms and Conditions',
+                  textScaleFactor: 0.85,
+                  style: const TextStyle(
+                    fontFamily: mainFontFamily,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.02,
+                    decorationThickness: 1,
+                    decoration: TextDecoration.underline,
                   ),
+                  gradientType: GradientType.linear,
+                  gradientDirection: GradientDirection.ltr,
+                  colors: const [purpleColor2, purpleColor1],
                 ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
   );
 }

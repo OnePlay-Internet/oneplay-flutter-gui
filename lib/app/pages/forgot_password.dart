@@ -23,10 +23,11 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final RestService _restService = Modular.get<RestService>();
-  String errorEmail = "";
-  bool isLoading = false;
 
   final emailController = TextEditingController();
+
+  String errorEmail = "";
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +77,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   height: size.height * 0.03,
                 ),
                 customTextField(
-                    labelText: 'Email',
-                    hintText: 'Email Address',
-                    textCtrler: emailController,
-                    errorText: errorEmail,
-                    onChanged: ((text) {
-                      setState(() {});
-                    })),
+                  labelText: 'Email',
+                  hintText: 'Email Address',
+                  textCtrler: emailController,
+                  errorText: errorEmail,
+                ),
                 SizedBox(
                   height: size.height * 0.05,
                 ),
