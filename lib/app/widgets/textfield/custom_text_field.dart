@@ -4,19 +4,20 @@ import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../common/common.dart';
 
-StatefulBuilder customTextField(
-    {required String labelText,
-    required String hintText,
-    required TextEditingController textCtrler,
-    TextInputType textInputType = TextInputType.text,
-    String errorText = '',
-    Function(String text)? onChanged}) {
+StatefulBuilder customTextField({
+  required String labelText,
+  required String hintText,
+  required TextEditingController textCtrler,
+  TextInputType textInputType = TextInputType.text,
+  String errorText = '',
+  Function(String text)? onChanged,
+}) {
   bool isHideText = textInputType == TextInputType.visiblePassword;
   bool onChangeText = false;
+
   return StatefulBuilder(
     builder: (BuildContext context, StateSetter setState) {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 40),
+      return SizedBox(
         height: 84,
         width: MediaQuery.of(context).size.width,
         child: Column(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../common/common.dart';
-import '../submit_button/submit_button.dart';
+import '../Submit_Button/submit_button.dart';
 import '../common_divider.dart';
 import '../textfieldsetting/custom_text_field_setting.dart';
 
