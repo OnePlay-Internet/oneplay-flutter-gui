@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:oneplay_flutter_gui/app/services/gamepad_service.dart';
 
 class FocusZoom extends StatefulWidget {
   final Widget Function(FocusNode) builder;
@@ -21,19 +24,24 @@ class _FocusZoomState extends State<FocusZoom> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: focused
-          ? BoxDecoration(
-              border: Border.all(color: Colors.blueAccent),
-            )
-          : null,
-      child: widget.zoomEffect
-          ? AnimatedScale(
-              scale: scale,
-              duration: const Duration(milliseconds: 100),
-              child: widget.builder(_focusNode),
-            )
-          : widget.builder(_focusNode),
+    return Observer(
+      builder: (_) {
+        var gamepads = Modular.get<GamepadService>().gamepads;
+        return Container(
+          decoration: focused && gamepads.isNotEmpty
+              ? BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent),
+                )
+              : null,
+          child: widget.zoomEffect && gamepads.isNotEmpty
+              ? AnimatedScale(
+                  scale: scale,
+                  duration: const Duration(milliseconds: 100),
+                  child: widget.builder(_focusNode),
+                )
+              : widget.builder(_focusNode),
+        );
+      },
     );
   }
 

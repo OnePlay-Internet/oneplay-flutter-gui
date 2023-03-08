@@ -14,6 +14,7 @@ import 'package:oneplay_flutter_gui/app/models/start_game_model.dart';
 import 'package:oneplay_flutter_gui/app/models/video_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
+import 'package:oneplay_flutter_gui/app/services/gamepad_service.dart';
 import 'package:oneplay_flutter_gui/app/services/initialize_state.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
@@ -86,70 +87,46 @@ class _GameState extends State<Game> {
                     Stack(
                       children: [
                         ...bannerWidget(context, game!),
-                        Observer(builder: (_) {
-                          bool isInWishlist =
-                              authService.wishlist.contains(game?.oneplayId);
-                          return wishlistButton(
-                            isInWishlist ? Icons.remove : Icons.add_rounded,
-                            onTap: wishlistLoading
-                                ? null
-                                : () => _wishlistAction(isInWishlist),
-                          );
-                        }),
-                        statusActionBtn()
+                        Observer(
+                          builder: (_) {
+                            bool isInWishlist =
+                                authService.wishlist.contains(game?.oneplayId);
+                            return wishlistButton(
+                              isInWishlist ? Icons.remove : Icons.add_rounded,
+                              onTap: wishlistLoading
+                                  ? null
+                                  : () => _wishlistAction(isInWishlist),
+                            );
+                          },
+                        ),
+                        statusActionBtn(),
                       ],
                     ),
                     checkShowSettingWidget(),
                     commonDividerWidget(),
                     FakeFocus(child: detailGameWidget(context, game)),
                     FakeFocus(child: listTagWidget(context, game)),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     commonDividerWidget(),
                     // topVideoLiveStreamsWidget(context, videos),
                     commonDividerWidget(),
                     const SizedBox(height: 30),
                     if (genreGames.isNotEmpty)
                       listGameWithLabel(
-                          GameFeedModel(title: 'From Genre', games: genreGames),
-                          context),
+                        GameFeedModel(
+                          title: 'From Genre',
+                          games: genreGames,
+                        ),
+                        context,
+                      ),
                     if (devGames.isNotEmpty)
                       listGameWithLabel(
-                          GameFeedModel(
-                              title: 'From Developer', games: devGames),
-                          context),
-                    // Center(child: Text('${game?.title}')),
-                    // const SizedBox(height: 32),
-                    // if (game?.bgImage != null)
-                    //   Column(
-                    //     children: [
-                    //       Image(image: NetworkImage(game?.bgImage ?? '')),
-                    //       const SizedBox(height: 32),
-                    //     ],
-                    //   ),
-                    // Observer(
-                    //   builder: (_) {
-                    //     String action = _getAction(gameService.gameStatus);
-                    //     return Column(
-                    //       children: [
-                    //         OutlinedButton(
-                    //           onPressed: starting || game == null ? null : _startgame,
-                    //           child: Text(action),
-                    //         ),
-                    //         if (action == 'Resume') const SizedBox(height: 32),
-                    //         if (action == 'Resume')
-                    //           OutlinedButton(
-                    //             onPressed: terminating
-                    //                 ? null
-                    //                 : () => _terminateSession(
-                    //                     gameService.gameStatus.sessionId!),
-                    //             child: Text(terminating ? 'Terminating...' : 'Terminate'),
-                    //           ),
-                    //       ],
-                    //     );
-                    //   },
-                    // )
+                        GameFeedModel(
+                          title: 'From Developer',
+                          games: devGames,
+                        ),
+                        context,
+                      ),
                   ],
                 ),
         ),
@@ -520,7 +497,9 @@ class _GameState extends State<Game> {
       gameSetting.fullscreen = pref.getBool("fullscreen")!;
     }
 
-    if (pref.getBool("onscreen_controls") == null) {
+    if (Modular.get<GamepadService>().gamepads.isEmpty) {
+      gameSetting.onscreen_controls = true;
+    } else if (pref.getBool("onscreen_controls") == null) {
       gameSetting.onscreen_controls = false;
     } else {
       gameSetting.onscreen_controls = pref.getBool("onscreen_controls")!;
@@ -680,6 +659,12 @@ class _GameState extends State<Game> {
   }
 
   void _startSession() async {
+    var gamepads = Modular.get<GamepadService>().gamepads;
+
+    if (gamepads.isNotEmpty) {
+      _showSnackBar('${gamepads.length} gamepads connected');
+    }
+
     try {
       _startLoading();
 

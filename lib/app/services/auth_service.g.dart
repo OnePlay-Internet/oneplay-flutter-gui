@@ -84,6 +84,17 @@ mixin _$AuthService on AuthServiceBase, Store {
       ActionController(name: 'AuthServiceBase', context: context);
 
   @override
+  dynamic sessionKey() {
+    final _$actionInfo = _$AuthServiceBaseActionController.startAction(
+        name: 'AuthServiceBase.sessionKey');
+    try {
+      return super.sessionKey();
+    } finally {
+      _$AuthServiceBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic loadUser(UserModel user) {
     final _$actionInfo = _$AuthServiceBaseActionController.startAction(
         name: 'AuthServiceBase.loadUser');

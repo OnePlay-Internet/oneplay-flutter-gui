@@ -13,14 +13,14 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       firstName: json['first_name'] as String,
       lastName: json['last_name'] as String,
       bio: json['bio'] as String?,
-      partnerId: json['partner_id'] as String,
+      partnerId: json['partnerId'] as String?,
       email: json['email'] as String,
       phone: json['phone'] as String,
       type: json['user_type'] as String,
-      subscribedPlan: json['subscribed_plan'] as dynamic,
+      subscribedPlan: json['subscribed_plan'],
       subscriptionIsActive: json['subscription_is_active'] as bool,
       isVerified: json['is_verified_profile'] as bool,
-      photo: json['profile_image'] as dynamic,
+      photo: json['profile_image'],
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -30,7 +30,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'first_name': instance.firstName,
       'last_name': instance.lastName,
       'bio': instance.bio,
-      'partner_id': instance.partnerId,
+      'partnerId': instance.partnerId,
       'email': instance.email,
       'phone': instance.phone,
       'user_type': instance.type,

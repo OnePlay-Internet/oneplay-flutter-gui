@@ -19,7 +19,7 @@ class UserModel {
 
   String? bio;
 
-  String partnerId;
+  String? partnerId;
 
   String email;
 
@@ -47,7 +47,7 @@ class UserModel {
     required this.firstName,
     required this.lastName,
     this.bio,
-    required this.partnerId,
+    this.partnerId,
     required this.email,
     required this.phone,
     required this.type,

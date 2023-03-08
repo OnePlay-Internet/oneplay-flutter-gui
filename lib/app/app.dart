@@ -4,11 +4,17 @@ import 'package:oneplay_flutter_gui/app/guards/login_guard.dart';
 import 'package:oneplay_flutter_gui/app/modules/admin/admin.dart';
 import 'package:oneplay_flutter_gui/app/modules/auth/auth.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
+import 'package:oneplay_flutter_gui/app/services/gamepad_service.dart';
 
 class AppModule extends Module {
+  final GamepadService gamepadService;
+
+  AppModule(this.gamepadService);
+
   @override
   List<Bind> get binds => [
         Bind((i) => AuthService()),
+        Bind((i) => gamepadService),
       ];
 
   @override
