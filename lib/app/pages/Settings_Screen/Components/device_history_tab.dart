@@ -87,7 +87,6 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
           ),
           Flexible(
             child: ListView.builder(
-              reverse: true,
               shrinkWrap: true,
               itemCount: deviceHistory.length,
               itemBuilder: ((context, index) {
@@ -132,7 +131,7 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
           final res = await _restService.getDeviceHistory();
 
           setState(() {
-            deviceHistory = res;
+            deviceHistory = res.reversed.toList();
           });
         } finally {
           setState(() => loading = false);
