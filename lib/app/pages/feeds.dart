@@ -120,18 +120,17 @@ class _FeedsState extends State<Feeds> {
   Widget build(BuildContext context) {
     return GamepadPop(
       context: context,
-      child: Scaffold(
-        backgroundColor: mainColor,
-        body: starting
-            ? const Center(child: CircularProgressIndicator())
-            : SafeArea(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView(
-                    children: [
-                      bannerWidget(firstRow),
-                      Observer(builder: (context) {
+      child: starting
+          ? const Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: ListView(
+                  children: [
+                    bannerWidget(firstRow),
+                    Observer(
+                      builder: (context) {
                         return FutureBuilder(
                           future: _getLibrary(),
                           builder: (_, snap) {
@@ -148,15 +147,15 @@ class _FeedsState extends State<Feeds> {
                                 : Container();
                           },
                         );
-                      }),
-                      ...restRow
-                          .map((value) => listGameWithLabel(value, context))
-                          .toList()
-                    ],
-                  ),
+                      },
+                    ),
+                    ...restRow
+                        .map((value) => listGameWithLabel(value, context))
+                        .toList(),
+                  ],
                 ),
               ),
-      ),
+            ),
     );
     // return Container(
     //   padding: const EdgeInsets.all(4),
