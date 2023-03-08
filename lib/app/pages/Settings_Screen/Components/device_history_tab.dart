@@ -87,6 +87,7 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
           ),
           Flexible(
             child: ListView.builder(
+              reverse: true,
               shrinkWrap: true,
               itemCount: deviceHistory.length,
               itemBuilder: ((context, index) {
