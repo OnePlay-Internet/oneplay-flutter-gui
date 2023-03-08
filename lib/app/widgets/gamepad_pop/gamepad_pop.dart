@@ -14,8 +14,16 @@ class GamepadPop extends StatelessWidget {
       autofocus: true,
       onKey: (event) {
         if (event is RawKeyDownEvent) {
-          if (event.logicalKey.keyId == 0x200000312) {
-            Navigator.of(this.context).pop();
+          switch (event.logicalKey.keyId) {
+            case 0x200000312:
+              Navigator.of(this.context).pop();
+              break;
+            case 0x200000314:
+              FocusManager.instance.primaryFocus?.previousFocus();
+              break;
+            case 0x200000317:
+              FocusManager.instance.primaryFocus?.nextFocus();
+              break;
           }
         }
       },

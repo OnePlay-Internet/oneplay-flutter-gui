@@ -87,14 +87,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ? size.height * 0.05
                                     : size.height * 0.10,
                               ),
-                              child: customTextField(
+                              child: CustomTextField(
                                 labelText: 'Name',
                                 hintText: 'User Name',
                                 textCtrler: nameController,
                                 errorText: errorName,
                               ),
                             ),
-                            customTextField(
+                            CustomTextField(
                               labelText: 'Email',
                               hintText: 'Email Address',
                               textCtrler: emailController,
@@ -106,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ? size.height * 0.05
                                     : size.height * 0.10,
                               ),
-                              child: customTextField(
+                              child: CustomTextField(
                                 labelText: 'Phone',
                                 hintText: 'Phone',
                                 textCtrler: phoneController,
@@ -114,7 +114,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 textInputType: TextInputType.phone,
                               ),
                             ),
-                            customTextField(
+                            CustomTextField(
                               labelText: 'Password',
                               hintText: 'Password',
                               textCtrler: passController,

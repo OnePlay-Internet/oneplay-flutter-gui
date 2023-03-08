@@ -74,7 +74,7 @@ class LandscapeLoginUi extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                             vertical: size.height * 0.10,
                           ),
-                          child: customTextField(
+                          child: CustomTextField(
                             labelText: 'Email / Phone',
                             hintText: 'Email Address',
                             textCtrler: emailController,
@@ -82,7 +82,7 @@ class LandscapeLoginUi extends StatelessWidget {
                             onChanged: onChangedEmail,
                           ),
                         ),
-                        customTextField(
+                        CustomTextField(
                           labelText: 'Password',
                           hintText: 'Password',
                           textInputType: TextInputType.visiblePassword,

@@ -101,14 +101,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 40),
-                                customTextField(
+                                CustomTextField(
                                   labelText: 'Email / Phone',
                                   hintText: 'Email Address',
                                   textCtrler: idCtrler,
                                   errorText: errorEmail,
                                 ),
                                 const SizedBox(height: 40),
-                                customTextField(
+                                CustomTextField(
                                   labelText: 'Password',
                                   hintText: 'Password',
                                   textCtrler: pwdCtrler,
@@ -222,14 +222,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 ),
                                               ),
                                               const SizedBox(height: 40),
-                                              customTextField(
+                                              CustomTextField(
                                                 labelText: 'Email / Phone',
                                                 hintText: 'Email Address',
                                                 textCtrler: idCtrler,
                                                 errorText: errorEmail,
                                               ),
                                               const SizedBox(height: 40),
-                                              customTextField(
+                                              CustomTextField(
                                                 labelText: 'Password',
                                                 hintText: 'Password',
                                                 textCtrler: pwdCtrler,

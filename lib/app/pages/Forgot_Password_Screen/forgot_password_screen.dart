@@ -82,7 +82,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               ),
                             ),
                           ),
-                          customTextField(
+                          CustomTextField(
                             labelText: 'Email',
                             hintText: 'Email Address',
                             textCtrler: emailController,

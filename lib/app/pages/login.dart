@@ -84,14 +84,14 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 const SizedBox(height: 40),
-                customTextField(
+                CustomTextField(
                   labelText: 'Email / Phone',
                   hintText: 'Email Address',
                   textCtrler: idCtrler,
                   errorText: errorEmail,
                 ),
                 const SizedBox(height: 40),
-                customTextField(
+                CustomTextField(
                   labelText: 'Password',
                   hintText: 'Password',
                   textCtrler: pwdCtrler,

@@ -74,7 +74,7 @@ class PortraitLoginUi extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                             vertical: size.height * 0.05,
                           ),
-                          child: customTextField(
+                          child: CustomTextField(
                             labelText: 'Email / Phone',
                             hintText: 'Email Address',
                             textCtrler: emailController,
@@ -82,7 +82,7 @@ class PortraitLoginUi extends StatelessWidget {
                             onChanged: onChangedEmail,
                           ),
                         ),
-                        customTextField(
+                        CustomTextField(
                           labelText: 'Password',
                           hintText: 'Password',
                           textInputType: TextInputType.visiblePassword,
