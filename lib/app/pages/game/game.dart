@@ -24,6 +24,7 @@ import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../main.dart';
 import '../../common/common.dart';
 import '../../models/game_feed_model.dart';
 import '../../widgets/list_game_w_label/list_game_w_label.dart';
@@ -63,7 +64,6 @@ class _GameState extends State<Game> {
   bool isShowSetting = true;
   bool wishlistLoading = false;
   GameSetting gameSetting = GameSetting();
-  bool isOpenPopupSetting = false;
 
   @override
   void dispose() {
@@ -73,7 +73,7 @@ class _GameState extends State<Game> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => isOpenPopupSetting ? false : true,
+      onWillPop: () async => isOpenDialog ? false : true,
       child: GamepadPop(
         context: context,
         child: RefreshIndicator(
@@ -376,7 +376,6 @@ class _GameState extends State<Game> {
         "user_id": userId,
       },
     );
-    print('***** Game id: $gameId, User id: $userId *****');
   }
 
   _gamePlayLogEvent({
@@ -548,6 +547,8 @@ class _GameState extends State<Game> {
   }
 
   void _startLoading() {
+    isOpenDialog = true;
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -568,6 +569,7 @@ class _GameState extends State<Game> {
     );
     setState(() {
       starting = true;
+      isOpenDialog = false;
     });
   }
 
@@ -589,7 +591,8 @@ class _GameState extends State<Game> {
     Function()? onTap,
     dynamic response,
   }) async {
-    isOpenPopupSetting = true;
+    isOpenDialog = true;
+
     await showDialog(
       context: context,
       barrierDismissible: false,
@@ -616,7 +619,7 @@ class _GameState extends State<Game> {
         ),
       ),
     );
-    setState(() => isOpenPopupSetting = false);
+    setState(() => isOpenDialog = false);
   }
 
   void _showFeedback({
@@ -624,7 +627,8 @@ class _GameState extends State<Game> {
     required String userId,
     required String sessionId,
   }) async {
-    isOpenPopupSetting = true;
+    isOpenDialog = true;
+
     await showDialog(
       context: context,
       barrierDismissible: false,
@@ -636,12 +640,12 @@ class _GameState extends State<Game> {
         );
       },
     );
-    setState(() => isOpenPopupSetting = false);
   }
 
   void _startgame() async {
     if (isShowSetting) {
-      isOpenPopupSetting = true;
+      isOpenDialog = true;
+
       await showDialog(
         context: context,
         barrierDismissible: false,
@@ -652,7 +656,6 @@ class _GameState extends State<Game> {
           );
         },
       );
-      setState(() => isOpenPopupSetting = false);
     } else {
       _startSession();
     }

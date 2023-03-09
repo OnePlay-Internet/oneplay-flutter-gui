@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:oneplay_flutter_gui/main.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../common/common.dart';
@@ -302,6 +303,7 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                     InkWell(
                       onTap: () {
                         Navigator.pop(context);
+                        setState(() => isOpenDialog = false);
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -370,11 +372,14 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
       if (mounted) {
         Navigator.pop(context);
 
-        showDialog(
+        await showDialog(
           context: context,
           builder: (_) {
             Future.delayed(const Duration(milliseconds: 2000), () {
+              isOpenDialog = false;
+
               setState(() => isLoading = false);
+
               Navigator.pop(_);
             });
 

@@ -206,6 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _getUserProfile();
 
       userIdList = SharedPrefService.getUserId() ?? [];
+      SharedPrefService.storeIsPrivacy(true);
 
       if (userIdList.contains(AuthService().userIdToken!.userId)) {
         if (mounted) {

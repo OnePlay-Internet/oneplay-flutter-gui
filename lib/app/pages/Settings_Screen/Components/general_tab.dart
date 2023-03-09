@@ -13,10 +13,10 @@ import '../../../models/device_history_model.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/rest_service.dart';
 import '../../../services/rest_service_2.dart';
+import '../../../services/shared_pref_service.dart';
 import '../../../widgets/gamepad_pop/gamepad_pop.dart';
 import '../../../widgets/popup/ask_dialog.dart';
 import '../../../widgets/popup/exit_dialog.dart';
-import '../../../widgets/popup/feedback_dialog.dart';
 import '../../../widgets/popup/popup_success.dart';
 import 'general_tile.dart';
 
@@ -31,8 +31,7 @@ class _GeneralTabState extends State<GeneralTab> {
   final RestService _restService = Modular.get<RestService>();
   final RestService2 _restService2 = Modular.get<RestService2>();
   List<DeviceHistoryModel> deviceHistory = [];
-  bool isOpenDialog = false;
-  bool isPrivacy = true;
+  bool? isPrivacy;
   bool loading = false;
   String userKey = '';
 
@@ -40,120 +39,121 @@ class _GeneralTabState extends State<GeneralTab> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (isOpenDialog == true) {
-          print('***** Back: false, Open poup: $isOpenDialog *****');
-          return false;
-        } else {
-          print('***** Back: true, Open poup: $isOpenDialog *****');
-          return true;
-        }
-      },
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.045,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              GeneralTile(
-                title: 'Frequently Asked Questions',
-                iconPath: freqPng,
-                onTap: () {
-                  _launchURL('https://www.oneplay.in/contact.html');
-                },
-              ),
-              GeneralTile(
-                title: 'Support',
-                iconPath: supportPng,
-                onTap: () {
-                  _launchURL('https://www.oneplay.in/contact.html');
-                },
-              ),
-              GeneralTile(
-                title: 'Terms & Conditions',
-                iconPath: tncPng,
-                onTap: () {
-                  _launchURL('https://www.oneplay.in/tnc.html');
-                },
-              ),
-              GeneralTile(
-                title: 'Privacy Policy',
-                iconPath: policyPng,
-                onTap: () {
-                  _launchURL('https://www.oneplay.in/privacy.html');
-                },
-              ),
-              GeneralTile(
-                title: 'Privacy',
-                iconPath: privacyPng,
-                isPrivacy: isPrivacy,
-                onChanged: (value) {
+    isPrivacy = SharedPrefService.getIsPrivacy();
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: size.width * 0.045,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            GeneralTile(
+              title: 'Frequently Asked Questions',
+              iconPath: freqPng,
+              onTap: () {
+                _launchURL('https://www.oneplay.in/contact.html');
+              },
+            ),
+            GeneralTile(
+              title: 'Support',
+              iconPath: supportPng,
+              onTap: () {
+                _launchURL('https://www.oneplay.in/contact.html');
+              },
+            ),
+            GeneralTile(
+              title: 'Terms & Conditions',
+              iconPath: tncPng,
+              onTap: () {
+                _launchURL('https://www.oneplay.in/tnc.html');
+              },
+            ),
+            GeneralTile(
+              title: 'Privacy Policy',
+              iconPath: policyPng,
+              onTap: () {
+                _launchURL('https://www.oneplay.in/privacy.html');
+              },
+            ),
+            GeneralTile(
+              title: 'Privacy',
+              iconPath: privacyPng,
+              isPrivacy: isPrivacy!,
+              onChanged: (value) {
+                if (value == true) {
                   setState(() {
                     isPrivacy = value;
-                    _setSearchPrivacy(isPrivacy);
+                    _setSearchPrivacy(isPrivacy!);
+                    SharedPrefService.storeIsPrivacy(isPrivacy!);
                   });
-                },
-              ),
-              GeneralTile(
-                title: 'Session Data',
-                iconPath: pieChartPng,
-                onTap2: () {
-                  isOpenDialog = true;
+                } else {
+                  setState(() {
+                    isPrivacy = value;
+                    _setSearchPrivacy(isPrivacy!);
+                    SharedPrefService.storeIsPrivacy(isPrivacy!);
+                  });
+                }
+              },
+            ),
+            GeneralTile(
+              title: 'Session Data',
+              iconPath: pieChartPng,
+              onTap2: () async {
+                isOpenDialog = true;
 
-                  print('******* $isOpenDialog');
+                await showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertAskDialog(
+                      title: 'Are you sure?',
+                      subTitle:
+                          'Do you want to delete all your session \ndata?',
+                      onTapNo: () {
+                        Navigator.pop(context);
+                      },
+                      onTapYes: () {
+                        Navigator.pop(context);
+                        _deleteSessionData();
+                      },
+                    );
+                  },
+                );
+                setState(() => isOpenDialog = false);
+              },
+            ),
+            GeneralTile(
+              title: 'Log out',
+              iconPath: logoutPng,
+              onTap: () async {
+                isOpenDialog = true;
 
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertAskDialog(
-                        title: 'Are you sure?',
-                        subTitle:
-                            'Do you want to delete all your session \ndata?',
-                        onTapNo: () {
-                          Navigator.pop(context);
-                        },
-                        onTapYes: () {
-                          Navigator.pop(context);
-                          _deleteSessionData();
-                        },
-                      );
-                    },
-                  );
-                  setState(() => isOpenDialog = false);
-                },
-              ),
-              GeneralTile(
-                title: 'Log out',
-                iconPath: logoutPng,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ExitDialog(
-                        title: 'Do you want to logout?',
-                        onNo: () {
-                          Navigator.pop(context);
-                        },
-                        onYes: () {
-                          navigateIdx.value = 0;
-                          navigateIdx.notifyListeners();
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ExitDialog(
+                      title: 'Do you want to logout?',
+                      onNo: () {
+                        Navigator.pop(context);
+                      },
+                      onYes: () {
+                        navigateIdx.value = 0;
+                        navigateIdx.notifyListeners();
 
-                          _logoutUser(AuthService().sessionKey());
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+                        _logoutUser(AuthService().sessionKey());
+                      },
+                    );
+                  },
+                );
+                setState(() => isOpenDialog = false);
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -163,6 +163,8 @@ class _GeneralTabState extends State<GeneralTab> {
     try {
       await _restService.setSearchPrivacy(isPrivacy: privacy);
       if (mounted) {
+        isOpenDialog = true;
+
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -174,6 +176,7 @@ class _GeneralTabState extends State<GeneralTab> {
                   : 'Successfully turned off search privacy.',
               onTapYes: () {
                 Navigator.pop(_);
+                setState(() => isOpenDialog = false);
               },
             );
           },
@@ -191,6 +194,8 @@ class _GeneralTabState extends State<GeneralTab> {
       final response = await _restService2.deleteSessionData();
       if (response == 'success') {
         if (mounted) {
+          isOpenDialog = true;
+
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -200,6 +205,7 @@ class _GeneralTabState extends State<GeneralTab> {
                 subTitle: 'Successfully deleted sessions',
                 onTapYes: () {
                   Navigator.pop(_);
+                  setState(() => isOpenDialog = false);
                 },
               );
             },
