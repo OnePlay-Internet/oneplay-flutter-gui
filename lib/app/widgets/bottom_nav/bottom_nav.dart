@@ -3,8 +3,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 
@@ -59,67 +61,134 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: selectedIndex,
-      backgroundColor: blackColor4,
-      unselectedIconTheme: const IconThemeData(
-        color: textPrimaryColor,
-      ),
-      unselectedItemColor: textSecondaryColor,
-      showUnselectedLabels: true,
-      onTap: _onTap,
-      type: BottomNavigationBarType.fixed,
-      items: [
-        _item(icon: const Icon(Icons.home), label: 'Home'),
-        // _item(icon: const Icon(Icons.search), label: "Search"),
-        _item(
-          icon: Image.asset(
-            gamePng,
-            height: 22,
-            color: selectedIndex == 1 ? null : textPrimaryColor,
-          ),
-          label: "Games",
-        ),
-        _item(
-          icon: Observer(
-            builder: (context) {
-              gameService;
-              if (gameService.gameStatus.isRunning == true) {
-                return Image.asset(
-                  livePng,
-                  height: 48,
-                );
-              } else if (gameService.gameStatus.sessionId != null) {
-                return Image.asset(resumePng);
-              } else {
-                return Image.asset(inActivePng);
-              }
-            },
-          ),
-          label: '',
-          isImage: true,
-        ),
-        _item(
-          icon: Image.asset(
-            referPng,
-            height: 26,
-            color: selectedIndex == 3 ? textPrimaryColor : textPrimaryColor,
-          ),
-          label: "Refer",
-        ),
-        // _item(icon: const Icon(Icons.people), label: "Social"),
-        // _item(icon: const Icon(Icons.store), label: "Store"),
-        _item(
-          icon: Image.asset(
-            settingPng,
-            height: 22,
-            color: selectedIndex == 4 ? null : textPrimaryColor,
-          ),
-          label: "Settings",
-          isImage: true,
-        ),
-      ],
+    return Container(
+      color: blackColor4,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: 96,
+      child: Row(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _customItem(
+                idx: 0,
+                icon: Image.asset(homePng,
+                    height: 22,
+                    color: selectedIndex == 1 ? null : textPrimaryColor),
+                label: 'Home'),
+            _customItem(
+              idx: 1,
+              icon: Image.asset(
+                gamePng,
+                height: 22,
+                color: selectedIndex == 1 ? null : textPrimaryColor,
+              ),
+              label: "Games",
+            ),
+            _customItem(
+              idx: 2,
+              icon: Observer(
+                builder: (context) {
+                  gameService;
+                  if (gameService.gameStatus.isRunning == true) {
+                    return Image.asset(
+                      livePng,
+                      height: 48,
+                    );
+                  } else if (gameService.gameStatus.sessionId != null) {
+                    return Image.asset(resumePng);
+                  } else {
+                    return Image.asset(inActivePng);
+                  }
+                },
+              ),
+              label: '',
+              isImage: true,
+            ),
+            _customItem(
+              idx: 3,
+              icon: Image.asset(
+                referPng,
+                height: 26,
+                color: selectedIndex == 3 ? textPrimaryColor : textPrimaryColor,
+              ),
+              label: "Refer",
+            ),
+            // _item(icon: const Icon(Icons.people), label: "Social"),
+            // _item(icon: const Icon(Icons.store), label: "Store"),
+            _customItem(
+              idx: 4,
+              icon: Image.asset(
+                settingPng,
+                height: 22,
+                color: selectedIndex == 4 ? null : textPrimaryColor,
+              ),
+              label: "Settings",
+              isImage: true,
+            ),
+          ]),
     );
+
+    // return BottomNavigationBar(
+    //   currentIndex: selectedIndex,
+    //   backgroundColor: blackColor4,
+    //   unselectedIconTheme: const IconThemeData(
+    //     color: textPrimaryColor,
+    //   ),
+    //   unselectedItemColor: textSecondaryColor,
+    //   showUnselectedLabels: true,
+    //   onTap: _onTap,
+    //   type: BottomNavigationBarType.fixed,
+    //   items: [
+    //     _item(icon: const Icon(Icons.home), label: 'Home'),
+    //     // _item(icon: const Icon(Icons.search), label: "Search"),
+    //     _item(
+    //       icon: Image.asset(
+    //         gamePng,
+    //         height: 22,
+    //         color: selectedIndex == 1 ? null : textPrimaryColor,
+    //       ),
+    //       label: "Games",
+    //     ),
+    //     _item(
+    //       icon: Observer(
+    //         builder: (context) {
+    //           gameService;
+    //           if (gameService.gameStatus.isRunning == true) {
+    //             return Image.asset(
+    //               livePng,
+    //               height: 48,
+    //             );
+    //           } else if (gameService.gameStatus.sessionId != null) {
+    //             return Image.asset(resumePng);
+    //           } else {
+    //             return Image.asset(inActivePng);
+    //           }
+    //         },
+    //       ),
+    //       label: '',
+    //       isImage: true,
+    //     ),
+    //     _item(
+    //       icon: Image.asset(
+    //         referPng,
+    //         height: 26,
+    //         color: selectedIndex == 3 ? textPrimaryColor : textPrimaryColor,
+    //       ),
+    //       label: "Refer",
+    //     ),
+    //     // _item(icon: const Icon(Icons.people), label: "Social"),
+    //     // _item(icon: const Icon(Icons.store), label: "Store"),
+    //     _item(
+    //       icon: Image.asset(
+    //         settingPng,
+    //         height: 22,
+    //         color: selectedIndex == 4 ? null : textPrimaryColor,
+    //       ),
+    //       label: "Settings",
+    //       isImage: true,
+    //     ),
+    //   ],
+    // );
   }
 
   void _onTap(int value) {
@@ -184,6 +253,31 @@ class _BottomNavState extends State<BottomNav> {
       activeIcon: isImage ? null : _activeIcon(icon),
       label: label,
       tooltip: tooltip,
+    );
+  }
+
+  Widget _customItem(
+      {required Widget icon,
+      String? label,
+      String? tooltip,
+      bool isImage = false,
+      required int idx}) {
+    return GestureDetector(
+      onTap: () => _onTap(idx),
+      child: Container(
+        // height: 56,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              selectedIndex == idx && !isImage ? _activeIcon(icon) : icon,
+              Text(label!,
+                  style: tinyStyle.copyWith(
+                      color: selectedIndex == idx
+                          ? purpleColor1
+                          : textSecondaryColor))
+            ]),
+      ),
     );
   }
 

@@ -15,6 +15,7 @@ const timePng = 'assets/png/icon_time.png';
 const settingPng = 'assets/png/icon_settings.png';
 const imgStep1 = 'assets/png/img_step1.png';
 const imgStep2 = 'assets/png/img_step2.png';
+const homePng = 'assets/png/icon_home.png';
 const gamePng = 'assets/png/icon_game.png';
 const referPng = 'assets/png/add_user.png';
 const inActivePng = 'assets/png/icon_inactive1.png';
