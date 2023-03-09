@@ -25,6 +25,7 @@ int selectedIndex = 0;
 int previousIndex = 0;
 
 String profilePicURL = '';
+bool isOpenDialog = false;
 
 ValueNotifier<int> navigateIdx = ValueNotifier<int>(0);
 ValueNotifier<String> imageURL = ValueNotifier<String>('');

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../main.dart';
 import '../../common/common.dart';
 import '../../models/game_setting.dart';
 import '../../widgets/Submit_Button/submit_button.dart';
@@ -69,7 +70,10 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
                       return InkWell(
                         focusNode: focus,
                         autofocus: true,
-                        onTap: () => Navigator.pop(context),
+                        onTap: () {
+                          Navigator.pop(context);
+                          setState(() => isOpenDialog = false);
+                        },
                         child: SvgPicture.asset(
                           crossIcon,
                           height: 20,
@@ -266,16 +270,20 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
               builder: (focus) {
                 return InkWell(
                   focusNode: focus,
-                  onTap: () => showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AdvanceGameDialog(
-                        gameSetting: widget.gameSetting,
-                        launchGame: widget.launchGame,
-                      );
-                    },
-                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AdvanceGameDialog(
+                          gameSetting: widget.gameSetting,
+                          launchGame: widget.launchGame,
+                        );
+                      },
+                    );
+                  },
                   child: SizedBox(
                     width: size.width,
                     child: Row(
@@ -318,38 +326,6 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget dropdownMenu(List<dynamic> options, dynamic selectValue) {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return DropdownButton(
-          focusColor: Colors.blue,
-          isExpanded: true,
-          dropdownColor: blackColor4,
-          style: tinyStyle.copyWith(
-            color: textPrimaryColor,
-          ),
-          underline: const SizedBox.shrink(),
-          value: selectValue,
-          items: options
-              .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(
-                      "$e",
-                      style: tinyStyle.copyWith(
-                        color: textPrimaryColor,
-                      ),
-                    ),
-                  ))
-              .toList(),
-          onChanged: (value) {
-            setState(() => selectValue = value!);
-            print('***** Seletcted value: $selectValue *****');
-          },
-        );
-      },
     );
   }
 }

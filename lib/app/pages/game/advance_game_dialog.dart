@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
+import '../../../main.dart';
 import '../../common/common.dart';
 import '../../models/game_setting.dart';
 import '../../widgets/Submit_Button/submit_button.dart';
@@ -82,7 +83,10 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
                         return InkWell(
                           focusNode: focus,
                           autofocus: true,
-                          onTap: () => Navigator.pop(context),
+                          onTap: () {
+                            Navigator.pop(context);
+                            setState(() => isOpenDialog = false);
+                          },
                           child: SvgPicture.asset(
                             crossIcon,
                             height: 20,

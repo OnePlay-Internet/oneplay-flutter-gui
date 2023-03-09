@@ -23,6 +23,9 @@ class ErrorHandler {
       );
     }
 
-    showDialog(context: context, builder: (_) => dialog);
+    showDialog(
+      context: context,
+      builder: (_) => dialog,
+    );
   }
 }

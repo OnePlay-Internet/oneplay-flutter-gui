@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../../main.dart';
 import '../../common/common.dart';
 import '../Submit_Button/submit_button.dart';
 import '../common_divider.dart';
@@ -186,6 +187,7 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
               borderRadius: 25,
               colors: const [blackColor2, blackColor1],
               onTap: () {
+                isOpenDialog = true;
                 Navigator.pop(context);
 
                 showDialog(
@@ -205,6 +207,7 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
             InkWell(
               onTap: () {
                 Navigator.pop(context);
+                setState(() => isOpenDialog = false);
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(

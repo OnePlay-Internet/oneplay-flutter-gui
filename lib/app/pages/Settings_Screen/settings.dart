@@ -36,17 +36,21 @@ class Settings extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        if (navigateIdx.value != 4) {
+        if (isOpenDialog == true) {
           return false;
+        } else {
+          if (navigateIdx.value != 4) {
+            return false;
+          }
+          navigateIdx.value = 0;
+          previousIndex = 0;
+          navigateIdx.notifyListeners();
+          Modular.to.pushNamedAndRemoveUntil(
+            '/feeds',
+            (p0) => false,
+          );
+          return true;
         }
-        navigateIdx.value = 0;
-        previousIndex = 0;
-        navigateIdx.notifyListeners();
-        Modular.to.pushNamedAndRemoveUntil(
-          '/feeds',
-          (p0) => false,
-        );
-        return true;
 
         //
         // if (isOpenDialog.value == true) {

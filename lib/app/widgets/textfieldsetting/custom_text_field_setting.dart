@@ -69,86 +69,88 @@ StatefulBuilder settingsTextField({
                 Radius.circular(10.0),
               ),
             ),
-            child: TextFormField(
-              focusNode: FocusNode(),
-              enabled: enabled,
-              expands: expands,
-              maxLines: maxLines,
-              controller: controller,
-              onChanged: onChanged,
-              keyboardType: textInputType,
-              obscureText: isHideText,
-              style: const TextStyle(
-                fontFamily: mainFontFamily,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.02,
-                color: textPrimaryColor,
-                fontSize: 14,
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: hintText,
-                suffixIcon: textInputType == TextInputType.visiblePassword
-                    ? FocusZoom(
-                        builder: (focus) {
-                          return InkWell(
-                            focusNode: focus,
-                            onTap: () {
-                              setState(() => isHideText = !isHideText);
-                            },
-                            child: Container(
-                              height: 20,
-                              width: 20,
-                              alignment: Alignment.centerRight,
-                              child: SvgPicture.asset(
-                                isHideText ? hidePwdIcon : showPwdIcon,
-                                color: textPrimaryColor,
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    : textInputType == TextInputType.emailAddress ||
-                            textInputType == TextInputType.emailAddress
-                        ? Container(
-                            height: 2,
-                            width: 2,
-                            alignment: Alignment.centerRight,
-                            child: Image.asset(
-                              checkedPng,
-                            ),
-                          )
-                        : textInputType == TextInputType.name ||
-                                textInputType == TextInputType.name
-                            ? Container(
-                                height: 2,
-                                width: 2,
-                                alignment: Alignment.centerRight,
-                                child: Image.asset(
-                                  editPng,
-                                  fit: BoxFit.cover,
-                                  height: size.height * 0.024,
-                                ),
-                              )
-                            : textInputType == TextInputType.phone ||
-                                    textInputType == TextInputType.phone
-                                ? Container(
-                                    height: 2,
-                                    width: 2,
-                                    alignment: Alignment.centerRight,
-                                    child: Image.asset(
-                                      editPng,
-                                      fit: BoxFit.cover,
-                                      height: size.height * 0.024,
-                                    ),
-                                  )
-                                : null,
-                hintStyle: const TextStyle(
+            child: Center(
+              child: TextFormField(
+                focusNode: FocusNode(),
+                enabled: enabled,
+                expands: expands,
+                maxLines: maxLines,
+                controller: controller,
+                onChanged: onChanged,
+                keyboardType: textInputType,
+                obscureText: isHideText,
+                style: const TextStyle(
                   fontFamily: mainFontFamily,
-                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.02,
-                  color: textSecondaryColor,
+                  color: textPrimaryColor,
+                  fontSize: 14,
+                ),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: hintText,
+                  suffixIcon: textInputType == TextInputType.visiblePassword
+                      ? FocusZoom(
+                          builder: (focus) {
+                            return InkWell(
+                              focusNode: focus,
+                              onTap: () {
+                                setState(() => isHideText = !isHideText);
+                              },
+                              child: Container(
+                                height: 20,
+                                width: 20,
+                                alignment: Alignment.centerRight,
+                                child: SvgPicture.asset(
+                                  isHideText ? hidePwdIcon : showPwdIcon,
+                                  color: textPrimaryColor,
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : textInputType == TextInputType.emailAddress ||
+                              textInputType == TextInputType.emailAddress
+                          ? Container(
+                              height: 2,
+                              width: 2,
+                              alignment: Alignment.centerRight,
+                              child: Image.asset(
+                                checkedPng,
+                              ),
+                            )
+                          : textInputType == TextInputType.name ||
+                                  textInputType == TextInputType.name
+                              ? Container(
+                                  height: 2,
+                                  width: 2,
+                                  alignment: Alignment.centerRight,
+                                  child: Image.asset(
+                                    editPng,
+                                    fit: BoxFit.cover,
+                                    height: size.height * 0.024,
+                                  ),
+                                )
+                              : textInputType == TextInputType.phone ||
+                                      textInputType == TextInputType.phone
+                                  ? Container(
+                                      height: 2,
+                                      width: 2,
+                                      alignment: Alignment.centerRight,
+                                      child: Image.asset(
+                                        editPng,
+                                        fit: BoxFit.cover,
+                                        height: size.height * 0.024,
+                                      ),
+                                    )
+                                  : null,
+                  hintStyle: const TextStyle(
+                    fontFamily: mainFontFamily,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.02,
+                    color: textSecondaryColor,
+                  ),
                 ),
               ),
             ),
