@@ -83,11 +83,11 @@ class _GamesListState extends State<GamesList> {
       final res = await _restService.searchGames(
         query: widget.query,
         page: page,
-        limit: 10,
+        limit: 5,
       );
       setState(() {
         games = [...games, ...res.results];
-        if (res.results.length < 10) hasMore = false;
+        if (res.results.length < 5) hasMore = false;
       });
       keyword = res.keyword;
       keywordHash = res.keywordHash;
