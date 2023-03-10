@@ -246,7 +246,10 @@ class _AlertReferPopUpState extends State<AlertReferPopUp> {
                             context: context,
                             barrierDismissible: false,
                             builder: (BuildContext context) {
-                              return const AlertTermsAndCondition();
+                              return WillPopScope(
+                                onWillPop: () async => false,
+                                child: const AlertTermsAndCondition(),
+                              );
                             },
                           );
                         },

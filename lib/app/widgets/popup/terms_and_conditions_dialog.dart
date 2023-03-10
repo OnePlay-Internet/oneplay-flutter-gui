@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../main.dart';
 import '../../common/common.dart';
 import '../Submit_Button/submit_button.dart';
 
@@ -96,6 +98,10 @@ class AlertTermsAndCondition extends StatelessWidget {
                       borderRadius: 25,
                       onTap: () {
                         Navigator.pop(context);
+                        navigateIdx.value = 0;
+                        navigateIdx.notifyListeners();
+                        Modular.to
+                            .pushNamedAndRemoveUntil('/feeds', (r) => false);
                       },
                     ),
                     SizedBox(

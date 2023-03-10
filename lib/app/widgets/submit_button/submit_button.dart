@@ -8,7 +8,6 @@ class SubmitButton extends StatelessWidget {
   final double? width;
   final String buttonTitle;
   final String loadingTitle;
-
   final bool isLoading;
   final double borderRadius;
   final double fontSize;

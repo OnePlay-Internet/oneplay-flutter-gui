@@ -33,16 +33,16 @@ import '../../widgets/popup/feedback_dialog.dart';
 import 'component.dart';
 import 'game_settings_dialog.dart';
 
-class Game extends StatefulWidget {
+class GameDetailScreen extends StatefulWidget {
   final String id;
 
-  const Game(this.id, {super.key});
+  const GameDetailScreen(this.id, {super.key});
 
   @override
-  State<Game> createState() => _GameState();
+  State<GameDetailScreen> createState() => _GameDetailScreenState();
 }
 
-class _GameState extends State<Game> {
+class _GameDetailScreenState extends State<GameDetailScreen> {
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   RestService restService = Modular.get<RestService>();
@@ -384,8 +384,8 @@ class _GameState extends State<Game> {
     required double bitrate,
     required String streamCodec,
     required String audioType,
-    required bool vsyncEnabled,
-    required bool onscreenControls,
+    required String vsyncEnabled,
+    required String onscreenControls,
   }) {
     analytics.logEvent(
       name: gamePlayEvent,
@@ -547,8 +547,6 @@ class _GameState extends State<Game> {
   }
 
   void _startLoading() {
-    isOpenDialog = true;
-
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -569,8 +567,14 @@ class _GameState extends State<Game> {
     );
     setState(() {
       starting = true;
-      isOpenDialog = false;
     });
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   void _stopLoading() {
@@ -581,6 +585,7 @@ class _GameState extends State<Game> {
 
     setState(() {
       starting = false;
+      isOpenDialog = false;
       initializeState.reset();
     });
   }
@@ -662,6 +667,7 @@ class _GameState extends State<Game> {
   }
 
   void _startSession() async {
+    isOpenDialog = true;
     var gamepads = Modular.get<GamepadService>().gamepads;
 
     if (gamepads.isNotEmpty) {
@@ -683,22 +689,29 @@ class _GameState extends State<Game> {
           bitrate: gameSetting.bitrate ?? 0.0,
           streamCodec: gameSetting.stream_codec ?? '',
           audioType: gameSetting.audio_type ?? '',
-          vsyncEnabled: gameSetting.is_vsync_enabled ?? false,
-          onscreenControls: gameSetting.onscreen_controls ?? false,
+          vsyncEnabled: gameSetting.is_vsync_enabled == true ? 'true' : 'false',
+          onscreenControls:
+              gameSetting.onscreen_controls == true ? 'true' : 'false',
         );
       } else if (res.data.apiAction == ApiAction.callTerminate) {
         _terminateGame(res.data.session?.id ?? '');
+
+        setState(() => isOpenDialog = false);
       } else {
         _stopLoading();
+
         _showError(
           message: res.msg != '' ? res.msg : 'Something went wrong',
           onTap: () => _startSession(),
         );
+
+        setState(() => isOpenDialog = false);
       }
     } on DioError catch (e) {
       print('***** Exeption error: $e *****');
 
       _stopLoading();
+
       _showError(
         message: e.error['message'],
         errorCode: e.response?.statusCode ?? 503,
@@ -711,6 +724,7 @@ class _GameState extends State<Game> {
   void _startGameWithClientToken(String sessionId, {int millis = 0}) async {
     if (millis > 60000) {
       _stopLoading();
+
       _showError(
         message: 'Something went wrong',
         onTap: () => _startSession(),
@@ -725,11 +739,15 @@ class _GameState extends State<Game> {
 
       if (data.token != '') {
         await _reloadGameStatus();
+
         _stopLoading();
+
         _launchGame(data.token);
       } else {
         initializeState.setMessage(data.msg);
+
         int timeTaken = DateTime.now().millisecondsSinceEpoch - startTime;
+
         if (timeTaken >= 2000) {
           _startGameWithClientToken(sessionId, millis: timeTaken + millis);
         } else {

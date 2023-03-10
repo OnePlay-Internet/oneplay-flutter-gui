@@ -343,13 +343,15 @@ class _SelectGameTileState extends State<SelectGameTile> {
         title: Text(title),
         content: Text(message),
         actions: [
-          FocusZoom(builder: (focus) {
-            return TextButton(
-              focusNode: focus,
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Ok'),
-            );
-          }),
+          FocusZoom(
+            builder: (focus) {
+              return TextButton(
+                focusNode: focus,
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Ok'),
+              );
+            },
+          ),
         ],
       ),
     );

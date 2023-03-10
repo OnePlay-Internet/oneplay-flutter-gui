@@ -271,8 +271,6 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
                 return InkWell(
                   focusNode: focus,
                   onTap: () {
-                    Navigator.pop(context);
-
                     showDialog(
                       context: context,
                       barrierDismissible: false,

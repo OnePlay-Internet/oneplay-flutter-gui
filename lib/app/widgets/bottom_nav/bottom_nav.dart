@@ -3,10 +3,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:oneplay_flutter_gui/app/common/common.dart';
 import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 
@@ -62,31 +60,35 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 85,
       color: blackColor4,
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      height: 96,
       child: Row(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _customItem(
-                idx: 0,
-                icon: Image.asset(homePng,
-                    height: 22,
-                    color: selectedIndex == 1 ? null : textPrimaryColor),
-                label: 'Home'),
-            _customItem(
-              idx: 1,
-              icon: Image.asset(
-                gamePng,
-                height: 22,
-                color: selectedIndex == 1 ? null : textPrimaryColor,
-              ),
-              label: "Games",
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _customItem(
+            idx: 0,
+            icon: Image.asset(
+              homePng,
+              height: 22,
+              color: selectedIndex == 1 ? null : textPrimaryColor,
             ),
-            _customItem(
-              idx: 2,
-              icon: Observer(
+            label: 'Home',
+          ),
+          _customItem(
+            idx: 1,
+            icon: Image.asset(
+              gamePng,
+              height: 22,
+              color: selectedIndex == 1 ? null : textPrimaryColor,
+            ),
+            label: "Games",
+          ),
+          _customItem(
+            idx: 2,
+            icon: Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: Observer(
                 builder: (context) {
                   gameService;
                   if (gameService.gameStatus.isRunning == true) {
@@ -101,31 +103,33 @@ class _BottomNavState extends State<BottomNav> {
                   }
                 },
               ),
-              label: '',
-              isImage: true,
             ),
-            _customItem(
-              idx: 3,
-              icon: Image.asset(
-                referPng,
-                height: 26,
-                color: selectedIndex == 3 ? textPrimaryColor : textPrimaryColor,
-              ),
-              label: "Refer",
+            label: '',
+            isImage: true,
+          ),
+          _customItem(
+            idx: 3,
+            icon: Image.asset(
+              referPng,
+              height: 26,
+              color: selectedIndex == 3 ? textPrimaryColor : textPrimaryColor,
             ),
-            // _item(icon: const Icon(Icons.people), label: "Social"),
-            // _item(icon: const Icon(Icons.store), label: "Store"),
-            _customItem(
-              idx: 4,
-              icon: Image.asset(
-                settingPng,
-                height: 22,
-                color: selectedIndex == 4 ? null : textPrimaryColor,
-              ),
-              label: "Settings",
-              isImage: true,
+            label: "Refer",
+          ),
+          // _item(icon: const Icon(Icons.people), label: "Social"),
+          // _item(icon: const Icon(Icons.store), label: "Store"),
+          _customItem(
+            idx: 4,
+            icon: Image.asset(
+              settingPng,
+              height: 22,
+              color: selectedIndex == 4 ? null : textPrimaryColor,
             ),
-          ]),
+            label: "Settings",
+            isImage: true,
+          ),
+        ],
+      ),
     );
 
     // return BottomNavigationBar(
@@ -230,7 +234,10 @@ class _BottomNavState extends State<BottomNav> {
           context: context,
           barrierDismissible: true,
           builder: (BuildContext context) {
-            return const AlertReferPopUp();
+            return WillPopScope(
+              onWillPop: () async => false,
+              child: const AlertReferPopUp(),
+            );
           },
         );
         break;
@@ -242,41 +249,41 @@ class _BottomNavState extends State<BottomNav> {
     navigateIdx.value = selectedIndex;
   }
 
-  BottomNavigationBarItem _item({
+  // BottomNavigationBarItem _item({
+  //   required Widget icon,
+  //   String? label,
+  //   String? tooltip,
+  //   bool isImage = false,
+  // }) {
+  //   return BottomNavigationBarItem(
+  //     icon: icon,
+  //     activeIcon: isImage ? null : _activeIcon(icon),
+  //     label: label,
+  //     tooltip: tooltip,
+  //   );
+  // }
+
+  Widget _customItem({
     required Widget icon,
     String? label,
     String? tooltip,
     bool isImage = false,
+    required int idx,
   }) {
-    return BottomNavigationBarItem(
-      icon: icon,
-      activeIcon: isImage ? null : _activeIcon(icon),
-      label: label,
-      tooltip: tooltip,
-    );
-  }
-
-  Widget _customItem(
-      {required Widget icon,
-      String? label,
-      String? tooltip,
-      bool isImage = false,
-      required int idx}) {
     return GestureDetector(
       onTap: () => _onTap(idx),
-      child: Container(
-        // height: 56,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              selectedIndex == idx && !isImage ? _activeIcon(icon) : icon,
-              Text(label!,
-                  style: tinyStyle.copyWith(
-                      color: selectedIndex == idx
-                          ? purpleColor1
-                          : textSecondaryColor))
-            ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          selectedIndex == idx && !isImage ? _activeIcon(icon) : icon,
+          Text(
+            label!,
+            style: tinyStyle.copyWith(
+              color: selectedIndex == idx ? purpleColor1 : textSecondaryColor,
+            ),
+          ),
+        ],
       ),
     );
   }

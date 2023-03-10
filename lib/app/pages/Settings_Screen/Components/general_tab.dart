@@ -14,10 +14,8 @@ import '../../../services/auth_service.dart';
 import '../../../services/rest_service.dart';
 import '../../../services/rest_service_2.dart';
 import '../../../services/shared_pref_service.dart';
-import '../../../widgets/gamepad_pop/gamepad_pop.dart';
 import '../../../widgets/popup/ask_dialog.dart';
 import '../../../widgets/popup/exit_dialog.dart';
-import '../../../widgets/popup/popup_success.dart';
 import 'general_tile.dart';
 
 class GeneralTab extends StatefulWidget {
@@ -32,7 +30,7 @@ class _GeneralTabState extends State<GeneralTab> {
   final RestService2 _restService2 = Modular.get<RestService2>();
   List<DeviceHistoryModel> deviceHistory = [];
   bool? isPrivacy;
-  bool loading = false;
+  bool isLoading = false;
   String userKey = '';
 
   @override
@@ -135,16 +133,15 @@ class _GeneralTabState extends State<GeneralTab> {
 
                 await showDialog(
                   context: context,
+                  barrierDismissible: false,
                   builder: (BuildContext context) {
                     return ExitDialog(
                       title: 'Do you want to logout?',
+                      isLoading: isLoading,
                       onNo: () {
                         Navigator.pop(context);
                       },
                       onYes: () {
-                        navigateIdx.value = 0;
-                        navigateIdx.notifyListeners();
-
                         _logoutUser(AuthService().sessionKey());
                       },
                     );
@@ -157,6 +154,13 @@ class _GeneralTabState extends State<GeneralTab> {
         ),
       ),
     );
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   _setSearchPrivacy(bool privacy) async {
@@ -239,50 +243,46 @@ class _GeneralTabState extends State<GeneralTab> {
   }
 
   _logoutUser(String userKey) async {
+    setState(() => isLoading = true);
+
     try {
       final res = await _restService.logoutFromDevice(userKey);
       if (res == true) {
         if (mounted) {
-          showDialog(
-            context: context,
-            builder: (_) {
-              Future.delayed(const Duration(milliseconds: 3000), () {
-                Navigator.pop(_);
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            Navigator.pop(context);
 
-                Modular.to.pushNamed('/auth/login');
-              });
+            navigateIdx.value = 0;
+            navigateIdx.notifyListeners();
 
-              return alertSuccess(
-                context: context,
-                title: 'Logout Success',
-                description: 'Logout successfully!',
-              );
-            },
-            barrierDismissible: false,
-          );
+            setState(() => isLoading = false);
+
+            Modular.to.pushNamed('/auth/login');
+          });
         }
+
+        // if (mounted) {
+        //   showDialog(
+        //     context: context,
+        //     builder: (_) {
+        //       Future.delayed(const Duration(milliseconds: 3000), () {
+        //         Navigator.pop(_);
+
+        //         Modular.to.pushNamed('/auth/login');
+        //       });
+
+        //       return alertSuccess(
+        //         context: context,
+        //         title: 'Logout Success',
+        //         description: 'Logout successfully!',
+        //       );
+        //     },
+        //     barrierDismissible: false,
+        //   );
+        // }
       }
     } on DioError catch (e) {
-      print('***** Exeption error: $e *****');
-
-      showDialog(
-        context: context,
-        builder: (_) {
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            Navigator.pop(_);
-          });
-
-          return GamepadPop(
-            context: _,
-            child: alertError(
-              context: context,
-              title: 'Logout Error',
-              description: e.error["message"],
-            ),
-          );
-        },
-        barrierDismissible: false,
-      );
+      ErrorHandler.networkErrorHandler(e, context);
     }
   }
 

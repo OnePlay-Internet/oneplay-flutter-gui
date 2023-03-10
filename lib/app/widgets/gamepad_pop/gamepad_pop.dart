@@ -5,7 +5,11 @@ class GamepadPop extends StatelessWidget {
   final Widget child;
   final BuildContext context;
 
-  const GamepadPop({super.key, required this.child, required this.context});
+  const GamepadPop({
+    super.key,
+    required this.child,
+    required this.context,
+  });
 
   @override
   Widget build(BuildContext context) {
