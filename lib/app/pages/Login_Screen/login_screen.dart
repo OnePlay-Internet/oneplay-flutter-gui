@@ -16,8 +16,8 @@ import '../../services/shared_pref_service.dart';
 import '../../widgets/gamepad_pop/gamepad_pop.dart';
 import '../../widgets/popup/popup_success.dart';
 import '../../widgets/popup/steps_alert_dialog.dart';
-import 'Components.dart/landscape_login_ui.dart';
-import 'Components.dart/portrait_login_ui.dart';
+import 'Components/landscape_login_ui.dart';
+import 'Components/portrait_login_ui.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -45,8 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return WillPopScope(
       // onWillPop: () => exitDialog(context),
       onWillPop: () async {
