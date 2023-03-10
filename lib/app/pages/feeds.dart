@@ -32,7 +32,7 @@ class _FeedsState extends State<Feeds> {
 
   late GameFeedModel firstRow;
   late List<GameFeedModel> restRow;
-  List<ShortGameModel> library = [];
+  List<ShortGameModel> gameLibrary = [];
   bool starting = false;
   bool isDiolog = false;
   bool? getIsAgree;
@@ -52,11 +52,15 @@ class _FeedsState extends State<Feeds> {
 
   Future<List<ShortGameModel>> _getLibrary() async {
     try {
-      final games = await restService.getWishlistGames(authService.wishlist);
-      if (games.isEmpty) {
-        _showGameDialog();
-      }
-      return games;
+      gameLibrary = await restService.getWishlistGames(authService.wishlist);
+
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        if (gameLibrary.isEmpty) {
+          _showGameDialog();
+        }
+      });
+
+      return gameLibrary;
     } catch (e) {
       return [];
     }
@@ -121,7 +125,9 @@ class _FeedsState extends State<Feeds> {
     return GamepadPop(
       context: context,
       child: starting
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
           : SafeArea(
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,

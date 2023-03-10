@@ -7,12 +7,14 @@ class ExitDialog extends StatelessWidget {
   final String title;
   final Function()? onYes;
   final Function()? onNo;
+  final bool isLoading;
 
   const ExitDialog({
     super.key,
     required this.title,
     this.onYes,
     this.onNo,
+    this.isLoading = false,
   });
 
   @override
@@ -51,10 +53,10 @@ class ExitDialog extends StatelessWidget {
                 title,
                 style: const TextStyle(
                   fontFamily: mainFontFamily,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: 0.02,
                   color: textPrimaryColor,
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
               ),
             ),
@@ -64,10 +66,12 @@ class ExitDialog extends StatelessWidget {
               ),
               child: SubmitButton(
                 buttonTitle: 'Yes',
+                loadingTitle: 'Logging out...',
                 height: size.height * 0.056,
                 width: size.width * 0.52,
                 borderRadius: 25,
                 fontSize: 15,
+                isLoading: isLoading,
                 onTap: onYes,
               ),
             ),

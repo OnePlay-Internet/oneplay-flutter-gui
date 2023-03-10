@@ -48,9 +48,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return WillPopScope(
       // onWillPop: () => exitDialog(context),
       onWillPop: () async {
-        MethodChannel channel = const MethodChannel('flutter-gui');
-        channel.invokeMethod("closeApp");
-        return true;
+        if (isOpenDialog) {
+          return false;
+        } else {
+          MethodChannel channel = const MethodChannel('flutter-gui');
+          channel.invokeMethod("closeApp");
+          return true;
+        }
       },
       child: OrientationBuilder(
         builder: (context, orientation) {
@@ -207,17 +211,17 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPrefService.storeIsPrivacy(true);
 
       if (userIdList.contains(AuthService().userIdToken!.userId)) {
-        if (mounted) {
-          showDialog(
-            context: context,
-            builder: (_) => alertSuccess(
-              context: context,
-              title: 'Login Success',
-              description: 'You will be redirect to Feed Page',
-            ),
-            barrierDismissible: false,
-          );
-        }
+        // if (mounted) {
+        //   showDialog(
+        //     context: context,
+        //     builder: (_) => alertSuccess(
+        //       context: context,
+        //       title: 'Login Success',
+        //       description: 'You will be redirect to Feed Page',
+        //     ),
+        //     barrierDismissible: false,
+        //   );
+        // }
 
         Future.delayed(const Duration(milliseconds: 2000), () {
           setState(() => loading = false);
@@ -230,8 +234,6 @@ class _LoginScreenState extends State<LoginScreen> {
             email: userModel!.email.toString(),
             phone: userModel!.phone.toString(),
           );
-
-          print('***** Login event: 2 *****');
 
           SharedPrefService.storeIsAgree(true);
 
@@ -260,8 +262,11 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
     } on DioError catch (e) {
+      isOpenDialog = true;
+
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (_) {
           Future.delayed(const Duration(milliseconds: 3000), () {
             setState(() => loading = false);
@@ -276,8 +281,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         },
-        barrierDismissible: false,
       );
+
+      setState(() => isOpenDialog = false);
     }
   }
 }

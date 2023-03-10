@@ -85,7 +85,6 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
                           autofocus: true,
                           onTap: () {
                             Navigator.pop(context);
-                            setState(() => isOpenDialog = false);
                           },
                           child: SvgPicture.asset(
                             crossIcon,

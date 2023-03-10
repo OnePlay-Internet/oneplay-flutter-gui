@@ -1,7 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:oneplay_flutter_gui/app/modules/admin/admin_widget.dart';
 import 'package:oneplay_flutter_gui/app/pages/feeds.dart';
-import 'package:oneplay_flutter_gui/app/pages/game/game.dart';
 import 'package:oneplay_flutter_gui/app/pages/games_list.dart';
 import 'package:oneplay_flutter_gui/app/pages/search.dart';
 import 'package:oneplay_flutter_gui/app/pages/users_list.dart';
@@ -11,6 +10,7 @@ import 'package:oneplay_flutter_gui/app/services/game_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 
+import '../../pages/Game_Detail_Screen/game_detail_screen.dart';
 import '../../pages/Settings_Screen/settings.dart';
 import '../../pages/games.dart';
 
@@ -40,7 +40,7 @@ class AdminModule extends Module {
             ),
             ChildRoute(
               '/game/:id',
-              child: (context, args) => Game(args.params['id']),
+              child: (context, args) => GameDetailScreen(args.params['id']),
             ),
             ChildRoute(
               '/search',

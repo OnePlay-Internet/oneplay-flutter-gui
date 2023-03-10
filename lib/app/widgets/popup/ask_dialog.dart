@@ -58,10 +58,10 @@ class AlertAskDialog extends StatelessWidget {
                 title,
                 style: const TextStyle(
                   fontFamily: mainFontFamily,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: 0.02,
                   color: textPrimaryColor,
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
               ),
             ),

@@ -119,6 +119,10 @@ class _GamesState extends State<Games> {
 
         navigateIdx.value = 0;
         navigateIdx.notifyListeners();
+        Modular.to.pushNamedAndRemoveUntil(
+          '/feeds',
+          (p0) => false,
+        );
         return true;
       },
       child: GamepadPop(
