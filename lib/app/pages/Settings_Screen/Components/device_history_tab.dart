@@ -89,7 +89,7 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: deviceHistory.length,
-              itemBuilder: ((context, index) {
+              itemBuilder: (context, index) {
                 if (index < deviceHistory.length) {
                   return DeviceTile(
                     deviceHistory: deviceHistory[index],
@@ -106,7 +106,7 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
                     child: CircularProgressIndicator(),
                   );
                 }
-              }),
+              },
             ),
           ),
         ],
@@ -133,8 +133,12 @@ class _DeviceHistoryTabState extends State<DeviceHistoryTab> {
           setState(() {
             deviceHistory = res.reversed.toList();
           });
-        } finally {
+        } on DioError catch (e) {
           setState(() => loading = false);
+
+          if (mounted) {
+            ErrorHandler.networkErrorHandler(e, context);
+          }
         }
       }
     } on SocketException catch (_) {

@@ -43,3 +43,4 @@ const deletePng = 'assets/png/Delete.png';
 const pieChartPng = 'assets/png/Pie_Chart.png';
 const privacyPng = 'assets/png/Privacy.png';
 const loginSignUpPng = 'assets/png/login_signup_Illustration.png';
+const userWaitPng = 'assets/png/icon_user_wait.png';
