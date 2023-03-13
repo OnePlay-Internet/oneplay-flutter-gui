@@ -266,6 +266,10 @@ class _ProfileTabState extends State<ProfileTab> {
                           if (bio.isEmpty) {
                             setState(() => errorBio = "Write a short bio");
                             return;
+                          } else if (bio.length > 300) {
+                            setState(() => errorBio =
+                                "Enter short bio under 300 characters");
+                            return;
                           } else {
                             setState(() => errorBio = "");
                           }

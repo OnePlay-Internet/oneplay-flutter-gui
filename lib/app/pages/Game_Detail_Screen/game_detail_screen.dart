@@ -30,6 +30,7 @@ import '../../models/game_feed_model.dart';
 import '../../widgets/list_game_w_label/list_game_w_label.dart';
 import '../../widgets/popup/error_dialog.dart';
 import '../../widgets/popup/feedback_dialog.dart';
+import '../../widgets/popup/no_server_dialog.dart';
 import 'component.dart';
 import 'game_settings_dialog.dart';
 
@@ -49,21 +50,22 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   GameService gameService = Modular.get<GameService>();
   RestService2 restService2 = Modular.get<RestService2>();
   AuthService authService = Modular.get<AuthService>();
-  GameModel? game;
+
   List<ShortGameModel> devGames = [];
   List<ShortGameModel> genreGames = [];
   List<VideoModel> videos = [];
+
+  GameSetting gameSetting = GameSetting();
+  GameModel? game;
   BuildContext? initializeContext;
-  bool starting = false;
-  bool terminating = false;
   InitializeState initializeState = InitializeState();
   late SharedPreferences pref;
-
   int maxLoadTopVideo = 2;
 
   bool isShowSetting = true;
   bool wishlistLoading = false;
-  GameSetting gameSetting = GameSetting();
+  bool starting = false;
+  bool terminating = false;
 
   @override
   void dispose() {
@@ -72,6 +74,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('***** Screen width: ${MediaQuery.of(context).size.width} ******');
+    print('***** Screen height: ${MediaQuery.of(context).size.height} ******');
     return WillPopScope(
       onWillPop: () async => isOpenDialog ? false : true,
       child: GamepadPop(
@@ -549,7 +553,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   void _startLoading() {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      // barrierDismissible: false,
       builder: (BuildContext context) {
         initializeContext = context;
         return AlertDialog(
@@ -598,30 +602,40 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }) async {
     isOpenDialog = true;
 
+    print('***** isOpenDialog: $isOpenDialog ******');
+
     await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => GamepadPop(
         context: context,
-        child: AlertErrorDialog(
-          errorCode: errorCode,
-          error: message,
-          onTap1: onTap,
-          onTap2: () async {
-            try {
-              await restService.postAReport(message, response);
-              if (mounted) {
-                Navigator.pop(context);
-                _showSnackBar('Thanks, we will look into the issue!');
-              }
-            } on DioError catch (e) {
-              _showError(
-                errorCode: e.response?.statusCode ?? 503,
-                message: e.error['message'],
-              );
-            }
-          },
-        ),
+        child: message ==
+                'Sorry, No Resources Available to Play at the moment, Please try again in sometime.'
+            ? AlertNoServerDialog(
+                title: 'No server available!',
+                subTitle:
+                    'Please try again in sometime, \nthank you for your patience!',
+                onTapYes: onTap,
+              )
+            : AlertErrorDialog(
+                errorCode: errorCode,
+                error: message,
+                onTap1: onTap,
+                onTap2: () async {
+                  try {
+                    await restService.postAReport(message, response);
+                    if (mounted) {
+                      Navigator.pop(context);
+                      _showSnackBar('Thanks, we will look into the issue!');
+                    }
+                  } on DioError catch (e) {
+                    _showError(
+                      errorCode: e.response?.statusCode ?? 503,
+                      message: e.error['message'],
+                    );
+                  }
+                },
+              ),
       ),
     );
     setState(() => isOpenDialog = false);
@@ -667,7 +681,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
   void _startSession() async {
-    isOpenDialog = true;
+    // isOpenDialog = true;
     var gamepads = Modular.get<GamepadService>().gamepads;
 
     if (gamepads.isNotEmpty) {
@@ -696,16 +710,19 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
       } else if (res.data.apiAction == ApiAction.callTerminate) {
         _terminateGame(res.data.session?.id ?? '');
 
-        setState(() => isOpenDialog = false);
+        // setState(() => isOpenDialog = false);
       } else {
         _stopLoading();
+
+        print(
+            '***** Error code: ${res.data}, Error response: ${res.msg} *****');
 
         _showError(
           message: res.msg != '' ? res.msg : 'Something went wrong',
           onTap: () => _startSession(),
         );
 
-        setState(() => isOpenDialog = false);
+        // setState(() => isOpenDialog = false);
       }
     } on DioError catch (e) {
       print('***** Exeption error: $e *****');

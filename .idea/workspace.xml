@@ -4,24 +4,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="fix internet issue">
+    <list default="true" id="a5f0565a-9e98-444e-a718-9eff9e3da849" name="Changes" comment="bug fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/common/theme/pngPath.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/common/theme/pngPath.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/common/theme/textStyle.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/common/theme/textStyle.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/Login_Screen/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/Login_Screen/login_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/Components/general_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/Settings_Screen/Components/general_tab.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/feeds.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/feeds.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/game/advance_game_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/game/advance_game_dialog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/game/game.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/game/game.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/game/game_settings_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/game/game_settings_dialog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/pages/games.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/pages/games.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/bottom_nav/bottom_nav.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/gamepad_pop/gamepad_pop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/gamepad_pop/gamepad_pop.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/ask_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/ask_dialog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/exit_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/exit_dialog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/popup/game_alert_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/popup/game_alert_dialog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/widgets/submit_button/submit_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/widgets/submit_button/submit_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,7 +198,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677841205893</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="bug fix">
+      <created>1678453910824</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1678453910824</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -268,6 +259,7 @@
     <MESSAGE value="fix bug" />
     <MESSAGE value="google analytics implement" />
     <MESSAGE value="fix internet issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix internet issue" />
+    <MESSAGE value="bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fix" />
   </component>
 </project>
