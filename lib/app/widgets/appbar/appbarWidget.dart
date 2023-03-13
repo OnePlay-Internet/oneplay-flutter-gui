@@ -5,6 +5,8 @@ import 'package:oneplay_flutter_gui/app/common/theme/color.dart';
 import 'package:oneplay_flutter_gui/app/common/theme/pngPath.dart';
 import 'package:oneplay_flutter_gui/main.dart';
 
+import '../Responsive_Widget/responsive_widget.dart';
+
 class AppBarWidget {
   Widget logoWidget(BuildContext context) {
     return Container(
@@ -27,9 +29,10 @@ class AppBarWidget {
     Function()? searchTap,
     Function()? profileTap,
     required Size size,
+    required int isPortrait,
   }) {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: size.width,
       margin: const EdgeInsets.only(
         top: 18,
       ),
@@ -87,8 +90,14 @@ class AppBarWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 15.0),
                   child: SizedBox(
-                    height: size.height * 0.047,
-                    width: size.width * 0.10,
+                    height: isPortrait == 8
+                        ? size.height * 0.075
+                        : size.height * 0.045,
+                    width: Responsive.isTablet(context)
+                        ? size.width * 0.078
+                        : isPortrait == 8 || isPortrait == 8
+                            ? size.width * 0.04
+                            : size.width * 0.10,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(
                         size.height * 0.1,

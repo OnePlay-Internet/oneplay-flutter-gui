@@ -37,7 +37,7 @@ Text titleLabelGames(GameFeedModel value) {
 
 SizedBox listGames(GameFeedModel value, BuildContext context) {
   return SizedBox(
-    height: MediaQuery.of(context).size.height * 1 / 7.8,
+    height: MediaQuery.of(context).size.height * 1 / 8.2,
     child: ListView(
       scrollDirection: Axis.horizontal,
       children: value.games
@@ -50,7 +50,7 @@ SizedBox listGames(GameFeedModel value, BuildContext context) {
                   child: Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(right: 20),
-                    width: MediaQuery.of(context).size.width * 2.3 / 5.1,
+                    width: MediaQuery.of(context).size.width * 2.3 / 5.3,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: ColorFiltered(

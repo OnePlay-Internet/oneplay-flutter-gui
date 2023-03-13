@@ -11,10 +11,12 @@ import 'package:oneplay_flutter_gui/app/models/game_feed_model.dart';
 import 'package:oneplay_flutter_gui/app/models/game_model.dart';
 import 'package:oneplay_flutter_gui/app/services/auth_service.dart';
 import 'package:oneplay_flutter_gui/app/services/rest_service.dart';
+import 'package:oneplay_flutter_gui/app/widgets/Submit_Button/submit_button.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import '../services/shared_pref_service.dart';
-import '../widgets/list_game_w_label/list_game_w_label.dart';
+import '../widgets/Responsive_Widget/responsive_widget.dart';
+import '../widgets/list_game_w_label/game_list_tile.dart';
 import '../widgets/popup/game_alert_dialog.dart';
 import '../widgets/popup/steps_alert_dialog.dart';
 
@@ -33,9 +35,13 @@ class _FeedsState extends State<Feeds> {
   late GameFeedModel firstRow;
   late List<GameFeedModel> restRow;
   List<ShortGameModel> gameLibrary = [];
+
   bool starting = false;
   bool isDiolog = false;
   bool? getIsAgree;
+
+  double? viewportFraction;
+  double? height;
 
   _getHomeFeed() async {
     setState(() => starting = true);
@@ -122,46 +128,71 @@ class _FeedsState extends State<Feeds> {
 
   @override
   Widget build(BuildContext context) {
-    return GamepadPop(
-      context: context,
-      child: starting
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: ListView(
-                  children: [
-                    bannerWidget(firstRow),
-                    Observer(
-                      builder: (context) {
-                        return FutureBuilder(
-                          future: _getLibrary(),
-                          builder: (_, snap) {
-                            return snap.hasData
-                                ? snap.data!.isNotEmpty
-                                    ? listGameWithLabel(
-                                        GameFeedModel(
-                                          title: 'My Library',
-                                          games: snap.data!,
-                                        ),
-                                        context,
-                                      )
-                                    : Container()
-                                : Container();
+    Size size = MediaQuery.of(context).size;
+
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        final isPortrait =
+            MediaQuery.of(context).orientation == Orientation.portrait ? 5 : 8;
+
+        height = Responsive.isTablet(context)
+            ? size.height * 0.3
+            : isPortrait == 8 || isPortrait == 8
+                ? size.height * 0.67
+                : size.height * 0.23;
+        viewportFraction = Responsive.isTablet(context)
+            ? 0.77
+            : isPortrait == 8 || isPortrait == 8
+                ? 0.58
+                : 0.7;
+
+        return GamepadPop(
+          context: context,
+          child: starting
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SafeArea(
+                  child: SizedBox(
+                    height: size.height,
+                    width: size.width,
+                    child: ListView(
+                      children: [
+                        bannerWidget(firstRow, size, isPortrait),
+                        Observer(
+                          builder: (context) {
+                            return FutureBuilder(
+                              future: _getLibrary(),
+                              builder: (_, snap) {
+                                return snap.hasData
+                                    ? snap.data!.isNotEmpty
+                                        ? GameListTile(
+                                            isPortrait: isPortrait,
+                                            gameFeed: GameFeedModel(
+                                              title: 'My Library',
+                                              games: snap.data!,
+                                            ),
+                                          )
+                                        : Container()
+                                    : Container();
+                              },
+                            );
                           },
-                        );
-                      },
+                        ),
+                        ...restRow.map(
+                          (value) {
+                            return GameListTile(
+                              isPortrait: isPortrait,
+                              gameFeed: value,
+                            );
+                          },
+                        ).toList(),
+                      ],
                     ),
-                    ...restRow
-                        .map((value) => listGameWithLabel(value, context))
-                        .toList(),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+        );
+      },
     );
     // return Container(
     //   padding: const EdgeInsets.all(4),
@@ -181,38 +212,59 @@ class _FeedsState extends State<Feeds> {
     // );
   }
 
-  CarouselSlider bannerWidget(GameFeedModel data) {
+  CarouselSlider bannerWidget(
+    GameFeedModel data,
+    Size size,
+    int isPortrait,
+  ) {
     return CarouselSlider(
       options: CarouselOptions(
-        viewportFraction: 0.80,
-        height: MediaQuery.of(context).size.height * 1 / 4.2,
+        viewportFraction: viewportFraction!,
+        height: height,
       ),
       items: data.games.map(
         (item) {
           return item.textBgImage!.isNotEmpty
               ? FocusZoom(
                   builder: (focusNode) {
-                    return InkWell(
-                      focusNode: focusNode,
-                      onTap: (() =>
-                          Modular.to.pushNamed('/game/${item.oneplayId}')),
-                      child: Container(
-                        height: 200,
-                        width: 300,
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 10,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl: item.textBgImage.toString(),
-                            height: 200,
-                            width: 300,
-                            fit: BoxFit.fitWidth,
+                    return Stack(
+                      children: [
+                        InkWell(
+                          focusNode: focusNode,
+                          onTap: (() =>
+                              Modular.to.pushNamed('/game/${item.oneplayId}')),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 10,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: item.textBgImage.toString(),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        isPortrait == 8
+                            ? Positioned(
+                                bottom: size.height * 0.12,
+                                left: size.width * 0.05,
+                                child: SubmitButton(
+                                  buttonTitle: 'Play Now',
+                                  height: size.height * 0.1,
+                                  width: size.width * 0.16,
+                                  borderRadius: 25,
+                                  fontSize: 18,
+                                  onTap: () {
+                                    Modular.to
+                                        .pushNamed('/game/${item.oneplayId}');
+                                  },
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ],
                     );
                   },
                 )

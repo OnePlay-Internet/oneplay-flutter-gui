@@ -84,7 +84,10 @@ class AlertNoServerDialog extends StatelessWidget {
                 width: size.width * 0.56,
                 fontSize: 15,
                 borderRadius: 25,
-                onTap: onTapYes,
+                onTap: () {
+                  Navigator.pop(context);
+                  onTapYes!();
+                },
               ),
             ),
             Padding(

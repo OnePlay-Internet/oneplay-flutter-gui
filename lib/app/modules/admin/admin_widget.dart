@@ -14,6 +14,7 @@ import 'package:oneplay_flutter_gui/app/services/rest_service_2.dart';
 import 'package:oneplay_flutter_gui/app/widgets/appbar/appbarWidget.dart';
 import 'package:oneplay_flutter_gui/main.dart';
 
+import '../../widgets/Responsive_Widget/responsive_widget.dart';
 import '../../widgets/bottom_nav/bottom_nav.dart';
 
 class AdminWidget extends StatefulWidget {
@@ -45,40 +46,50 @@ class _AdminWidgetState extends State<AdminWidget> {
         channel.invokeMethod("closeApp");
         return true;
       },
-      child: Scaffold(
-        // key: scaffoldKey,
-        backgroundColor: mainColor,
-        // drawer: Drawer(
-        //   backgroundColor: mainColor,
-        //   child: Column(
-        //     children: const [],
-        //   ),
-        // ),
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60.0),
-          child: AppBarWidget().menu(
-            context,
-            size: size,
-            // openDrawer: () {
-            //   _scaffoldKey.currentState?.openDrawer();
-            // },
-            searchTap: () {
-              Modular.to.pushNamed('/search');
-            },
-            profileTap: () {
-              if (navigateIdx.value == 4) {
-                return;
-              }
-              navigateIdx.value = 4;
-              previousIndex = 0;
-              navigateIdx.notifyListeners();
-              Modular.to.pushNamed('/setting');
-            },
+      child: OrientationBuilder(builder: (context, orientation) {
+        final isPortrait =
+            MediaQuery.of(context).orientation == Orientation.portrait ? 5 : 8;
+
+        return Scaffold(
+          // key: scaffoldKey,
+          backgroundColor: mainColor,
+          // drawer: Drawer(
+          //   backgroundColor: mainColor,
+          //   child: Column(
+          //     children: const [],
+          //   ),
+          // ),
+          appBar: PreferredSize(
+            preferredSize: Responsive.isTablet(context)
+                ? const Size.fromHeight(65.0)
+                : isPortrait == 8 || isPortrait == 8
+                    ? const Size.fromHeight(75.0)
+                    : const Size.fromHeight(60.0),
+            child: AppBarWidget().menu(
+              context,
+              size: size,
+              isPortrait: isPortrait,
+              // openDrawer: () {
+              //   _scaffoldKey.currentState?.openDrawer();
+              // },
+              searchTap: () {
+                Modular.to.pushNamed('/search');
+              },
+              profileTap: () {
+                if (navigateIdx.value == 4) {
+                  return;
+                }
+                navigateIdx.value = 4;
+                previousIndex = 0;
+                navigateIdx.notifyListeners();
+                Modular.to.pushNamed('/setting');
+              },
+            ),
           ),
-        ),
-        body: const RouterOutlet(),
-        bottomNavigationBar: const BottomNav(),
-      ),
+          body: const RouterOutlet(),
+          bottomNavigationBar: const BottomNav(),
+        );
+      }),
     );
   }
 

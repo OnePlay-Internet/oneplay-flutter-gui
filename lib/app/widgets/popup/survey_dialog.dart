@@ -286,18 +286,24 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
                       width: size.width * 0.52,
                       borderRadius: 25,
                       onTap: () {
-                        _feedBack(
-                          gameId: widget.gameId,
-                          userId: widget.userId,
-                          sessionId: widget.sessionId,
-                          rating: rating!,
-                          suggestion: '',
-                          comment: comment,
-                          question: firstQuestion!,
-                          answer: firsAnswer!,
-                          question2: secondQuestion!,
-                          answer2: secondAnswer!,
-                        );
+                        if (comment.length > 500) {
+                          setState(() => errorComment =
+                              "Enter answer under 500 characters");
+                          return;
+                        } else {
+                          _feedBack(
+                            gameId: widget.gameId,
+                            userId: widget.userId,
+                            sessionId: widget.sessionId,
+                            rating: rating!,
+                            suggestion: '',
+                            comment: comment,
+                            question: firstQuestion!,
+                            answer: firsAnswer!,
+                            question2: secondQuestion!,
+                            answer2: secondAnswer!,
+                          );
+                        }
                       },
                     ),
                     InkWell(
