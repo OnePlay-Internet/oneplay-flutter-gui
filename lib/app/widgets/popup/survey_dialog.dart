@@ -3,6 +3,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 import 'package:oneplay_flutter_gui/main.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
@@ -93,249 +95,257 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return AlertDialog(
-      backgroundColor: mainColor,
-      contentPadding: const EdgeInsets.all(0.0),
-      insetPadding: EdgeInsets.all(
-        size.width * 0.05,
-      ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
+    return GamepadPop(
+      context: context,
+      child: AlertDialog(
+        backgroundColor: mainColor,
+        contentPadding: const EdgeInsets.all(0.0),
+        insetPadding: EdgeInsets.all(
+          size.width * 0.05,
         ),
-      ),
-      content: SizedBox(
-        width: size.width,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: size.height * 0.06,
-            ),
-            Image.asset(
-              feedbackPng,
-            ),
-            SizedBox(
-              height: size.height * 0.05,
-            ),
-            const Text(
-              'We would love your feedback',
-              style: TextStyle(
-                fontFamily: mainFontFamily,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.02,
-                color: textPrimaryColor,
-                fontSize: 18,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        content: SizedBox(
+          width: size.width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: size.height * 0.06,
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.05,
+              Image.asset(
+                feedbackPng,
               ),
-              child: const Text(
-                'Our goal is to make a platform that simplifies experience.',
-                textAlign: TextAlign.center,
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+              const Text(
+                'We would love your feedback',
                 style: TextStyle(
                   fontFamily: mainFontFamily,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.02,
-                  color: textSecondaryColor,
-                  fontSize: 14,
+                  color: textPrimaryColor,
+                  fontSize: 18,
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: size.height * 0.03,
+              SizedBox(
+                height: size.height * 0.02,
               ),
-              child: commonDividerWidget(),
-            ),
-            Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.05,
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          firstQuestion!,
-                          style: const TextStyle(
-                            fontFamily: mainFontFamily,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.02,
-                            color: textPrimaryColor,
-                            fontSize: 14,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.05,
+                ),
+                child: const Text(
+                  'Our goal is to make a platform that simplifies experience.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: mainFontFamily,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.02,
+                    color: textSecondaryColor,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: size.height * 0.03,
+                ),
+                child: commonDividerWidget(),
+              ),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.05,
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            firstQuestion!,
+                            style: const TextStyle(
+                              fontFamily: mainFontFamily,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.02,
+                              color: textPrimaryColor,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.05,
+                      SizedBox(
+                        height: size.height * 0.02,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: answerRow1(
-                          size: size,
-                          answer: firstAnswerList!,
-                          value: index,
-                          onTap: (e) {
-                            setState(() => index = firstAnswerList!.indexOf(e));
-
-                            if (index == 0) {
-                              firsAnswer = firstAnswerList![index];
-                            } else if (index == 1) {
-                              firsAnswer = firstAnswerList![index];
-                            } else if (index == 2) {
-                              firsAnswer = firstAnswerList![index];
-                            }
-                          },
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.05,
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.04,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.05,
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          secondQuestion!,
-                          style: const TextStyle(
-                            fontFamily: mainFontFamily,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.02,
-                            color: textPrimaryColor,
-                            fontSize: 14,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: answerRow1(
+                            size: size,
+                            answer: firstAnswerList!,
+                            value: index,
+                            onTap: (e) {
+                              setState(() => index = firstAnswerList!.indexOf(e));
+    
+                              if (index == 0) {
+                                firsAnswer = firstAnswerList![index];
+                              } else if (index == 1) {
+                                firsAnswer = firstAnswerList![index];
+                              } else if (index == 2) {
+                                firsAnswer = firstAnswerList![index];
+                              }
+                            },
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.05,
+                      SizedBox(
+                        height: size.height * 0.04,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: answerRow2(
-                          size: size,
-                          answer2: secondAnswerList!,
-                          value: index2,
-                          onTap2: (e) {
-                            setState(
-                                () => index2 = secondAnswerList!.indexOf(e));
-
-                            if (index2 == 0) {
-                              secondAnswer = secondAnswerList![index2];
-                            } else if (index2 == 1) {
-                              secondAnswer = secondAnswerList![index2];
-                            } else if (index2 == 2) {
-                              secondAnswer = secondAnswerList![index2];
-                            }
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.05,
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            secondQuestion!,
+                            style: const TextStyle(
+                              fontFamily: mainFontFamily,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.02,
+                              color: textPrimaryColor,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.05,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: answerRow2(
+                            size: size,
+                            answer2: secondAnswerList!,
+                            value: index2,
+                            onTap2: (e) {
+                              setState(
+                                  () => index2 = secondAnswerList!.indexOf(e));
+    
+                              if (index2 == 0) {
+                                secondAnswer = secondAnswerList![index2];
+                              } else if (index2 == 1) {
+                                secondAnswer = secondAnswerList![index2];
+                              } else if (index2 == 2) {
+                                secondAnswer = secondAnswerList![index2];
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.05,
+                        ),
+                        child: settingsTextField(
+                          context: context,
+                          height: size.height * 0.09,
+                          textFieldTitle: 'Manual Answer',
+                          hintText: 'Write a short answer',
+                          errorMessage: errorComment,
+                          expands: true,
+                          maxLines: null,
+                          controller: TextEditingController(text: comment),
+                          onChanged: (value) {
+                            comment = value;
                           },
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.05,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: size.height * 0.04,
+                        ),
+                        child: commonDividerWidget(),
                       ),
-                      child: settingsTextField(
-                        context: context,
-                        height: size.height * 0.09,
-                        textFieldTitle: 'Manual Answer',
-                        hintText: 'Write a short answer',
-                        errorMessage: errorComment,
-                        expands: true,
-                        maxLines: null,
-                        controller: TextEditingController(text: comment),
-                        onChanged: (value) {
-                          comment = value;
+                      SubmitButton(
+                        buttonTitle: 'Submit',
+                        loadingTitle: 'Submiting...',
+                        isLoading: isLoading,
+                        height: size.height * 0.056,
+                        width: size.width * 0.52,
+                        borderRadius: 25,
+                        onTap: () {
+                          if (comment.length > 500) {
+                            setState(() => errorComment =
+                                "Enter answer under 500 characters");
+                            return;
+                          } else {
+                            _feedBack(
+                              gameId: widget.gameId,
+                              userId: widget.userId,
+                              sessionId: widget.sessionId,
+                              rating: rating!,
+                              suggestion: '',
+                              comment: comment,
+                              question: firstQuestion!,
+                              answer: firsAnswer!,
+                              question2: secondQuestion!,
+                              answer2: secondAnswer!,
+                            );
+                          }
                         },
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: size.height * 0.04,
-                      ),
-                      child: commonDividerWidget(),
-                    ),
-                    SubmitButton(
-                      buttonTitle: 'Submit',
-                      loadingTitle: 'Submiting...',
-                      isLoading: isLoading,
-                      height: size.height * 0.056,
-                      width: size.width * 0.52,
-                      borderRadius: 25,
-                      onTap: () {
-                        if (comment.length > 500) {
-                          setState(() => errorComment =
-                              "Enter answer under 500 characters");
-                          return;
-                        } else {
-                          _feedBack(
-                            gameId: widget.gameId,
-                            userId: widget.userId,
-                            sessionId: widget.sessionId,
-                            rating: rating!,
-                            suggestion: '',
-                            comment: comment,
-                            question: firstQuestion!,
-                            answer: firsAnswer!,
-                            question2: secondQuestion!,
-                            answer2: secondAnswer!,
+                      FocusZoom(
+                        builder: (f) {
+                          return InkWell(
+                            focusNode: f,
+                            onTap: () {
+                              Navigator.pop(context);
+                              setState(() => isOpenDialog = false);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: size.height * 0.03,
+                                horizontal: size.width * 0.08,
+                              ),
+                              child: const Text(
+                                'Skip Survey',
+                                style: TextStyle(
+                                  fontFamily: mainFontFamily,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0.02,
+                                  color: textSecondaryColor,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
                           );
                         }
-                      },
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                        setState(() => isOpenDialog = false);
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: size.height * 0.03,
-                          horizontal: size.width * 0.08,
-                        ),
-                        child: const Text(
-                          'Skip Survey',
-                          style: TextStyle(
-                            fontFamily: mainFontFamily,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.02,
-                            color: textSecondaryColor,
-                            fontSize: 14,
-                          ),
-                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-          ],
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -435,39 +445,44 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
         ));
       }
       widgets.add(
-        InkWell(
-          onTap: () => onTap(element),
-          child: Container(
-            height: size.height * 0.065,
-            width: widget.feedbackRating == '1'
-                ? null
-                : widget.feedbackRating == '2' || widget.feedbackRating == '2'
+        FocusZoom(
+          builder: (f) {
+            return InkWell(
+              focusNode: f,
+              onTap: () => onTap(element),
+              child: Container(
+                height: size.height * 0.065,
+                width: widget.feedbackRating == '1'
                     ? null
-                    : size.width * 0.38,
-            padding: EdgeInsets.symmetric(
-              horizontal: size.width * 0.045,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 2,
-                color: answer.indexOf(element) == value
-                    ? purpleColor1
-                    : basicLineColor,
+                    : widget.feedbackRating == '2' || widget.feedbackRating == '2'
+                        ? null
+                        : size.width * 0.38,
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.045,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    width: 2,
+                    color: answer.indexOf(element) == value
+                        ? purpleColor1
+                        : basicLineColor,
+                  ),
+                ),
+                child: Center(
+                  child: GradientText(
+                    element,
+                    style: tinyStyle,
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: answer.indexOf(element) == value
+                        ? const [purpleColor2, purpleColor1]
+                        : [textPrimaryColor, textPrimaryColor],
+                  ),
+                ),
               ),
-            ),
-            child: Center(
-              child: GradientText(
-                element,
-                style: tinyStyle,
-                gradientType: GradientType.linear,
-                gradientDirection: GradientDirection.ltr,
-                colors: answer.indexOf(element) == value
-                    ? const [purpleColor2, purpleColor1]
-                    : [textPrimaryColor, textPrimaryColor],
-              ),
-            ),
-          ),
+            );
+          }
         ),
       );
     }
@@ -491,36 +506,41 @@ class _AlertSurveyDialogState extends State<AlertSurveyDialog> {
         );
       }
       widgets.add(
-        InkWell(
-          onTap: () => onTap2(element),
-          child: Container(
-            height: size.height * 0.065,
-            width: size.width * 0.38,
-            margin: EdgeInsets.zero,
-            padding: EdgeInsets.symmetric(
-              horizontal: size.width * 0.018,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 2,
-                color: answer2.indexOf(element) == value
-                    ? purpleColor1
-                    : basicLineColor,
+        FocusZoom(
+          builder: (f) {
+            return InkWell(
+              focusNode: f,
+              onTap: () => onTap2(element),
+              child: Container(
+                height: size.height * 0.065,
+                width: size.width * 0.38,
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.018,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    width: 2,
+                    color: answer2.indexOf(element) == value
+                        ? purpleColor1
+                        : basicLineColor,
+                  ),
+                ),
+                child: Center(
+                  child: GradientText(
+                    element,
+                    style: tinyStyle,
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: answer2.indexOf(element) == value
+                        ? const [purpleColor2, purpleColor1]
+                        : [textPrimaryColor, textPrimaryColor],
+                  ),
+                ),
               ),
-            ),
-            child: Center(
-              child: GradientText(
-                element,
-                style: tinyStyle,
-                gradientType: GradientType.linear,
-                gradientDirection: GradientDirection.ltr,
-                colors: answer2.indexOf(element) == value
-                    ? const [purpleColor2, purpleColor1]
-                    : [textPrimaryColor, textPrimaryColor],
-              ),
-            ),
-          ),
+            );
+          }
         ),
       );
     }

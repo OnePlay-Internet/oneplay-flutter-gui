@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 
 class GradientBorderButton extends StatelessWidget {
   final _GradientPainter _painter;
@@ -30,19 +31,24 @@ class GradientBorderButton extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: _callback,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(_radius),
-          onTap: _callback,
-          child: Container(
-            constraints: const BoxConstraints(minWidth: 88, minHeight: 48),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _child,
-              ],
-            ),
-          ),
+        child: FocusZoom(
+          builder: (f) {
+            return InkWell(
+              focusNode: f,
+              borderRadius: BorderRadius.circular(_radius),
+              onTap: _callback,
+              child: Container(
+                constraints: const BoxConstraints(minWidth: 88, minHeight: 48),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    _child,
+                  ],
+                ),
+              ),
+            );
+          }
         ),
       ),
     );

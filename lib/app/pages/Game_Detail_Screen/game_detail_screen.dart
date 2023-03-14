@@ -149,13 +149,19 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
             data: Theme.of(context).copyWith(
               unselectedWidgetColor: textPrimaryColor,
             ),
-            child: Checkbox(
-              value: isShowSetting,
-              activeColor: textPrimaryColor,
-              checkColor: Colors.black,
-              onChanged: (value) => setState(() {
-                isShowSetting = value!;
-              }),
+            child: FocusZoom(
+              zoomEffect: false,
+              builder: (f) {
+                return Checkbox(
+                  focusNode: f,
+                  value: isShowSetting,
+                  activeColor: textPrimaryColor,
+                  checkColor: Colors.black,
+                  onChanged: (value) => setState(() {
+                    isShowSetting = value!;
+                  }),
+                );
+              }
             ),
           ),
           Text(

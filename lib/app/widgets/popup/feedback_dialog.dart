@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
+import 'package:oneplay_flutter_gui/app/widgets/gamepad_pop/gamepad_pop.dart';
 
 import '../../../main.dart';
 import '../../common/common.dart';
@@ -33,189 +35,53 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return AlertDialog(
-      backgroundColor: mainColor,
-      contentPadding: const EdgeInsets.all(0.0),
-      insetPadding: EdgeInsets.all(
-        size.width * 0.05,
-      ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
+    return GamepadPop(
+      context: context,
+      child: AlertDialog(
+        backgroundColor: mainColor,
+        contentPadding: const EdgeInsets.all(0.0),
+        insetPadding: EdgeInsets.all(
+          size.width * 0.05,
         ),
-      ),
-      content: SizedBox(
-        width: size.width,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: size.height * 0.06,
-            ),
-            Image.asset(
-              feedbackPng,
-            ),
-            SizedBox(
-              height: size.height * 0.05,
-            ),
-            const Text(
-              'We would love your feedback',
-              style: TextStyle(
-                fontFamily: mainFontFamily,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.02,
-                color: textPrimaryColor,
-                fontSize: 18,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        content: SizedBox(
+          width: size.width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: size.height * 0.06,
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.05,
+              Image.asset(
+                feedbackPng,
               ),
-              child: const Text(
-                'Our goal is to make a platform that simplifies experience.',
-                textAlign: TextAlign.center,
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+              const Text(
+                'We would love your feedback',
                 style: TextStyle(
                   fontFamily: mainFontFamily,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.02,
-                  color: textSecondaryColor,
-                  fontSize: 14,
+                  color: textPrimaryColor,
+                  fontSize: 18,
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: size.height * 0.03,
+              SizedBox(
+                height: size.height * 0.02,
               ),
-              child: commonDividerWidget(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.05,
-              ),
-              child: const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '*Did you enjoy using Oneplay?',
-                  style: TextStyle(
-                    fontFamily: mainFontFamily,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.02,
-                    color: textPrimaryColor,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.02,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: feedbackRow(
-                  size: size,
-                  feedback: ratings,
-                  value: index,
-                  onTap: (e) {
-                    setState(() => index = ratings.indexOf(e));
-                    if (index == 0) {
-                      selectedRating = '1';
-                    } else if (index == 1) {
-                      selectedRating = '2';
-                    } else if (index == 2) {
-                      selectedRating = '3';
-                    } else if (index == 3) {
-                      selectedRating = '4';
-                    } else if (index == 4) {
-                      selectedRating = '5';
-                    }
-                  },
-                ),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.05,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Disagree',
-                    style: TextStyle(
-                      fontFamily: mainFontFamily,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0.02,
-                      color: textSecondaryColor,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Text(
-                    'Agree',
-                    style: TextStyle(
-                      fontFamily: mainFontFamily,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0.02,
-                      color: textSecondaryColor,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: size.height * 0.04,
-              ),
-              child: commonDividerWidget(),
-            ),
-            SubmitButton(
-              buttonTitle: 'Next',
-              height: size.height * 0.056,
-              width: size.width * 0.52,
-              borderRadius: 25,
-              colors: const [blackColor2, blackColor1],
-              onTap: () {
-                isOpenDialog = true;
-                Navigator.pop(context);
-
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertSurveyDialog(
-                      feedbackRating: selectedRating,
-                      gameId: widget.gameId,
-                      userId: widget.userId,
-                      sessionId: widget.sessionId,
-                    );
-                  },
-                );
-              },
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-                setState(() => isOpenDialog = false);
-              },
-              child: Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.03,
-                  horizontal: size.width * 0.08,
+                  horizontal: size.width * 0.05,
                 ),
                 child: const Text(
-                  'Skip Survey',
+                  'Our goal is to make a platform that simplifies experience.',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: mainFontFamily,
                     fontWeight: FontWeight.w500,
@@ -225,8 +91,152 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
                   ),
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: size.height * 0.03,
+                ),
+                child: commonDividerWidget(),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.05,
+                ),
+                child: const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '*Did you enjoy using Oneplay?',
+                    style: TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: textPrimaryColor,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.02,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: feedbackRow(
+                    size: size,
+                    feedback: ratings,
+                    value: index,
+                    onTap: (e) {
+                      setState(() => index = ratings.indexOf(e));
+                      if (index == 0) {
+                        selectedRating = '1';
+                      } else if (index == 1) {
+                        selectedRating = '2';
+                      } else if (index == 2) {
+                        selectedRating = '3';
+                      } else if (index == 3) {
+                        selectedRating = '4';
+                      } else if (index == 4) {
+                        selectedRating = '5';
+                      }
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.05,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text(
+                      'Disagree',
+                      style: TextStyle(
+                        fontFamily: mainFontFamily,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.02,
+                        color: textSecondaryColor,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      'Agree',
+                      style: TextStyle(
+                        fontFamily: mainFontFamily,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.02,
+                        color: textSecondaryColor,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: size.height * 0.04,
+                ),
+                child: commonDividerWidget(),
+              ),
+              SubmitButton(
+                buttonTitle: 'Next',
+                height: size.height * 0.056,
+                width: size.width * 0.52,
+                borderRadius: 25,
+                colors: const [blackColor2, blackColor1],
+                onTap: () {
+                  isOpenDialog = true;
+                  Navigator.pop(context);
+    
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertSurveyDialog(
+                        feedbackRating: selectedRating,
+                        gameId: widget.gameId,
+                        userId: widget.userId,
+                        sessionId: widget.sessionId,
+                      );
+                    },
+                  );
+                },
+              ),
+              FocusZoom(
+                builder: (f) {
+                  return InkWell(
+                    focusNode: f,
+                    onTap: () {
+                      Navigator.pop(context);
+                      setState(() => isOpenDialog = false);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: size.height * 0.03,
+                        horizontal: size.width * 0.08,
+                      ),
+                      child: const Text(
+                        'Skip Survey',
+                        style: TextStyle(
+                          fontFamily: mainFontFamily,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.02,
+                          color: textSecondaryColor,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -249,32 +259,37 @@ class _AlertFeedbackDialogState extends State<AlertFeedbackDialog> {
         );
       }
       widgets.add(
-        InkWell(
-          onTap: () => onTap(element),
-          child: Container(
-            height: size.height * 0.062,
-            width: size.width * 0.17,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: feedback.indexOf(element) == value
-                    ? [purpleColor2, purpleColor1]
-                    : [blackColor2, blackColor1],
-              ),
-            ),
-            child: Center(
-              child: Text(
-                element,
-                style: const TextStyle(
-                  fontFamily: mainFontFamily,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.02,
-                  color: textPrimaryColor,
-                  fontSize: 18,
+        FocusZoom(
+          builder: (f) {
+            return InkWell(
+              focusNode: f,
+              onTap: () => onTap(element),
+              child: Container(
+                height: size.height * 0.062,
+                width: size.width * 0.17,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: feedback.indexOf(element) == value
+                        ? [purpleColor2, purpleColor1]
+                        : [blackColor2, blackColor1],
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    element,
+                    style: const TextStyle(
+                      fontFamily: mainFontFamily,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.02,
+                      color: textPrimaryColor,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          }
         ),
       );
     }

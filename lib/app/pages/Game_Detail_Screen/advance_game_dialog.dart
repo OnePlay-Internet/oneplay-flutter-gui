@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/fake_focus.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../../main.dart';
@@ -219,11 +220,13 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
               padding: EdgeInsets.all(
                 size.width * 0.04,
               ),
-              child: CupertinoSwitch(
-                value: value,
-                thumbColor: textPrimaryColor,
-                activeColor: purpleColor1,
-                onChanged: onChanged,
+              child: FakeFocus(
+                child: CupertinoSwitch(
+                  value: value,
+                  thumbColor: textPrimaryColor,
+                  activeColor: purpleColor1,
+                  onChanged: onChanged,
+                ),
               ),
             ),
           ),
@@ -368,32 +371,37 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
         ));
       }
       widgets.add(
-        InkWell(
-          onTap: () => onTap(element),
-          child: Container(
-            height: size.height * 0.065,
-            width: size.width * 0.38,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 2,
-                color: data.indexOf(element) == value
-                    ? purpleColor1
-                    : basicLineColor,
+        FocusZoom(
+          builder: (f) {
+            return InkWell(
+              focusNode: f,
+              onTap: () => onTap(element),
+              child: Container(
+                height: size.height * 0.065,
+                width: size.width * 0.38,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    width: 2,
+                    color: data.indexOf(element) == value
+                        ? purpleColor1
+                        : basicLineColor,
+                  ),
+                ),
+                child: Center(
+                  child: GradientText(
+                    element,
+                    style: tinyStyle,
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: data.indexOf(element) == value
+                        ? const [purpleColor2, purpleColor1]
+                        : [textPrimaryColor, textPrimaryColor],
+                  ),
+                ),
               ),
-            ),
-            child: Center(
-              child: GradientText(
-                element,
-                style: tinyStyle,
-                gradientType: GradientType.linear,
-                gradientDirection: GradientDirection.ltr,
-                colors: data.indexOf(element) == value
-                    ? const [purpleColor2, purpleColor1]
-                    : [textPrimaryColor, textPrimaryColor],
-              ),
-            ),
-          ),
+            );
+          }
         ),
       );
     }
@@ -414,34 +422,39 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
         ));
       }
       widgets.add(
-        InkWell(
-          onTap: () => onTap(element),
-          child: Container(
-            height: size.height * 0.065,
-            padding: EdgeInsets.symmetric(
-              horizontal: size.width * 0.06,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 2,
-                color: data.indexOf(element) == value
-                    ? purpleColor1
-                    : basicLineColor,
+        FocusZoom(
+          builder: (f) {
+            return InkWell(
+              focusNode: f,
+              onTap: () => onTap(element),
+              child: Container(
+                height: size.height * 0.065,
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.06,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    width: 2,
+                    color: data.indexOf(element) == value
+                        ? purpleColor1
+                        : basicLineColor,
+                  ),
+                ),
+                child: Center(
+                  child: GradientText(
+                    element,
+                    style: tinyStyle,
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: data.indexOf(element) == value
+                        ? const [purpleColor2, purpleColor1]
+                        : [textPrimaryColor, textPrimaryColor],
+                  ),
+                ),
               ),
-            ),
-            child: Center(
-              child: GradientText(
-                element,
-                style: tinyStyle,
-                gradientType: GradientType.linear,
-                gradientDirection: GradientDirection.ltr,
-                colors: data.indexOf(element) == value
-                    ? const [purpleColor2, purpleColor1]
-                    : [textPrimaryColor, textPrimaryColor],
-              ),
-            ),
-          ),
+            );
+          }
         ),
       );
     }
@@ -462,34 +475,39 @@ class _AdvanceGameDialogState extends State<AdvanceGameDialog> {
         ));
       }
       widgets.add(
-        InkWell(
-          onTap: () => onTap(element),
-          child: Container(
-            height: size.height * 0.065,
-            padding: EdgeInsets.symmetric(
-              horizontal: size.width * 0.03,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 2,
-                color: data.indexOf(element) == value
-                    ? purpleColor1
-                    : basicLineColor,
+        FocusZoom(
+          builder: (f) {
+            return InkWell(
+              focusNode: f,
+              onTap: () => onTap(element),
+              child: Container(
+                height: size.height * 0.065,
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.03,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    width: 2,
+                    color: data.indexOf(element) == value
+                        ? purpleColor1
+                        : basicLineColor,
+                  ),
+                ),
+                child: Center(
+                  child: GradientText(
+                    element,
+                    style: tinyStyle,
+                    gradientType: GradientType.linear,
+                    gradientDirection: GradientDirection.ltr,
+                    colors: data.indexOf(element) == value
+                        ? const [purpleColor2, purpleColor1]
+                        : [textPrimaryColor, textPrimaryColor],
+                  ),
+                ),
               ),
-            ),
-            child: Center(
-              child: GradientText(
-                element,
-                style: tinyStyle,
-                gradientType: GradientType.linear,
-                gradientDirection: GradientDirection.ltr,
-                colors: data.indexOf(element) == value
-                    ? const [purpleColor2, purpleColor1]
-                    : [textPrimaryColor, textPrimaryColor],
-              ),
-            ),
-          ),
+            );
+          }
         ),
       );
     }

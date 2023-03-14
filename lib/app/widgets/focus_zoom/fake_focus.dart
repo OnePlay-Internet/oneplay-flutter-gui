@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/focus_zoom.dart';
 
@@ -19,7 +20,12 @@ class FakeFocus extends StatelessWidget {
           ),
           child: InkWell(
             focusNode: focus,
-            onTap: () {},
+            onTap: () {
+              if (child is CupertinoSwitch) {
+                var c = child as CupertinoSwitch;
+                c.onChanged!(!c.value);
+              }
+            },
             child: child,
           ),
         );

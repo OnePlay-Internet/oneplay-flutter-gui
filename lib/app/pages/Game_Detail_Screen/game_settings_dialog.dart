@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:oneplay_flutter_gui/app/widgets/focus_zoom/fake_focus.dart';
 
 import '../../../main.dart';
 import '../../common/common.dart';
@@ -205,15 +206,17 @@ class _GameSettingsDialogState extends State<GameSettingsDialog> {
                             width: size.width * 0.06,
                             child: Transform.scale(
                               scale: 0.8,
-                              child: CupertinoSwitch(
-                                value: widget.gameSetting.is_vsync_enabled!,
-                                thumbColor: textPrimaryColor,
-                                activeColor: Colors.purple,
-                                onChanged: (value) {
-                                  setState(() {
-                                    widget.gameSetting.is_vsync_enabled = value;
-                                  });
-                                },
+                              child: FakeFocus(
+                                child: CupertinoSwitch(
+                                  value: widget.gameSetting.is_vsync_enabled!,
+                                  thumbColor: textPrimaryColor,
+                                  activeColor: Colors.purple,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      widget.gameSetting.is_vsync_enabled = value;
+                                    });
+                                  },
+                                ),
                               ),
                             ),
                           ),
